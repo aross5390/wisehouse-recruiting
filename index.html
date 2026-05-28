@@ -1140,9 +1140,16 @@ async function processFile(file) {
   pt.textContent = 'Reading file...';
   try {
     let result;
+    const isPDF = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
     const isImg = file.type.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name);
-    if (isImg) {
-      pt.textContent = 'Sending to Claude...';
+
+    if (isPDF) {
+      // Send PDF as base64 document to Claude — it can read PDFs natively
+      pt.textContent = 'Sending PDF to Claude...';
+      const b64 = await toBase64(file);
+      result = await parsePDF(b64);
+    } else if (isImg) {
+      pt.textContent = 'Sending image to Claude...';
       const b64 = await toBase64(file);
       result = await parseResume(null, true, b64, file.type || 'image/jpeg');
     } else {
@@ -1157,17 +1164,50 @@ async function processFile(file) {
       document.getElementById('parse-banner').innerHTML = '<div class="ok-b">✓ Resume parsed — fields auto-filled. Review before scoring.</div>';
     } else {
       pw.style.display = 'none';
-      document.getElementById('parse-banner').innerHTML = '<div class="warn-b">⚠ Could not read this PDF automatically. Please paste the resume text into the Resume/CV field below, or try uploading a Word (.docx) or text (.txt) file instead.</div>';
-      // Clear any garbage that got filled in
+      document.getElementById('parse-banner').innerHTML = '<div class="warn-b">⚠ Could not read this file. Please paste the resume text into the Resume/CV field below.</div>';
       const resumeField = document.getElementById('fres');
       const q1Field = document.getElementById('fq1');
-      if (resumeField && resumeField.value.includes('encoding')) resumeField.value = '';
+      if (resumeField && (resumeField.value.includes('encoding') || resumeField.value.includes('PDF'))) resumeField.value = '';
       if (q1Field && q1Field.value.includes('Cannot determine')) q1Field.value = '';
     }
   } catch(e) {
     clearInterval(tick); pw.style.display = 'none';
-    document.getElementById('parse-banner').innerHTML = '<div class="warn-b">Error reading file. Try pasting resume text manually.</div>';
+    document.getElementById('parse-banner').innerHTML = '<div class="warn-b">Error reading file. Please paste resume text manually.</div>';
   }
+}
+
+async function parsePDF(b64) {
+  const instr = `Extract info from this resume PDF. Return ONLY valid JSON, no markdown, no extra text:
+{"name":null,"email":null,"phone":null,"comp":null,"availability":null,"resume_text":"2-4 sentence professional summary","experience_summary":"detailed work history, skills, years of experience","role_guess":null}
+STRICT RULES:
+- name: full name only
+- email: email address only
+- phone: phone number only
+- comp: ONLY explicit salary or pay rate like "$18/hr". If not stated, return null. Never put company names here.
+- availability: ONLY explicit start date like "Available immediately". Never use employment dates. If not stated, return null.
+- resume_text: 2-4 sentence professional summary
+- experience_summary: work history, years of experience, key skills
+- role_guess: one of: Pest Control Technician, Outbound Sales Rep, CSR / Admin Support, Video Editor, AI Implementation Specialist — or null`;
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } },
+            { type: 'text', text: instr }
+          ]
+        }]
+      })
+    });
+    const d = await r.json();
+    if (d.error) { console.error('PDF parse error:', d.error); return null; }
+    return JSON.parse((d.content?.[0]?.text || '').replace(/```json|```/g, '').trim());
+  } catch(e) { console.error('parsePDF error:', e); return null; }
 }
 function toBase64(file) {
   return new Promise((res,rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
