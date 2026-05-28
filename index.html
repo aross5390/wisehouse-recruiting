@@ -1240,6 +1240,7 @@ async function addCandidate() {
   C.unshift(c);
   badge();
   pushToSheet('add', c);
+  notifyZapier(c);
   if (KEY) {
     document.getElementById('ai-area').innerHTML = `<div class="thinking"><div class="spin"></div><span class="pulse">Claude is reviewing ${name}...</span></div>`;
     const rpt = await scoreCandidate(c);
@@ -1635,6 +1636,10 @@ async function loadFromSheet() {
     const r = await fetch(SHEET_URL + '?t=' + Date.now());
     const d = await r.json();
     if (d.success && d.candidates) {
+      const existingIds = new Set(C.map(x => String(x.id)));
+      const newCandidates = d.candidates.filter(c => !existingIds.has(String(c.id)));
+      // Fire webhook for new candidates detected from form submissions
+      newCandidates.forEach(c => { if (c.name) notifyZapier(c); });
       C = d.candidates.map(c => ({
         ...c,
         id: String(c.id),
@@ -1677,6 +1682,30 @@ async function loadFromSheet() {
     console.error('Failed to load from sheet:', e);
     toast('Could not connect to database. Check your connection.');
   }
+}
+
+async function notifyZapier(c) {
+  try {
+    await fetch('https://hooks.zapier.com/hooks/catch/21681276/4b2u597/', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name:         c.name || '',
+        email:        c.email || '',
+        phone:        c.phone || '',
+        role:         c.role || '',
+        source:       c.source || '',
+        comp:         c.comp || '',
+        availability: c.availability || '',
+        video:        c.video || '',
+        stage:        c.stage || 'Applied',
+        score:        c.score !== null ? String(c.score) : 'Pending',
+        added:        c.added || '',
+        platform_url: 'https://recruiting.wisehousebugs.com'
+      })
+    });
+  } catch(e) { console.error('Webhook failed:', e); }
 }
 
 async function pushToSheet(action, data) {
