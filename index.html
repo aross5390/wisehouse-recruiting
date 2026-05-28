@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wise House — Recruiting Platform</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F0F4F0;--surf:#FFFFFF;--surf2:#F4F8F4;--surf3:#E8F0E8;
+  --bdr:#D0E0D0;--bdr2:#B0CCB0;
+  --tx:#1A2E1A;--tx2:#4A6741;--tx3:#7A9A78;
+  --blue:#2E7D32;--blue-bg:rgba(46,125,50,0.08);--blue-bdr:rgba(46,125,50,0.25);
+  --green:#2E7D32;--green-bg:rgba(46,125,50,0.08);--green-bdr:rgba(46,125,50,0.3);
+  --amber:#F57F17;--amber-bg:rgba(245,127,23,0.1);--amber-bdr:rgba(245,127,23,0.3);
+  --red:#C62828;--red-bg:rgba(198,40,40,0.08);
+  --purple:#6A1B9A;--purple-bg:rgba(106,27,154,0.08);
+  --teal:#00695C;--teal-bg:rgba(0,105,92,0.08);
+  --r:8px;--rl:12px;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);font-size:14px}
+/* LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:210px;flex-shrink:0;background:#1B4332;border-right:1px solid #145229;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:52px;flex-shrink:0;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.content{flex:1;overflow-y:auto;padding:22px 24px}
+/* SIDEBAR */
+.brand{padding:16px 14px;border-bottom:1px solid rgba(255,255,255,0.1)}
+.brand-name{font-size:14px;font-weight:600;letter-spacing:-0.2px;color:#FFFFFF}
+.brand-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px;font-family:'DM Mono',monospace;letter-spacing:0.5px}
+.nav{flex:1;padding:10px 6px;overflow-y:auto}
+.nav-lbl{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;padding:6px 8px 3px}
+.ni{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:var(--r);cursor:pointer;color:rgba(255,255,255,0.65);font-size:13px;margin-bottom:1px;transition:all 0.1s;border:1px solid transparent;user-select:none}
+.ni:hover{background:rgba(255,255,255,0.08);color:#FFFFFF}
+.ni.on{background:rgba(255,255,255,0.15);color:#FFFFFF;border-color:rgba(255,255,255,0.2)}
+.ni svg{width:14px;height:14px;flex-shrink:0}
+.ni .nb{margin-left:auto;background:#4CAF50;color:#fff;font-size:10px;font-weight:600;padding:1px 5px;border-radius:8px;font-family:'DM Mono',monospace}
+.sb-foot{padding:10px 6px;border-top:1px solid rgba(255,255,255,0.1);font-size:11px;color:rgba(255,255,255,0.4)}
+.api-ind{padding:4px 8px}
+/* TOPBAR */
+.page-ttl{font-size:14px;font-weight:500}
+/* PAGES */
+.page{display:none}.page.on{display:block}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;transition:all 0.1s;border:1px solid var(--bdr);background:transparent;color:var(--tx2);font-family:'DM Sans',sans-serif;line-height:1}
+.btn:hover{background:var(--surf2);color:var(--tx);border-color:var(--bdr2)}
+.btn-p{background:#2E7D32;color:#fff;border-color:#2E7D32}
+.btn-p:hover{background:#1B5E20;border-color:#1B5E20}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-danger{color:var(--red)}
+.btn-danger:hover{background:var(--red-bg);border-color:var(--red);color:var(--red)}
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px 18px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.stat{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.stat-n{font-size:24px;font-weight:600;font-family:'DM Mono',monospace;line-height:1.2}
+.stat-l{font-size:11px;color:var(--tx2);margin-top:3px}
+/* TABLE */
+.tbl-wrap{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:10px;font-weight:600;color:var(--tx3);padding:9px 14px;border-bottom:1px solid var(--bdr);text-transform:uppercase;letter-spacing:0.5px}
+td{padding:10px 14px;border-bottom:1px solid var(--bdr);font-size:13px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr.clickable:hover td{background:var(--surf2);cursor:pointer}
+/* BADGES */
+.bdg{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:8px}
+.bdg-blue{background:var(--blue-bg);color:#60A5FA}
+.bdg-green{background:var(--green-bg);color:#4ADE80}
+.bdg-amber{background:var(--amber-bg);color:#FCD34D}
+.bdg-red{background:var(--red-bg);color:#FCA5A5}
+.bdg-purple{background:var(--purple-bg);color:#C4B5FD}
+.bdg-teal{background:var(--teal-bg);color:#67E8F9}
+.bdg-gray{background:var(--surf3);color:var(--tx3)}
+.score-pill{font-size:10px;font-weight:600;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:8px}
+.sp-hi{background:var(--green-bg);color:#4ADE80}
+.sp-mid{background:var(--amber-bg);color:#FCD34D}
+.sp-lo{background:var(--red-bg);color:#FCA5A5}
+/* PIPELINE */
+.board{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.col{min-width:200px;flex:1}
+.col-head{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:#1B4332;border:1px solid #145229;border-radius:var(--r) var(--r) 0 0}
+.col-ttl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:rgba(255,255,255,0.8)}
+.col-ct{font-size:10px;font-family:'DM Mono',monospace;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.15);padding:1px 6px;border-radius:8px}
+.col-body{border:1px solid var(--bdr);border-top:none;border-radius:0 0 var(--r) var(--r);min-height:60px;padding:6px;display:flex;flex-direction:column;gap:5px;background:#F4F8F4}
+.cc{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px;cursor:pointer;transition:all 0.1s;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.cc:hover{border-color:#2E7D32;box-shadow:0 2px 6px rgba(46,125,50,0.12)}
+.cc-name{font-size:12px;font-weight:500;display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.cc-role{font-size:10px;color:var(--tx3);margin-bottom:5px}
+.cc-meta{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.src-tag{font-size:10px;padding:1px 6px;border-radius:6px;background:var(--surf3);color:var(--tx3);border:1px solid var(--bdr)}
+.ago{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace}
+/* FORM */
+.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.fg label{font-size:11px;font-weight:500;color:var(--tx2)}
+.req{color:var(--red)}
+.fg input,.fg select,.fg textarea{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--r);padding:8px 11px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:100%;transition:border-color 0.1s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#2E7D32;box-shadow:0 0 0 2px rgba(46,125,50,0.08)}
+.fg select option{background:var(--surf2)}
+.fg textarea{resize:vertical;min-height:72px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-full{grid-column:1/-1}
+.fsec-ttl{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;padding-bottom:7px;border-bottom:1px solid var(--bdr)}
+.form-foot{display:flex;gap:8px;justify-content:flex-end;padding-top:14px;border-top:1px solid var(--bdr);margin-top:8px}
+/* UPLOAD */
+.upload-zone{border:2px dashed var(--bdr2);border-radius:var(--rl);padding:24px 16px;text-align:center;cursor:pointer;background:#F4F8F4;position:relative;margin-bottom:16px;transition:all 0.15s}
+.upload-zone:hover,.upload-zone.drag{border-color:#2E7D32;background:rgba(46,125,50,0.06)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:24px;margin-bottom:6px}
+.upload-ttl{font-size:13px;font-weight:500;margin-bottom:3px}
+.upload-sub{font-size:11px;color:var(--tx3)}
+.prog-wrap{margin-top:10px;display:none}
+.prog-bar{height:3px;background:var(--bdr);border-radius:2px;margin-top:5px;overflow:hidden}
+.prog-fill{height:100%;background:#2E7D32;border-radius:2px;width:0;transition:width 0.3s}
+.populated{border-color:var(--green) !important;transition:all 0.3s}
+/* BANNERS */
+.info-b{background:rgba(46,125,50,0.08);border:1px solid rgba(46,125,50,0.25);border-radius:var(--r);padding:10px 14px;font-size:12px;color:#2E7D32;margin-bottom:12px;line-height:1.55}
+.warn-b{background:var(--amber-bg);border:1px solid var(--amber-bdr);border-radius:var(--r);padding:10px 14px;font-size:12px;color:#FCD34D;margin-bottom:12px;line-height:1.55}
+.ok-b{background:var(--green-bg);border:1px solid var(--green-bdr);border-radius:var(--r);padding:10px 14px;font-size:12px;color:#4ADE80;margin-bottom:12px;line-height:1.55}
+/* AI PANEL */
+.ai-panel{background:#F4F8F4;border:1px solid var(--bdr);border-radius:var(--rl);padding:16px;margin-top:14px}
+.ai-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;color:#2E7D32;font-family:'DM Mono',monospace;margin-bottom:10px}
+.ai-score-big{font-size:38px;font-weight:600;font-family:'DM Mono',monospace;line-height:1}
+.ai-sub{font-size:11px;color:var(--tx3);margin-top:2px}
+.breakdown{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}
+.bp{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px}
+.bp-n{font-size:10px;color:var(--tx3);margin-bottom:3px}
+.bp-row{display:flex;align-items:center;gap:7px}
+.bp-num{font-size:12px;font-weight:600;font-family:'DM Mono',monospace;color:var(--tx);white-space:nowrap}
+.bar-t{flex:1;height:3px;background:var(--bdr);border-radius:2px;overflow:hidden}
+.bar-f{height:100%;background:#2E7D32;border-radius:2px}
+.ai-sec{font-size:10px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin:12px 0 6px}
+.chip{display:inline-flex;align-items:center;font-size:11px;padding:3px 8px;border-radius:8px;margin:2px;border:1px solid var(--bdr);background:var(--surf);color:var(--tx2)}
+.chip-row{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:4px}
+.flag-row{display:flex;align-items:flex-start;gap:7px;padding:7px 9px;background:var(--surf);border:1px solid var(--amber-bdr);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:var(--tx2)}
+.fdot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:4px}
+.q-row{display:flex;align-items:flex-start;gap:7px;padding:7px 9px;background:var(--surf);border:1px solid var(--blue-bdr);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:var(--tx2)}
+.qdot{font-size:11px;font-weight:600;font-family:'DM Mono',monospace;color:var(--blue);min-width:14px}
+/* THINKING */
+.thinking{display:flex;align-items:center;gap:9px;padding:12px 14px;background:rgba(46,125,50,0.08);border:1px solid rgba(46,125,50,0.25);border-radius:var(--r);font-size:12px;color:#2E7D32;margin-top:12px}
+.spin{width:14px;height:14px;border:2px solid rgba(46,125,50,0.25);border-top-color:#2E7D32;border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pulse{animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(27,67,50,0.7);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.overlay.off{display:none}
+.modal{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--rl);width:100%;max-width:660px;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.15)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--bdr);flex-shrink:0;background:#1B4332}
+.modal-ttl{font-size:14px;font-weight:600;color:#FFFFFF}
+.modal-body{padding:20px;overflow-y:auto;flex:1}
+.close-btn{width:26px;height:26px;border-radius:var(--r);background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);cursor:pointer;color:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;transition:all 0.1s;font-family:sans-serif}
+.close-btn:hover{background:rgba(255,255,255,0.25);color:#FFFFFF}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:16px}
+.tab{padding:9px 14px;font-size:12px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--tx2);white-space:nowrap;transition:color 0.1s}
+.tab.on{color:#1B4332;border-bottom-color:#2E7D32}
+.tab:hover:not(.on){color:var(--tx)}
+/* DETAIL */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.df{display:flex;flex-direction:column;gap:2px}
+.df-l{font-size:10px;color:var(--tx3);font-weight:500}
+.df-v{font-size:13px;color:var(--tx)}
+.divider{height:1px;background:var(--bdr);margin:14px 0}
+.stage-row{display:flex;align-items:center;gap:8px;margin-top:14px}
+.stage-row label{font-size:11px;font-weight:500;color:var(--tx2);white-space:nowrap}
+.stage-row select{flex:1;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:7px 10px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif}
+.stage-row select:focus{outline:none;border-color:var(--blue)}
+/* REPORTS */
+.rpt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.rpt-card{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--rl);padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.rpt-ttl{font-size:12px;font-weight:600;margin-bottom:12px}
+.bar-row{display:flex;align-items:center;gap:8px;font-size:11px;margin-bottom:7px}
+.bar-lbl{width:80px;color:var(--tx2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0}
+.bar-track{flex:1;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:#2E7D32;border-radius:3px}
+.bar-val{width:24px;text-align:right;color:var(--tx3);font-family:'DM Mono',monospace;font-size:10px}
+.fn-row{display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 0;border-bottom:1px solid var(--bdr)}
+.fn-row:last-child{border-bottom:none}
+.fn-stg{flex:1;color:var(--tx2)}
+.fn-ct{font-family:'DM Mono',monospace;font-weight:600;min-width:24px;text-align:right}
+.fn-pct{font-size:10px;color:var(--tx3);min-width:36px;text-align:right;font-family:'DM Mono',monospace}
+/* SETTINGS */
+.set-card{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--rl);padding:18px 20px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.set-ttl{font-size:13px;font-weight:600;margin-bottom:3px}
+.set-desc{font-size:11px;color:var(--tx3);margin-bottom:12px;line-height:1.5}
+.api-row{display:flex;gap:8px;align-items:center}
+.api-row input{flex:1}
+.api-st{display:flex;align-items:center;gap:6px;font-size:11px;margin-top:7px}
+.api-dot{width:6px;height:6px;border-radius:50%}
+/* TOAST */
+.sop-card{background:#FFFFFF;border:1px solid var(--bdr);border-radius:var(--rl);padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.sop-section{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--bdr)}
+.sop-q{padding:10px 12px;border-left:3px solid #2E7D32;background:#F4F8F4;border-radius:0 var(--r) var(--r) 0;margin-bottom:7px}
+.sop-q-text{font-size:13px;font-weight:500;color:var(--tx);margin-bottom:3px}
+.sop-q-why{font-size:11px;color:var(--tx3);font-style:italic;line-height:1.5}
+.sop-q-score{font-size:10px;color:var(--blue);margin-top:3px;font-weight:600}
+.sop-flag{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--amber-bg);border:1px solid var(--amber-bdr);border-radius:var(--r);margin-bottom:5px;font-size:12px;color:var(--tx2)}
+.sop-score-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bdr);font-size:13px}
+.sop-score-row:last-child{border-bottom:none}
+.sop-score-pts{font-weight:600;color:var(--blue);font-family:"DM Mono",monospace;white-space:nowrap;min-width:48px;text-align:right}
+.sop-prompt{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px;font-size:11px;font-family:"DM Mono",monospace;line-height:1.8;color:var(--tx2);white-space:pre-wrap;max-height:320px;overflow-y:auto}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:var(--r);font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--tx3);font-family:"DM Sans",sans-serif;margin-top:8px}
+.copy-btn:hover{background:var(--surf2);color:var(--tx)}
+.src-stat{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px}
+.src-stat-n{font-size:22px;font-weight:600;font-family:"DM Mono",monospace}
+.src-stat-l{font-size:11px;color:var(--tx2);margin-top:2px}
+.src-stat-sub{font-size:10px;color:var(--tx3);margin-top:4px}
+.toast{position:fixed;bottom:20px;right:20px;background:#1B4332;border:1px solid #2E7D32;border-radius:var(--rl);padding:10px 16px;font-size:12px;color:#FFFFFF;z-index:999;transform:translateY(60px);opacity:0;transition:all 0.25s;max-width:300px;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:var(--green-bdr)}
+/* SECTION HEADER */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sh-ttl{font-size:14px;font-weight:600}
+.sh-sub{font-size:11px;color:var(--tx3);margin-top:1px}
+/* empty */
+.empty{text-align:center;padding:28px;color:var(--tx3);font-size:12px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="brand">
+    <div style="display:flex;align-items:center;gap:9px">
+      <img src="data:image/png;base64,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" style="width:32px;height:32px;border-radius:8px;flex-shrink:0">
+      <div>
+        <div class="brand-name">Wise House</div>
+        <div class="brand-sub">RECRUITING PLATFORM</div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-lbl">Main</div>
+    <div class="ni on" id="ni-dashboard" onclick="go('dashboard',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="ni" id="ni-pipeline" onclick="go('pipeline',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+      Pipeline
+      <span class="nb" id="nb">0</span>
+    </div>
+    <div class="ni" id="ni-candidates" onclick="go('candidates',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+      All Candidates
+    </div>
+    <div class="ni" id="ni-add" onclick="go('add',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Add Candidate
+    </div>
+    <div class="nav-lbl" style="margin-top:6px">Insights</div>
+    <div class="ni" id="ni-reports" onclick="go('reports',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Reports
+    </div>
+    <div class="ni" id="ni-sources" onclick="go('sources',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+      Hiring Sources
+    </div>
+    <div class="ni" id="ni-sops" onclick="go('sops',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      SOPs
+    </div>
+    <div class="nav-lbl" style="margin-top:6px">System</div>
+    <div class="ni" id="ni-settings" onclick="go('settings',this)">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </div>
+  </nav>
+  <div class="sb-foot">
+    <div class="api-ind">AI: <span id="api-ind" style="color:#4CAF50">✓ Connected</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="page-ttl" id="page-ttl">Dashboard</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-sm btn-p" onclick="go('add',document.getElementById('ni-add'))">+ Add Candidate</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="page-dashboard">
+      <div class="stats">
+        <div class="stat"><div class="stat-n" id="s-total">0</div><div class="stat-l">Total Candidates</div></div>
+        <div class="stat"><div class="stat-n" style="color:#4ADE80" id="s-adv">0</div><div class="stat-l">Advancing (70+)</div></div>
+        <div class="stat"><div class="stat-n" style="color:#FCD34D" id="s-bench">0</div><div class="stat-l">On Bench</div></div>
+        <div class="stat"><div class="stat-n" style="color:#60A5FA" id="s-scored">0</div><div class="stat-l">AI Screened</div></div>
+      </div>
+      <div class="sh">
+        <div><div class="sh-ttl">Recent Candidates</div><div class="sh-sub">Latest across all roles</div></div>
+        <button class="btn btn-sm" onclick="go('candidates',document.getElementById('ni-candidates'))">View all</button>
+      </div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Candidate</th><th>Role</th><th>Source</th><th>AI Score</th><th>Stage</th><th>Added</th></tr></thead>
+        <tbody id="dash-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- PIPELINE -->
+    <div class="page" id="page-pipeline">
+      <div class="sh">
+        <div><div class="sh-ttl">Hiring Pipeline</div></div>
+        <select id="prf" onchange="renderPipeline()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+          <option value="all">All Roles</option>
+          <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
+          <option>CSR / Admin Support</option><option>Video Editor</option><option>AI Implementation Specialist</option>
+        </select>
+      </div>
+      <div class="board" id="board"></div>
+    </div>
+
+    <!-- ALL CANDIDATES -->
+    <div class="page" id="page-candidates">
+      <div class="sh">
+        <div><div class="sh-ttl">All Candidates</div><div class="sh-sub" id="cand-ct"></div></div>
+        <div style="display:flex;gap:6px">
+          <select id="frl" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+            <option value="all">All Roles</option>
+            <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
+            <option>CSR / Admin Support</option><option>Video Editor</option><option>AI Implementation Specialist</option>
+          </select>
+          <select id="fst" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+            <option value="all">All Stages</option>
+            <option>Applied</option><option>Screening</option><option>Video Screen</option>
+            <option>Final Interview</option><option>Reference Check</option><option>Offer</option>
+            <option>Hired</option><option>Bench</option><option>Archived</option>
+          </select>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Candidate</th><th>Role</th><th>Source</th><th>AI Score</th><th>Stage</th><th>Added</th><th></th></tr></thead>
+        <tbody id="cand-tbody"></tbody></table>
+      </div>
+    </div>
+
+    <!-- ADD CANDIDATE -->
+    <div class="page" id="page-add">
+      <div class="sh"><div><div class="sh-ttl">Add Candidate</div><div class="sh-sub">Upload resume to auto-fill, or enter manually</div></div></div>
+      <div style="max-width:660px">
+        <!-- UPLOAD ZONE -->
+        <div class="upload-zone" id="uz" ondragover="ev(event,'over')" ondragleave="ev(event,'leave')" ondrop="ev(event,'drop')">
+          <input type="file" id="rfile" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.webp" onchange="onFile(event)">
+          <div class="upload-icon">📄</div>
+          <div class="upload-ttl">Drop resume or click to upload</div>
+          <div class="upload-sub">PDF · Word · Image · Text — Claude reads it and fills all fields</div>
+          <div class="prog-wrap" id="prog-wrap">
+            <div id="prog-txt" style="font-size:11px;color:var(--blue)">Reading...</div>
+            <div class="prog-bar"><div class="prog-fill" id="prog-fill"></div></div>
+          </div>
+        </div>
+        <div id="parse-banner"></div>
+
+        <div class="fsec-ttl">Basic Information</div>
+        <div class="form-row">
+          <div class="fg"><label>Full Name <span class="req">*</span></label><input id="fn" placeholder="Carlos Mendoza"></div>
+          <div class="fg"><label>Email</label><input id="fe" type="email" placeholder="candidate@email.com"></div>
+          <div class="fg"><label>Phone</label><input id="fp" placeholder="+1 555 000 0000"></div>
+          <div class="fg">
+            <label>Role Applied For <span class="req">*</span></label>
+            <select id="fr">
+              <option value="">Select role...</option>
+              <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
+              <option>CSR / Admin Support</option><option>Video Editor</option><option>AI Implementation Specialist</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Source Platform <span class="req">*</span></label>
+            <select id="fs">
+              <option value="">Select source...</option>
+              <option>Indeed</option><option>LinkedIn</option><option>ZipRecruiter</option>
+              <option>Facebook</option><option>Upwork</option><option>OnlineJobs.ph</option>
+              <option>Workana</option><option>Craigslist</option><option>Employee Referral</option><option>Direct / Other</option>
+            </select>
+          </div>
+          <div class="fg"><label>Compensation Expectation</label><input id="fc" placeholder="$18–22/hr or $45k"></div>
+          <div class="fg"><label>Availability</label><input id="fa" placeholder="Immediately / 2 weeks"></div>
+          <div class="fg"><label>Video Intro Link</label><input id="fv" placeholder="Loom / YouTube / Drive link"></div>
+        </div>
+        <div class="fg form-full"><label>Resume / CV Summary</label><textarea id="fres" rows="4" placeholder="Auto-filled from upload, or paste here..."></textarea></div>
+
+        <div class="fsec-ttl">Screening Answers</div>
+        <div class="fg"><label>Experience &amp; services performed</label><textarea id="fq1" placeholder="Paste candidate's answer or auto-filled from resume..."></textarea></div>
+        <div class="fg"><label>Difficult customer scenario — how they handled it</label><textarea id="fq2" placeholder="Candidate's answer..."></textarea></div>
+        <div class="fg"><label>Why this role / why Wise House</label><textarea id="fq3" placeholder="Candidate's answer..."></textarea></div>
+        <div class="fg"><label>Internal notes</label><textarea id="fnotes" placeholder="Your notes..."></textarea></div>
+
+        <div id="ai-area"></div>
+        <div class="form-foot">
+          <button class="btn" onclick="clearForm()">Clear</button>
+          <button class="btn btn-p" onclick="addCandidate()">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Add &amp; Score with AI
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORTS -->
+    <div class="page" id="page-reports">
+      <div class="sh-ttl" style="margin-bottom:16px">Reports &amp; Analytics</div>
+      <div class="rpt-grid">
+        <div class="rpt-card"><div class="rpt-ttl">Candidates by Role</div><div id="r-roles"></div></div>
+        <div class="rpt-card"><div class="rpt-ttl">Candidates by Source</div><div id="r-sources"></div></div>
+        <div class="rpt-card"><div class="rpt-ttl">Pipeline Funnel</div><div id="r-funnel"></div></div>
+        <div class="rpt-card"><div class="rpt-ttl">Avg AI Score by Role</div><div id="r-scores"></div></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="sh-ttl" style="margin-bottom:16px">Settings</div>
+      <div class="set-card">
+        <div class="set-ttl">Claude API</div>
+        <div class="set-desc">AI scoring and resume parsing are active. This platform is pre-configured and ready to use — no setup required.</div>
+        <div class="api-st"><div class="api-dot" id="api-dot" style="background:var(--green)"></div><span id="api-lbl" style="color:var(--green)">AI scoring active — ready to use</span></div>
+        <input type="hidden" id="api-inp">
+      </div>
+      <div class="set-card">
+        <div class="set-ttl">Scoring Tiers</div>
+        <div class="set-desc">Auto-placement thresholds after AI scoring.</div>
+        <div class="form-row" style="max-width:380px">
+          <div class="fg"><label>Strong Advance (min)</label><input type="number" id="t-strong" value="85" min="0" max="100"></div>
+          <div class="fg"><label>Advance (min)</label><input type="number" id="t-adv" value="70" min="0" max="100"></div>
+          <div class="fg"><label>Bench (min)</label><input type="number" id="t-bench" value="55" min="0" max="100"></div>
+        </div>
+        <button class="btn btn-sm" style="margin-top:8px" onclick="toast('Tiers saved','ok')">Save Tiers</button>
+      </div>
+      <div class="set-card">
+        <div class="set-ttl">Data — Google Sheets</div>
+        <div class="set-desc">All candidate data is stored in your shared Google Sheet. Every team member sees the same data in real time. Updates sync automatically every 30 seconds.</div>
+        <a href="https://docs.google.com/spreadsheets/d/1_zrkSjHGHcoilHgn_gqwYVyK0GSMZ8w-g7GxIISdVS0/edit" target="_blank" class="btn btn-sm" style="text-decoration:none;display:inline-flex">Open Google Sheet ↗</a>
+        <div style="margin-top:10px"><button class="btn btn-sm" onclick="exportData()">Export Backup (JSON)</button></div>
+      </div>
+    </div>
+
+
+    <!-- HIRING SOURCES -->
+    <div class="page" id="page-sources">
+      <div class="sh"><div><div class="sh-ttl">Hiring Sources</div><div class="sh-sub">Applicant volume and quality by platform</div></div></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px" id="src-stat-grid"></div>
+      <div class="sh" style="margin-top:4px">
+        <div><div class="sh-ttl" style="font-size:13px">Platform Detail</div></div>
+        <select id="src-role-filter" onchange="renderSources()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+          <option value="all">All Roles</option>
+          <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
+          <option>CSR / Admin Support</option><option>Video Editor</option><option>AI Implementation Specialist</option>
+        </select>
+      </div>
+      <div class="tbl-wrap" style="margin-bottom:20px">
+        <table><thead><tr><th>Platform</th><th>Total</th><th>Advancing (70+)</th><th>Benched</th><th>Hired</th><th>Avg Score</th><th>Conversion</th></tr></thead>
+        <tbody id="src-tbody"></tbody></table>
+      </div>
+      <div class="sh-ttl" style="font-size:13px;margin-bottom:10px">All Candidates by Source</div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Candidate</th><th>Role</th><th>Source</th><th>AI Score</th><th>Stage</th><th>Added</th><th></th></tr></thead>
+        <tbody id="src-cand-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SOPs -->
+    <div class="page" id="page-sops">
+      <div class="sh"><div><div class="sh-ttl">Screening SOPs</div><div class="sh-sub">Questions, scoring rubrics, red flags, and Claude prompts for each role</div></div></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px" id="sop-role-tabs">
+        <button class="btn btn-p btn-sm" onclick="showSop('tech',this)">Technician</button>
+        <button class="btn btn-sm" onclick="showSop('sales',this)">Sales Rep</button>
+        <button class="btn btn-sm" onclick="showSop('csr',this)">CSR / Admin</button>
+        <button class="btn btn-sm" onclick="showSop('video',this)">Video Editor</button>
+        <button class="btn btn-sm" onclick="showSop('ai',this)">AI Specialist</button>
+      </div>
+      <div id="sop-content"></div>
+    </div>
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- DETAIL MODAL -->
+<div class="overlay off" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <div class="modal-ttl" id="m-name"></div>
+      <div style="display:flex;gap:6px;align-items:center">
+        <button class="btn btn-sm" onclick="rescore()">↺ Re-score</button>
+        <div class="close-btn" onclick="closeModal()">✕</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="tabs">
+        <div class="tab on" onclick="mTab('overview',this)">Overview</div>
+        <div class="tab" onclick="mTab('ai',this)">AI Assessment</div>
+        <div class="tab" onclick="mTab('answers',this)">Answers</div>
+        <div class="tab" onclick="mTab('notes',this)">Notes</div>
+      </div>
+      <div id="mt-overview">
+        <div class="detail-grid" id="m-grid"></div>
+        <div class="divider"></div>
+        <div class="stage-row">
+          <label>Stage:</label>
+          <select id="m-stage" onchange="updateStage()">
+            <option>Applied</option><option>Screening</option><option>Video Screen</option>
+            <option>Final Interview</option><option>Reference Check</option><option>Offer</option>
+            <option>Hired</option><option>Bench</option><option>Archived</option>
+          </select>
+          <button class="btn btn-sm btn-danger" onclick="deleteCandidate()">Delete</button>
+        </div>
+      </div>
+      <div id="mt-ai" style="display:none"><div id="m-ai"></div></div>
+      <div id="mt-answers" style="display:none"><div id="m-ans"></div></div>
+      <div id="mt-notes" style="display:none">
+        <div class="fg"><label>Internal Notes (Gab / Ross)</label><textarea id="m-notes-ta" style="min-height:100px" class="fg" placeholder="Notes from video screen, reference calls, interviews..."></textarea></div>
+        <button class="btn btn-sm" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<script type="application/json" id="sops-data">
+{
+  "tech": {
+    "title": "Pest Control Technician",
+    "priority": "High",
+    "badge": "red",
+    "params": [
+      [
+        "Experience match",
+        "Years in pest control, service types, relevant CV skills",
+        "0-25 pts"
+      ],
+      [
+        "Reliability signals",
+        "Driver's license, job tenure history, consistency",
+        "0-20 pts"
+      ],
+      [
+        "Communication quality",
+        "Written clarity, video presence, customer scenario",
+        "0-15 pts"
+      ],
+      [
+        "Motivation fit",
+        "Specificity of interest, long-term signals, attitude",
+        "0-15 pts"
+      ],
+      [
+        "Area fit / Availability",
+        "Can cover routes, available soon, full-time",
+        "0-15 pts"
+      ],
+      [
+        "Bonus qualifiers",
+        "FL license, bilingual, referral, GorillaDesk exp.",
+        "0-10 pts"
+      ]
+    ],
+    "questions": [
+      {
+        "code": "A1",
+        "q": "What city or area do you currently live in?",
+        "why": "Confirms geographic fit for service routes.",
+        "score": "Area fit"
+      },
+      {
+        "code": "A2",
+        "q": "Do you have a valid driver's license and reliable transportation?",
+        "why": "Route work requires daily driving — non-negotiable.",
+        "score": "Reliability signals"
+      },
+      {
+        "code": "A3",
+        "q": "When are you available to start? Is this a full-time interest?",
+        "why": "We need full-time techs urgently. Part-time is a flag.",
+        "score": "Motivation fit"
+      },
+      {
+        "code": "A4",
+        "q": "What is your compensation expectation?",
+        "why": "Prevents time lost on candidates above budget.",
+        "score": "Noted — not scored"
+      },
+      {
+        "code": "B1",
+        "q": "How many years of pest control experience do you have? What services have you performed?",
+        "why": "Core experience question. Claude cross-references against CV.",
+        "score": "Experience match (primary)"
+      },
+      {
+        "code": "B2",
+        "q": "Do you currently hold a Florida Pest Control license? If yes, which category?",
+        "why": "Active license adds bonus points. Unlicensed is NOT disqualified.",
+        "score": "Bonus qualifiers (+4 pts)"
+      },
+      {
+        "code": "B3",
+        "q": "List your last 2 employers, your role, how long you were there, and why you left.",
+        "why": "Job tenure is the strongest reliability signal for field roles.",
+        "score": "Reliability signals (primary)"
+      },
+      {
+        "code": "C1",
+        "q": "Describe a time you dealt with a difficult or unhappy customer. What happened and how did you handle it?",
+        "why": "Best predictor of customer-facing success. Claude looks for ownership, calm, resolution.",
+        "score": "Communication quality"
+      },
+      {
+        "code": "C2",
+        "q": "You're on your 5th stop and the job is running long. You have 3 more stops and it's 3pm. What do you do?",
+        "why": "Tests time management and proactive communication under pressure.",
+        "score": "Communication + Motivation"
+      },
+      {
+        "code": "C3",
+        "q": "Why do you want to work as a pest control technician, and specifically why Wise House?",
+        "why": "Separates intentional candidates from spray-and-pray applicants.",
+        "score": "Motivation fit (primary)"
+      },
+      {
+        "code": "D1",
+        "q": "Record a 60-second Loom video: who you are, your experience, and why you'd be a great fit.",
+        "why": "Reveals communication style and professionalism beyond written answers.",
+        "score": "Communication quality"
+      },
+      {
+        "code": "D2",
+        "q": "Upload your resume or paste a Google Drive link.",
+        "why": "Claude reads CV for employment history, tenure, licenses, certifications.",
+        "score": "Informs all parameters"
+      }
+    ],
+    "flags": [
+      "No driver's license mentioned — route work is impossible without one",
+      "Location outside service territory — commute not viable for daily routes",
+      "Frequent job changes with no explanation — 3+ jobs in under 2 years",
+      "CV and written answers do not match — experience discrepancy flagged",
+      "Poor customer scenario judgment — blames customer, no resolution shown",
+      "Compensation significantly above range — Claude flags but does not penalize score",
+      "Video link missing or broken — reduces Communication score",
+      "Very short or one-word answers to situational questions",
+      "Generic motivation answer — no awareness of what pest control work involves"
+    ],
+    "prompt": "You are a recruiting assistant for Wise House Pest Control. Score this Pest Control Technician candidate.\n\nCANDIDATE:\nName: [NAME] | Location: [CITY] | Transport: [TRANSPORT]\nAvailability: [AVAILABILITY] | Comp: [COMP]\nExperience years: [EXP_YEARS] | Services: [SERVICES]\nFL license: [LICENSE] | Job history: [JOB_HISTORY]\nCustomer scenario: [ANSWER_C1]\nSchedule pressure: [ANSWER_C2]\nMotivation: [ANSWER_C3]\nVideo: [VIDEO_LINK]\nCV: [RESUME_TEXT]\n\nSCORING (100 pts):\nExperience (0-25) + Reliability (0-20) + Communication (0-15) + Motivation (0-15) + Availability (0-15) + Bonus (0-10)\n\nRULES: Fair, objective. Never reject — only score. Unlicensed is NOT a disqualifier.\n\nReturn ONLY valid JSON:\n{\"score\":75,\"breakdown\":{\"experience\":18,\"communication\":13,\"motivation\":12,\"reliability\":14,\"availability\":13,\"bonus\":5},\"tier\":\"Advance\",\"summary\":\"3-sentence summary.\",\"strengths\":[\"s1\",\"s2\"],\"concerns\":[\"c1\",\"c2\"],\"flags\":[\"f1\"],\"comp_note\":\"In range\",\"screen_questions\":[\"q1\",\"q2\",\"q3\"]}"
+  },
+  "sales": {
+    "title": "Outbound Sales Representative",
+    "priority": "Med-High",
+    "badge": "amber",
+    "params": [
+      [
+        "Sales experience",
+        "Years in pest control sales, companies, services sold",
+        "0-25 pts"
+      ],
+      [
+        "Sales performance",
+        "Deal sizes, close rates, objection handling, live test",
+        "0-25 pts"
+      ],
+      [
+        "Communication",
+        "Written clarity, video presence, persuasiveness",
+        "0-20 pts"
+      ],
+      [
+        "Motivation fit",
+        "Intent, goal-setting, long-term signals",
+        "0-15 pts"
+      ],
+      [
+        "Comp alignment",
+        "Open to base + commission, expectation in range",
+        "0-10 pts"
+      ],
+      [
+        "Bonus qualifiers",
+        "GorillaDesk/CRM exp., bilingual, referral",
+        "0-5 pts"
+      ]
+    ],
+    "questions": [
+      {
+        "code": "A1",
+        "q": "How many years of pest control sales experience do you have? Which companies?",
+        "why": "Industry-specific experience is the top differentiator.",
+        "score": "Sales experience (primary)"
+      },
+      {
+        "code": "A2",
+        "q": "Have you sold fumigations, termite treatments, or high-ticket pest services? Average deal size and close rate?",
+        "why": "We need someone who closes $1,000-$10,000+ jobs.",
+        "score": "Sales experience + Sales performance"
+      },
+      {
+        "code": "A3",
+        "q": "Describe your outbound inspection process from first call to closing the job.",
+        "why": "Strong candidates describe a repeatable, structured method.",
+        "score": "Communication + Experience"
+      },
+      {
+        "code": "A4",
+        "q": "What CRM or sales tools have you used?",
+        "why": "GorillaDesk familiarity is a significant plus.",
+        "score": "Bonus qualifiers"
+      },
+      {
+        "code": "A5",
+        "q": "What is your compensation expectation? Are you comfortable with base + commission?",
+        "why": "Commission appetite is required. Flat salary only is a poor fit.",
+        "score": "Comp alignment — flagged if only wants flat salary"
+      },
+      {
+        "code": "B1",
+        "q": "Sell me on why a homeowner should choose Wise House over Orkin or Terminix. Write as if speaking directly to the homeowner.",
+        "why": "Live sales test. Claude evaluates persuasiveness and specificity.",
+        "score": "Communication + Sales performance"
+      },
+      {
+        "code": "B2",
+        "q": "A homeowner says the quote is too expensive and wants to think about it. What do you say next — word for word?",
+        "why": "Objection handling is the clearest predictor of sales performance.",
+        "score": "Sales performance (primary)"
+      },
+      {
+        "code": "B3",
+        "q": "Tell me about the biggest fumigation or termite job you have ever closed. Walk me through it.",
+        "why": "Verifies claimed experience and reveals actual sales process.",
+        "score": "Experience + Sales performance"
+      },
+      {
+        "code": "B4",
+        "q": "Why do you want to work in sales at Wise House, and what does a successful first year look like?",
+        "why": "Long-term intent and goal-setting are strong retention predictors.",
+        "score": "Motivation fit"
+      },
+      {
+        "code": "C1",
+        "q": "Record a 60-second Loom video: introduce yourself, your biggest pest control sales achievement, and why you would be a top performer.",
+        "why": "For a sales role, video energy and presence is a direct performance signal.",
+        "score": "Communication (primary)"
+      }
+    ],
+    "flags": [
+      "Only wants flat salary — commission appetite is required for this role",
+      "No pest control sales experience — adjacent sales noted but scored lower",
+      "Generic live sales test — answer does not mention local service or specific pest issues",
+      "No objection handling attempt — agreeing with objection without reframe",
+      "Exaggerated deal sizes without supporting detail — flagged for reference check",
+      "Flat or low-energy video — direct concern for a customer-facing sales role",
+      "Multiple stints under 1 year — suggests inability to build a pipeline"
+    ],
+    "prompt": "You are a recruiting assistant for Wise House Pest Control. Score this Outbound Sales Rep candidate.\n\nCANDIDATE:\nName: [NAME] | Source: [SOURCE] | Comp: [COMP]\nExperience: [EXP] | Biggest deal / close rate: [DEALS]\nOutbound process: [PROCESS] | CRM tools: [CRM]\nLive sales test answer: [SALES_TEST]\nObjection handling: [OBJECTION]\nBiggest close story: [BIG_CLOSE]\nMotivation: [MOTIVATION] | Video: [VIDEO]\nCV: [RESUME]\n\nSCORING (100 pts):\nSales experience (0-25) + Sales performance (0-25) + Communication (0-20) + Motivation (0-15) + Comp alignment (0-10) + Bonus (0-5)\n\nRULES: Fair. Never reject — only score. Flag flat-salary-only preference explicitly.\n\nReturn ONLY valid JSON:\n{\"score\":75,\"breakdown\":{\"sales_experience\":18,\"sales_performance\":19,\"communication\":15,\"motivation\":12,\"comp_alignment\":8,\"bonus\":3},\"tier\":\"Advance\",\"summary\":\"3-sentence summary.\",\"strengths\":[\"s1\",\"s2\"],\"concerns\":[\"c1\",\"c2\"],\"flags\":[\"f1\"],\"comp_note\":\"In range\",\"screen_questions\":[\"q1\",\"q2\",\"q3\"]}"
+  },
+  "csr": {
+    "title": "CSR / Admin Support",
+    "priority": "Medium",
+    "badge": "blue",
+    "params": [
+      [
+        "Communication quality",
+        "English fluency (voice + written), professionalism, grammar",
+        "0-30 pts"
+      ],
+      [
+        "Experience match",
+        "US company work history, customer service volume, phone exp.",
+        "0-20 pts"
+      ],
+      [
+        "Technical reliability",
+        "Internet speed, equipment quality, workspace",
+        "0-15 pts"
+      ],
+      [
+        "Availability fit",
+        "Hours overlap with US Eastern, full-time commitment",
+        "0-15 pts"
+      ],
+      [
+        "Problem-solving",
+        "Situational answer quality, prioritization, judgment",
+        "0-10 pts"
+      ],
+      [
+        "Bonus qualifiers",
+        "GorillaDesk/field service CRM, bilingual, prior pest control CSR",
+        "0-10 pts"
+      ]
+    ],
+    "questions": [
+      {
+        "code": "A1 — GATE",
+        "q": "Record a 60-second Loom or voice note: your name, where you are based, US company experience, and why you are interested. Required — application not reviewed without this.",
+        "why": "English fluency gate step. Eliminates poor-fit candidates before any time is invested.",
+        "score": "Communication quality (primary) — gate step"
+      },
+      {
+        "code": "A2",
+        "q": "What is your internet speed (test at fast.com)? What computer and headset do you use?",
+        "why": "Remote CSRs need 25Mbps+ minimum. A practical constraint, not a preference.",
+        "score": "Technical reliability — flagged if below minimum"
+      },
+      {
+        "code": "A3",
+        "q": "What hours are you available? We operate on US Eastern Time (8am-6pm EST/EDT).",
+        "why": "Minimum 6-hour overlap with Eastern business hours is non-negotiable.",
+        "score": "Availability fit — flagged if insufficient overlap"
+      },
+      {
+        "code": "B1",
+        "q": "Have you worked for a US-based company before? Describe the role, duration, and responsibilities.",
+        "why": "US work culture experience significantly reduces onboarding time.",
+        "score": "Experience match (primary)"
+      },
+      {
+        "code": "B2",
+        "q": "What scheduling, CRM, or field service tools have you used? (GorillaDesk, ServiceTitan, HouseCall Pro, etc.)",
+        "why": "GorillaDesk experience is highly valuable for Wise House operations.",
+        "score": "Bonus qualifiers (+3 for GorillaDesk or field service CRM)"
+      },
+      {
+        "code": "C1",
+        "q": "A customer calls very upset — a technician was 2 hours late and no one called. How do you handle this call from start to finish?",
+        "why": "Most common real scenario. Claude looks for: acknowledges, apologizes, resolves, documents.",
+        "score": "Communication + Problem-solving"
+      },
+      {
+        "code": "C2",
+        "q": "It is 4:30pm Friday. You have 3 voicemails, 2 new leads, and a technician calling in sick for Monday. How do you prioritize the next 30 minutes?",
+        "why": "Tests structured thinking and composure under real-world pressure.",
+        "score": "Problem-solving + Reliability"
+      },
+      {
+        "code": "C3",
+        "q": "Write a short email response to a customer who asked why their pest problem came back 3 weeks after their last service.",
+        "why": "Direct written communication test. Claude evaluates tone, grammar, and empathy balance.",
+        "score": "Communication quality"
+      }
+    ],
+    "flags": [
+      "Voice recording skipped — non-negotiable gate step. Prompt once; archive if no response in 48 hrs",
+      "Poor English fluency — unclear pronunciation or very limited vocabulary flagged",
+      "Internet speed below 25Mbps — insufficient for reliable call quality",
+      "Cannot cover Eastern business hours — logistics dealbreaker",
+      "Multiple grammar errors in written email response (C3)",
+      "No US company experience — not a disqualifier but significantly reduces score",
+      "Blames others in customer scenario — deflects responsibility onto technician or company"
+    ],
+    "prompt": "You are a recruiting assistant for Wise House Pest Control. Score this CSR / Admin Support candidate.\n\nCANDIDATE:\nName: [NAME] | Location: [LOCATION] | Source: [SOURCE]\nVoice recording link: [VOICE_LINK]\nInternet speed: [INTERNET] | Equipment: [EQUIPMENT]\nAvailable hours (Eastern): [HOURS]\nUS company experience: [US_EXP] | CRM tools: [CRM]\nUpset customer scenario: [ANSWER_C1]\nFriday prioritization: [ANSWER_C2]\nEmail response (C3): [ANSWER_C3]\nCV: [RESUME]\n\nSCORING (100 pts):\nCommunication (0-30) + Experience (0-20) + Technical reliability (0-15) + Availability (0-15) + Problem-solving (0-10) + Bonus (0-10)\n\nRULES: Fair. Never reject — only score. Flag missing voice recording explicitly.\n\nReturn ONLY valid JSON:\n{\"score\":75,\"breakdown\":{\"communication\":22,\"experience\":15,\"technical\":12,\"availability\":13,\"problem_solving\":8,\"bonus\":5},\"tier\":\"Advance\",\"summary\":\"3-sentence summary.\",\"strengths\":[\"s1\",\"s2\"],\"concerns\":[\"c1\",\"c2\"],\"flags\":[\"f1\"],\"comp_note\":\"Not provided\",\"screen_questions\":[\"q1\",\"q2\",\"q3\"]}"
+  },
+  "video": {
+    "title": "Video Editor",
+    "priority": "Medium",
+    "badge": "green",
+    "params": [
+      [
+        "Portfolio quality",
+        "Quality, relevance, and variety of short-form examples",
+        "0-30 pts"
+      ],
+      [
+        "Technical skill",
+        "Software proficiency, workflow clarity, delivery speed",
+        "0-20 pts"
+      ],
+      [
+        "Creative communication",
+        "Written creative approach, structured thinking",
+        "0-20 pts"
+      ],
+      [
+        "Reliability signals",
+        "Turnaround commitments, capacity, revision process",
+        "0-15 pts"
+      ],
+      [
+        "Comp alignment",
+        "Rate within budget, availability matches needs",
+        "0-10 pts"
+      ],
+      [
+        "Bonus qualifiers",
+        "Home services niche experience, paid test agreement",
+        "0-5 pts"
+      ]
+    ],
+    "questions": [
+      {
+        "code": "A1 — GATE",
+        "q": "Share a link to your portfolio with at least 3 examples of short-form or social media content you have edited. No portfolio = no review.",
+        "why": "Portfolio is the primary screen. Claude evaluates what the candidate writes about their work.",
+        "score": "Portfolio quality — gate step"
+      },
+      {
+        "code": "A2",
+        "q": "What editing software do you use? Describe your workflow from raw footage to final delivery.",
+        "why": "Professional workflow descriptions separate experienced editors from hobbyists.",
+        "score": "Technical skill"
+      },
+      {
+        "code": "A3",
+        "q": "Have you edited content for home services, pest control, trades, or similar industries?",
+        "why": "Niche familiarity reduces onboarding significantly.",
+        "score": "Bonus qualifiers (+3 for relevant niche)"
+      },
+      {
+        "code": "B1",
+        "q": "What is your typical turnaround for a 60-second reel from raw footage? How many reels can you deliver per week consistently?",
+        "why": "Sets realistic expectations. We need 2-4 reels per week consistently.",
+        "score": "Reliability signals"
+      },
+      {
+        "code": "B2",
+        "q": "Describe a time a client was unhappy with an edit. What was the feedback and what did you change?",
+        "why": "Reveals professionalism, revision process, and ability to take direction.",
+        "score": "Communication + Reliability"
+      },
+      {
+        "code": "B3",
+        "q": "You receive 5 minutes of raw footage from a pest control technician on the job — no script, no structure. How do you turn it into a compelling 60-second Reel?",
+        "why": "Tests creative problem-solving with unstructured input — exactly what they will face at Wise House.",
+        "score": "Creative communication (primary)"
+      },
+      {
+        "code": "C1 — PAID TEST",
+        "q": "We run a paid test edit as part of screening. We will provide raw footage and ask for one 60-second Reel. Payment upon delivery. Are you willing to complete this?",
+        "why": "Paid test edit is the single most important screening tool. Candidates who decline are benched.",
+        "score": "Required to advance — decline = bench"
+      }
+    ],
+    "flags": [
+      "No portfolio provided — non-negotiable gate step. No portfolio = application not reviewed",
+      "Portfolio has no short-form content — long-form corporate videos do not translate to Reels",
+      "Declines paid test edit — the most critical evaluation step. Decline = benched",
+      "Vague workflow description — inability to describe process suggests low experience",
+      "Unrealistic turnaround claims — 10+ reels per week at high quality raises credibility concerns",
+      "Generic creative approach answer — shows limited creative thinking"
+    ],
+    "prompt": "You are a recruiting assistant for Wise House Pest Control. Score this Video Editor candidate.\n\nCANDIDATE:\nName: [NAME] | Source: [SOURCE] | Rate: [RATE]\nPortfolio: [PORTFOLIO]\nSoftware + workflow: [WORKFLOW]\nNiche experience: [NICHE]\nTurnaround + capacity: [TURNAROUND]\nClient feedback story: [FEEDBACK]\nRaw footage approach: [CREATIVE]\nPaid test agreement: [TEST_AGREE]\nCV: [RESUME]\n\nSCORING (100 pts):\nPortfolio quality (0-30) + Technical skill (0-20) + Creative communication (0-20) + Reliability (0-15) + Comp alignment (0-10) + Bonus (0-5)\n\nRULES: Fair. Never reject — only score. Flag missing portfolio and test edit refusal explicitly.\n\nReturn ONLY valid JSON:\n{\"score\":75,\"breakdown\":{\"portfolio\":22,\"technical\":15,\"creative\":16,\"reliability\":12,\"comp\":8,\"bonus\":2},\"tier\":\"Advance\",\"summary\":\"3-sentence summary.\",\"strengths\":[\"s1\",\"s2\"],\"concerns\":[\"c1\",\"c2\"],\"flags\":[\"f1\"],\"comp_note\":\"In range\",\"screen_questions\":[\"q1\",\"q2\",\"q3\"]}"
+  },
+  "ai": {
+    "title": "AI Implementation Specialist",
+    "priority": "Strategic",
+    "badge": "purple",
+    "params": [
+      [
+        "Technical depth",
+        "Tool stack breadth, build descriptions, architecture thinking",
+        "0-30 pts"
+      ],
+      [
+        "Build experience",
+        "Complexity and relevance of past projects, real deployments",
+        "0-25 pts"
+      ],
+      [
+        "Problem-solving",
+        "Wise House scenario response quality, logical approach",
+        "0-20 pts"
+      ],
+      [
+        "Communication",
+        "Written clarity, explains technical concepts well",
+        "0-10 pts"
+      ],
+      [
+        "Comp and availability",
+        "Rate in budget, open to paid test project",
+        "0-10 pts"
+      ],
+      [
+        "Bonus qualifiers",
+        "GorillaDesk/field service API, open-source contributions, referral",
+        "0-5 pts"
+      ]
+    ],
+    "questions": [
+      {
+        "code": "A1 — GATE",
+        "q": "Share a link to at least one of: a live automation you built, a GitHub repo, a case study with results, or a demo video. Describe what it did, tools used, and outcome achieved.",
+        "why": "Portfolio evidence is non-negotiable. Descriptions without proof are not advanced.",
+        "score": "Build experience — gate step"
+      },
+      {
+        "code": "A2",
+        "q": "List the AI and automation tools you use regularly and rate your proficiency: Make.com, n8n, Zapier, Claude API, OpenAI, LangChain, REST APIs, webhooks.",
+        "why": "Expert in everything without evidence is a credibility flag. Honest self-assessments score higher.",
+        "score": "Technical depth (primary)"
+      },
+      {
+        "code": "A3",
+        "q": "Have you built integrations with field service software or CRMs? (GorillaDesk, ServiceTitan, HouseCall Pro, Salesforce, HubSpot)",
+        "why": "GorillaDesk or field service API experience is highly valuable for Wise House.",
+        "score": "Bonus qualifiers (+5 for GorillaDesk or field service API)"
+      },
+      {
+        "code": "B1",
+        "q": "Describe the most complex automation or AI workflow you have ever built: the problem, architecture decisions, tools connected, challenges hit, and measurable outcome.",
+        "why": "Most important question. Claude looks for clear problem definition, specific tools, honest challenges, quantified results.",
+        "score": "Build experience + Technical depth + Problem-solving"
+      },
+      {
+        "code": "B2",
+        "q": "Share an example of a complex AI prompt or agent system you built. What was the goal, what prompt structure did you use, and how did you iterate?",
+        "why": "Evaluates prompt engineering sophistication beyond basic ChatGPT usage.",
+        "score": "Technical depth"
+      },
+      {
+        "code": "B3",
+        "q": "Wise House uses GorillaDesk as our CRM. We want to automate: (1) follow-up messages after service, (2) lead qualification from web forms, and (3) tech scheduling notifications. How would you approach this? What tools and why?",
+        "why": "Real Wise House use case. Tests applied thinking, not theoretical knowledge.",
+        "score": "Problem-solving + Technical depth + Communication"
+      },
+      {
+        "code": "B4",
+        "q": "What is your availability and rate? Are you open to a paid test project as part of the evaluation?",
+        "why": "Paid test project is required. This gauges openness before investing further.",
+        "score": "Comp alignment — test project refusal flagged"
+      }
+    ],
+    "flags": [
+      "No portfolio or build evidence — non-negotiable gate step. Descriptions without proof are not advanced",
+      "Vague build descriptions — outcomes without architecture or tool specifics suggest surface-level experience",
+      "Claims Expert in every tool without supporting project evidence",
+      "Generic Wise House scenario answer — tool names without architecture thinking",
+      "Declines paid test project without explanation — not advanced to hire decision",
+      "Rate significantly above budget — flag and confirm range before scheduling screen",
+      "No API or webhook experience — drag-and-drop only without integration depth is insufficient"
+    ],
+    "prompt": "You are a recruiting assistant for Wise House Pest Control. Score this AI Implementation Specialist candidate.\n\nCANDIDATE:\nName: [NAME] | Source: [SOURCE] | Rate: [RATE]\nPortfolio / build evidence: [PORTFOLIO]\nTool stack + proficiency: [TOOLS]\nField service CRM experience: [CRM_EXP]\nMost complex build: [COMPLEX_BUILD]\nPrompt engineering example: [PROMPT_EXP]\nWise House scenario answer: [WH_SCENARIO]\nPaid test agreement: [TEST_AGREE]\nCV: [RESUME]\n\nSCORING (100 pts):\nTechnical depth (0-30) + Build experience (0-25) + Problem-solving (0-20) + Communication (0-10) + Comp and availability (0-10) + Bonus (0-5)\n\nRULES: Fair. Never reject — only score. Flag missing portfolio and vague builds explicitly.\n\nReturn ONLY valid JSON:\n{\"score\":75,\"breakdown\":{\"technical\":22,\"build_experience\":18,\"problem_solving\":16,\"communication\":8,\"comp\":8,\"bonus\":3},\"tier\":\"Advance\",\"summary\":\"3-sentence summary.\",\"strengths\":[\"s1\",\"s2\"],\"concerns\":[\"c1\",\"c2\"],\"flags\":[\"f1\"],\"comp_note\":\"In range\",\"screen_questions\":[\"q1\",\"q2\",\"q3\"]}"
+  }
+}
+</script>
+
+<script>
+// ── STATE ──────────────────────────────────────
+let C = []; // loaded from Google Sheets
+let KEY = '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';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyYsZY_YcqEn7z3Gdts2Qh_c1vWEzf_vnJ17I_VZMe8B5Z-XnoOOdNfQtpc_kXiSZva/exec';
+let AID = null; // active candidate id
+
+const ROLES = ['Pest Control Technician','Outbound Sales Rep','CSR / Admin Support','Video Editor','AI Implementation Specialist'];
+const RC = {Technician:'coral','Pest Control Technician':'red','Outbound Sales Rep':'amber','CSR / Admin Support':'blue','Video Editor':'green','AI Implementation Specialist':'purple'};
+const SC = {Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Reference Check':'amber',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};
+const STAGES = ['Applied','Screening','Video Screen','Final Interview','Reference Check','Offer','Hired','Bench','Archived'];
+
+// ── NAVIGATION ─────────────────────────────────
+function go(page, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+  document.getElementById('page-' + page).classList.add('on');
+  if (el) el.classList.add('on');
+  const titles = {dashboard:'Dashboard',pipeline:'Pipeline',candidates:'All Candidates',add:'Add Candidate',reports:'Reports',settings:'Settings'};
+  document.getElementById('page-ttl').textContent = titles[page] || page;
+  if (page === 'dashboard') renderDash();
+  if (page === 'pipeline') renderPipeline();
+  if (page === 'candidates') renderTable();
+  if (page === 'reports') renderReports();
+  if (page === 'sources') renderSources();
+  if (page === 'sops') showSop('tech', document.querySelector('#sop-role-tabs button'));
+  if (page === 'settings') { const i = document.getElementById('api-inp'); if(i && KEY) i.value = KEY; }
+}
+
+// ── PERSIST ────────────────────────────────────
+function save() { badge(); } // data persisted per-operation to Google Sheets
+function badge() {
+  const n = C.filter(c => !['Hired','Archived'].includes(c.stage)).length;
+  document.getElementById('nb').textContent = n;
+}
+function apiStatus() {
+  const ind = document.getElementById('api-ind');
+  if (ind) { ind.textContent = '✓ Connected'; ind.style.color = 'var(--green)'; }
+  const dot = document.getElementById('api-dot');
+  if (dot) dot.style.background = 'var(--green)';
+  const lbl = document.getElementById('api-lbl');
+  if (lbl) { lbl.textContent = 'AI scoring active — ready to use'; lbl.style.color = 'var(--green)'; }
+}
+
+// ── UPLOAD HANDLERS ────────────────────────────
+function ev(e, type) {
+  e.preventDefault();
+  const uz = document.getElementById('uz');
+  if (type === 'over') uz.classList.add('drag');
+  else if (type === 'leave') uz.classList.remove('drag');
+  else if (type === 'drop') { uz.classList.remove('drag'); const f = e.dataTransfer.files[0]; if(f) processFile(f); }
+}
+function onFile(e) { const f = e.target.files[0]; if(f) processFile(f); }
+
+async function processFile(file) {
+  if (!KEY) { document.getElementById('parse-banner').innerHTML = '<div class="warn-b">⚠ API key required for resume parsing. Add it in Settings first.</div>'; return; }
+  const pw = document.getElementById('prog-wrap'), pf = document.getElementById('prog-fill'), pt = document.getElementById('prog-txt');
+  pw.style.display = 'block';
+  document.getElementById('parse-banner').innerHTML = '';
+  let pct = 0;
+  const tick = setInterval(() => { pct = Math.min(pct + 10, 80); pf.style.width = pct + '%'; }, 200);
+  pt.textContent = 'Reading file...';
+  try {
+    let result;
+    const isImg = file.type.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp)$/i.test(file.name);
+    if (isImg) {
+      pt.textContent = 'Sending to Claude...';
+      const b64 = await toBase64(file);
+      result = await parseResume(null, true, b64, file.type || 'image/jpeg');
+    } else {
+      pt.textContent = 'Parsing with Claude...';
+      const txt = await toText(file);
+      result = await parseResume(txt, false, null, null);
+    }
+    clearInterval(tick); pf.style.width = '100%';
+    if (result) {
+      fillForm(result);
+      pw.style.display = 'none';
+      document.getElementById('parse-banner').innerHTML = '<div class="ok-b">✓ Resume parsed — fields auto-filled. Review before scoring.</div>';
+    } else {
+      pw.style.display = 'none';
+      document.getElementById('parse-banner').innerHTML = '<div class="warn-b">Could not parse. Try a different format or fill in manually.</div>';
+    }
+  } catch(e) {
+    clearInterval(tick); pw.style.display = 'none';
+    document.getElementById('parse-banner').innerHTML = '<div class="warn-b">Error reading file. Try pasting resume text manually.</div>';
+  }
+}
+function toBase64(file) {
+  return new Promise((res,rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; r.readAsDataURL(file); });
+}
+function toText(file) {
+  return new Promise((res,rej) => { const r = new FileReader(); r.onload = e => res(e.target.result); r.onerror = rej; r.readAsText(file); });
+}
+async function parseResume(text, isImg, b64, mime) {
+  const instr = `Extract info from this resume. Return ONLY valid JSON, no markdown, no extra text:
+{"name":null,"email":null,"phone":null,"comp":null,"availability":null,"resume_text":"2-4 sentence summary","experience_summary":"detailed work history and skills","role_guess":null}
+role_guess must be one of: Pest Control Technician, Outbound Sales Rep, CSR / Admin Support, Video Editor, AI Implementation Specialist — or null.`;
+  const msgs = isImg
+    ? [{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:instr}]}]
+    : [{role:'user',content:instr+'\n\nRESUME:\n'+text}];
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:msgs})});
+    const d = await r.json();
+    const raw = d.content?.[0]?.text || '';
+    return JSON.parse(raw.replace(/```json|```/g,'').trim());
+  } catch(e) { return null; }
+}
+function fillForm(p) {
+  const map = {fn:p.name,fe:p.email,fp:p.phone,fc:p.comp,fa:p.availability,fres:p.resume_text,fq1:p.experience_summary};
+  Object.entries(map).forEach(([id,val]) => {
+    if (val && val !== 'null') {
+      const el = document.getElementById(id);
+      if (el) { el.value = val; el.classList.add('populated'); setTimeout(()=>el.classList.remove('populated'),2500); }
+    }
+  });
+  if (p.role_guess && p.role_guess !== 'null') {
+    const sel = document.getElementById('fr');
+    const opt = Array.from(sel.options).find(o => o.value === p.role_guess);
+    if (opt) { sel.value = p.role_guess; sel.classList.add('populated'); setTimeout(()=>sel.classList.remove('populated'),2500); }
+  }
+}
+
+// ── ADD + SCORE ────────────────────────────────
+async function addCandidate() {
+  const name = document.getElementById('fn').value.trim();
+  const role = document.getElementById('fr').value;
+  const src  = document.getElementById('fs').value;
+  if (!name || !role || !src) { toast('Name, role and source are required'); return; }
+  const c = {
+    id: Date.now().toString(), name, role, source: src,
+    email:document.getElementById('fe').value.trim(),
+    phone:document.getElementById('fp').value.trim(),
+    comp:document.getElementById('fc').value.trim(),
+    availability:document.getElementById('fa').value.trim(),
+    video:document.getElementById('fv').value.trim(),
+    resume:document.getElementById('fres').value.trim(),
+    q1:document.getElementById('fq1').value.trim(),
+    q2:document.getElementById('fq2').value.trim(),
+    q3:document.getElementById('fq3').value.trim(),
+    notes:document.getElementById('fnotes').value.trim(),
+    stage:'Applied', added:new Date().toISOString(),
+    score:null, report:null
+  };
+  C.unshift(c);
+  badge();
+  pushToSheet('add', c);
+  if (KEY) {
+    document.getElementById('ai-area').innerHTML = `<div class="thinking"><div class="spin"></div><span class="pulse">Claude is reviewing ${name}...</span></div>`;
+    const rpt = await scoreCandidate(c);
+    if (rpt) {
+      c.score = rpt.score; c.report = rpt;
+      c.stage = autoStage(rpt.score);
+      save();
+      document.getElementById('ai-area').innerHTML = aiPanel(rpt);
+      toast(`${name} added · ${rpt.score}/100 · ${c.stage}`, 'ok');
+    } else {
+      document.getElementById('ai-area').innerHTML = '<div class="warn-b">AI scoring failed: '+(window._lastApiError||'Unknown — open F12 console for details')+'</div>';
+      toast(`${name} added`);
+    }
+  } else {
+    document.getElementById('ai-area').innerHTML = '';
+    toast(`${name} added — add API key in Settings to enable scoring`, 'ok');
+  }
+  renderDash();
+  clearForm();
+}
+
+async function scoreCandidate(c) {
+  const p = `You are a recruiting assistant for Wise House pest control. Score this ${c.role} candidate.
+Name: ${c.name} | Source: ${c.source} | Comp: ${c.comp||'?'} | Available: ${c.availability||'?'}
+Resume: ${c.resume||'N/A'} | Experience: ${c.q1||'N/A'} | Customer scenario: ${c.q2||'N/A'} | Motivation: ${c.q3||'N/A'} | Video: ${c.video||'N/A'}
+Score 100pts: experience(25)+communication(20)+motivation(15)+reliability(15)+availability(15)+bonus(10). Be fair, never reject — only score.
+Return ONLY valid JSON no markdown:
+{"score":75,"breakdown":{"experience":18,"communication":15,"motivation":12,"reliability":13,"availability":12,"bonus":5},"tier":"Advance","summary":"3-sentence summary.","strengths":["s1","s2"],"concerns":["c1","c2"],"flags":["f1 or None identified"],"comp_note":"In range","screen_questions":["q1","q2","q3"]}`;
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:p}]})});
+    const d = await r.json();
+    if (d.error) { console.error('API Error:', JSON.stringify(d.error)); window._lastApiError = JSON.stringify(d.error); return null; }
+    return JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
+  } catch(e) { console.error('Fetch error:', e); window._lastApiError = e.message; return null; }
+}
+
+function autoStage(s) {
+  const strong = parseInt(document.getElementById('t-strong')?.value||85);
+  const adv    = parseInt(document.getElementById('t-adv')?.value||70);
+  const bench  = parseInt(document.getElementById('t-bench')?.value||55);
+  if (s >= strong || s >= adv) return 'Screening';
+  if (s >= bench) return 'Bench';
+  return 'Archived';
+}
+
+function aiPanel(r) {
+  if (!r) return '<div class="empty">No AI report.</div>';
+  const sc = r.score>=85?'#4ADE80':r.score>=70?'#60A5FA':r.score>=55?'#FCD34D':'#FCA5A5';
+  const bd = r.breakdown||{};
+  const params = [['Experience',bd.experience||0,25],['Communication',bd.communication||0,20],['Motivation',bd.motivation||0,15],['Reliability',bd.reliability||0,15],['Availability',bd.availability||0,15],['Bonus',bd.bonus||0,10]];
+  const flags = (r.flags||[]).filter(f=>f&&!f.toLowerCase().includes('none'));
+  const qs = r.screen_questions||[];
+  return `<div class="ai-panel">
+    <div class="ai-lbl">Claude AI Assessment</div>
+    <div style="display:flex;align-items:flex-end;gap:14px;margin-bottom:12px">
+      <div><div class="ai-score-big" style="color:${sc}">${r.score}</div><div class="ai-sub">/ 100 · ${r.tier||''}</div></div>
+      <div style="flex:1;font-size:12px;color:var(--tx2);line-height:1.6">${r.summary||''}</div>
+    </div>
+    <div class="breakdown">${params.map(([n,v,m])=>`<div class="bp"><div class="bp-n">${n}</div><div class="bp-row"><span class="bp-num">${v}/${m}</span><div class="bar-t"><div class="bar-f" style="width:${Math.round(v/m*100)}%"></div></div></div></div>`).join('')}</div>
+    <div class="ai-sec">Strengths</div>
+    <div class="chip-row">${(r.strengths||[]).map(s=>`<span class="chip" style="color:#4ADE80;border-color:rgba(74,222,128,0.2)">✓ ${s}</span>`).join('')}</div>
+    <div class="ai-sec">Concerns</div>
+    <div class="chip-row">${(r.concerns||[]).map(c=>`<span class="chip" style="color:#FCD34D;border-color:rgba(252,211,77,0.2)">⚠ ${c}</span>`).join('')}</div>
+    <div class="ai-sec">Red Flags</div>
+    ${flags.length?flags.map(f=>`<div class="flag-row"><div class="fdot"></div>${f}</div>`).join(''):'<div style="font-size:11px;color:var(--green)">✓ No red flags</div>'}
+    <div class="ai-sec">Comp Note</div>
+    <div style="font-size:12px;color:var(--tx2)">${r.comp_note||'Not assessed'}</div>
+    ${qs.length?`<div class="ai-sec">Screen Questions for Gab</div>${qs.map((q,i)=>`<div class="q-row"><span class="qdot">${i+1}</span>${q}</div>`).join('')}`:''}
+  </div>`;
+}
+
+function clearForm() {
+  ['fn','fe','fp','fc','fa','fv','fres','fq1','fq2','fq3','fnotes'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['fr','fs'].forEach(id=>{const e=document.getElementById(id);if(e)e.selectedIndex=0;});
+  document.getElementById('ai-area').innerHTML='';
+  document.getElementById('parse-banner').innerHTML='';
+  document.getElementById('rfile').value='';
+}
+
+// ── DASHBOARD ──────────────────────────────────
+function renderDash() {
+  document.getElementById('s-total').textContent = C.length;
+  document.getElementById('s-adv').textContent = C.filter(c=>c.score>=70).length;
+  document.getElementById('s-bench').textContent = C.filter(c=>c.stage==='Bench').length;
+  document.getElementById('s-scored').textContent = C.filter(c=>c.score!==null).length;
+  const tbody = document.getElementById('dash-tbody');
+  const rows = C.slice(0,8);
+  tbody.innerHTML = rows.length
+    ? rows.map(c=>`<tr class="clickable" onclick="openModal('${c.id}')">
+        <td><div style="font-weight:500">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
+        <td>${roleBadge(c.role)}</td><td style="font-size:12px;color:var(--tx2)">${c.source}</td>
+        <td>${scorePill(c.score)}</td><td>${stageBadge(c.stage)}</td>
+        <td style="font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace">${ago(c.added)}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="6" class="empty">No candidates yet — add your first one above.</td></tr>';
+}
+
+// ── PIPELINE ───────────────────────────────────
+function renderPipeline() {
+  const rf = document.getElementById('prf').value;
+  const f = rf==='all'?C:C.filter(c=>c.role===rf);
+  document.getElementById('board').innerHTML = ['Applied','Screening','Video Screen','Final Interview','Reference Check','Offer','Hired','Bench'].map(stage=>{
+    const sc = f.filter(c=>c.stage===stage);
+    return `<div class="col">
+      <div class="col-head"><span class="col-ttl">${stage}</span><span class="col-ct">${sc.length}</span></div>
+      <div class="col-body">${sc.length
+        ? sc.map(c=>`<div class="cc" onclick="openModal('${c.id}')">
+            <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
+            <div class="cc-role">${c.role}</div>
+            <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
+          </div>`).join('')
+        : '<div style="text-align:center;padding:14px 6px;color:var(--tx3);font-size:11px">Empty</div>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── CANDIDATES TABLE ───────────────────────────
+function renderTable() {
+  const rf = document.getElementById('frl').value;
+  const sf = document.getElementById('fst').value;
+  let f = C;
+  if (rf!=='all') f=f.filter(c=>c.role===rf);
+  if (sf!=='all') f=f.filter(c=>c.stage===sf);
+  document.getElementById('cand-ct').textContent = `${f.length} candidate${f.length!==1?'s':''}`;
+  const tbody = document.getElementById('cand-tbody');
+  tbody.innerHTML = f.length
+    ? f.map(c=>`<tr>
+        <td><div style="font-weight:500">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
+        <td>${roleBadge(c.role)}</td><td style="font-size:12px;color:var(--tx2)">${c.source}</td>
+        <td>${scorePill(c.score)}</td><td>${stageBadge(c.stage)}</td>
+        <td style="font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace">${ago(c.added)}</td>
+        <td><button class="btn btn-sm" onclick="openModal(String('${c.id}'))">View</button></td>
+      </tr>`).join('')
+    : '<tr><td colspan="7" class="empty">No candidates match this filter.</td></tr>';
+}
+
+// ── MODAL ──────────────────────────────────────
+function openModal(id) {
+  const c = C.find(x=>String(x.id)===String(id)); if(!c) return;
+  AID = id;
+  document.getElementById('m-name').textContent = c.name;
+  // Video: only show Watch if URL looks valid
+  function videoDisplay(url) {
+    if (!url || url.trim() === '') return '<span style="color:var(--tx3)">Not Available</span>';
+    const u = url.trim();
+    // Convert Google Drive view links to direct open
+    const gdMatch = u.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    const finalUrl = gdMatch ? `https://drive.google.com/file/d/${gdMatch[1]}/view` : u;
+    return `<a href="${finalUrl}" target="_blank" style="color:var(--blue);font-weight:500">▶ Watch</a>`;
+  }
+  // Resume: if it's a URL show as link, if text show truncated with expand
+  function resumeDisplay(resume) {
+    if (!resume || resume.trim() === '') return '<span style="color:var(--tx3)">Not provided</span>';
+    const r = resume.trim();
+    const isUrl = r.startsWith('http') || r.startsWith('www') || r.includes('drive.google') || r.includes('dropbox') || r.includes('docs.google');
+    if (isUrl) {
+      return `<a href="${r}" target="_blank" style="color:var(--blue);font-weight:500">📄 Open Resume</a>`;
+    }
+    return '<span style="color:var(--tx2);font-size:12px">Text resume — view in Answers tab</span>';
+  }
+  document.getElementById('m-grid').innerHTML = [
+    ['Role',roleBadge(c.role)],['Source',c.source||'—'],
+    ['Email',c.email||'—'],['Phone',c.phone||'—'],
+    ['Compensation',c.comp||'—'],['Availability',c.availability||'—'],
+    ['Added',new Date(c.added).toLocaleDateString()],
+    ['AI Score',scorePill(c.score)],
+    ['Resume',resumeDisplay(c.resume)],
+    ['Video',videoDisplay(c.video)]
+  ].map(([l,v])=>`<div class="df"><div class="df-l">${l}</div><div class="df-v">${v}</div></div>`).join('');
+  document.getElementById('m-stage').value = c.stage;
+  document.getElementById('m-ai').innerHTML = c.report ? aiPanel(c.report)
+    : `<div class="empty">${KEY?'<button class="btn btn-p btn-sm" onclick="rescore()">Score with Claude AI</button>':'Add API key in Settings to enable scoring.'}</div>`;
+  function answerDisplay(label, val) {
+    if (!val) return '';
+    const isUrl = val.trim().startsWith('http') || val.trim().includes('drive.google') || val.trim().includes('dropbox');
+    const content = (label === 'Resume/CV' && isUrl)
+      ? `<a href="${val.trim()}" target="_blank" style="color:var(--blue);font-weight:500">📄 Open Resume File</a>`
+      : `<div style="font-size:12px;color:var(--tx2);line-height:1.6;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px">${val}</div>`;
+    return `<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:600;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">${label}</div>${content}</div>`;
+  }
+  document.getElementById('m-ans').innerHTML =
+    [['Resume/CV',c.resume],['Experience',c.q1],['Customer Scenario',c.q2],['Motivation',c.q3]]
+    .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
+    || '<div class="empty">No answers recorded.</div>';
+  document.getElementById('m-notes-ta').value = c.notes||'';
+  mTab('overview', document.querySelector('.tab'));
+  document.getElementById('modal-overlay').classList.remove('off');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.add('off'); AID=null; }
+function mTab(tab, el) {
+  ['overview','ai','answers','notes'].forEach(t => { document.getElementById('mt-'+t).style.display = t===tab?'block':'none'; });
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  if(el) el.classList.add('on');
+}
+function updateStage() {
+  const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
+  c.stage=document.getElementById('m-stage').value;
+  pushToSheet('update', {id:String(c.id), stage:c.stage});
+  badge(); renderDash(); renderPipeline(); renderTable();
+  toast('Stage updated to: ' + c.stage,'ok');
+}
+function saveNotes() {
+  const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
+  c.notes=document.getElementById('m-notes-ta').value;
+  pushToSheet('update', {id:String(c.id), notes:c.notes});
+  toast('Notes saved','ok');
+}
+function deleteCandidate() {
+  if(!confirm('Delete this candidate?')) return;
+  const idToDelete = String(AID);
+  pushToSheet('delete', {id: idToDelete});
+  C=C.filter(x=>String(x.id)!==idToDelete);
+  badge(); closeModal(); renderDash(); renderTable(); renderPipeline();
+  toast('Candidate deleted');
+}
+async function rescore() {
+  const c=C.find(x=>x.id===AID); if(!c||!KEY){toast('API key required');return;}
+  document.getElementById('m-ai').innerHTML=`<div class="thinking"><div class="spin"></div><span class="pulse">Re-scoring...</span></div>`;
+  mTab('ai',document.querySelectorAll('.tab')[1]);
+  const rpt=await scoreCandidate(c);
+  if(rpt){
+  c.score=rpt.score;c.report=rpt;c.stage=autoStage(rpt.score);
+  pushToSheet('update',{id:c.id,score:c.score,tier:rpt.tier||'',summary:rpt.summary||'',strengths:(rpt.strengths||[]).join(' | '),concerns:(rpt.concerns||[]).join(' | '),flags:(rpt.flags||[]).join(' | '),comp_note:rpt.comp_note||'',screen_questions:(rpt.screen_questions||[]).join(' | ')});
+  badge();
+  document.getElementById('m-ai').innerHTML=aiPanel(rpt);
+  document.getElementById('m-stage').value=c.stage;
+  renderDash();
+  toast(`${rpt.score}/100`,'ok');
+}
+  else{document.getElementById('m-ai').innerHTML='<div class="warn-b">Scoring failed. Error: '+(window._lastApiError||'Unknown — check browser console (F12)')+'</div>';}
+}
+
+// ── REPORTS ────────────────────────────────────
+function renderReports() {
+  const rc={};ROLES.forEach(r=>rc[r]=0);C.forEach(c=>{if(rc[c.role]!==undefined)rc[c.role]++;});
+  const mr=Math.max(...Object.values(rc),1);
+  document.getElementById('r-roles').innerHTML=ROLES.map(r=>`<div class="bar-row"><div class="bar-lbl" title="${r}">${r.split(' ').slice(0,2).join(' ')}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(rc[r]/mr*100)}%"></div></div><div class="bar-val">${rc[r]}</div></div>`).join('');
+  const sc2={};C.forEach(c=>{sc2[c.source]=(sc2[c.source]||0)+1;});
+  const ss=Object.entries(sc2).sort((a,b)=>b[1]-a[1]).slice(0,6);const ms=Math.max(...ss.map(x=>x[1]),1);
+  document.getElementById('r-sources').innerHTML=ss.length?ss.map(([s,n])=>`<div class="bar-row"><div class="bar-lbl">${s}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(n/ms*100)}%"></div></div><div class="bar-val">${n}</div></div>`).join(''):'<div class="empty">No data</div>';
+  const stc={};STAGES.forEach(s=>stc[s]=0);C.forEach(c=>{if(stc[c.stage]!==undefined)stc[c.stage]++;});
+  const tot=C.length||1;
+  document.getElementById('r-funnel').innerHTML=STAGES.filter(s=>s!=='Archived').map(s=>`<div class="fn-row"><div class="fn-stg">${s}</div><div class="fn-ct">${stc[s]}</div><div class="fn-pct">${Math.round(stc[s]/tot*100)}%</div></div>`).join('');
+  const rs={};ROLES.forEach(r=>{const arr=C.filter(c=>c.role===r&&c.score!==null).map(c=>c.score);rs[r]=arr.length?Math.round(arr.reduce((a,b)=>a+b,0)/arr.length):0;});
+  document.getElementById('r-scores').innerHTML=ROLES.map(r=>`<div class="bar-row"><div class="bar-lbl" title="${r}">${r.split(' ').slice(0,2).join(' ')}</div><div class="bar-track"><div class="bar-fill" style="width:${rs[r]}%"></div></div><div class="bar-val">${rs[r]||'—'}</div></div>`).join('');
+}
+
+// ── SETTINGS ───────────────────────────────────
+function saveKey(){toast('API key is pre-configured','ok');}
+function removeKey(){toast('API key is pre-configured and cannot be removed here');}
+
+// ── DATA ───────────────────────────────────────
+function exportData(){const b=new Blob([JSON.stringify({candidates:C,exported:new Date().toISOString()},null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='wisehouse-candidates.json';a.click();toast('Exported','ok');}
+function importData(){toast('Import not available — all data lives in Google Sheets');}
+function clearAll(){toast('Clear not available — manage data directly in Google Sheets');}
+
+// ── HELPERS ────────────────────────────────────
+function roleBadge(role){const map={'Pest Control Technician':'red','Outbound Sales Rep':'amber','CSR / Admin Support':'blue','Video Editor':'green','AI Implementation Specialist':'purple'};return`<span class="bdg bdg-${map[role]||'gray'}">${role}</span>`;}
+function stageBadge(s){const map={Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Reference Check':'amber',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};return`<span class="bdg bdg-${map[s]||'gray'}">${s}</span>`;}
+function scorePill(s){if(s===null||s===undefined)return'<span style="font-size:11px;color:var(--tx3)">Pending</span>';const cls=s>=70?'sp-hi':s>=55?'sp-mid':'sp-lo';return`<span class="score-pill ${cls}">${s}/100</span>`;}
+function ago(iso){if(!iso)return'—';const d=Math.floor((Date.now()-new Date(iso))/86400000),h=Math.floor((Date.now()-new Date(iso))/3600000),m=Math.floor((Date.now()-new Date(iso))/60000);if(d>0)return d+'d ago';if(h>0)return h+'h ago';if(m>0)return m+'m ago';return'Just now';}
+function toast(msg,type=''){const t=document.getElementById('toast-el');t.textContent=msg;t.className='toast'+(type==='ok'?' ok':'');void t.offsetHeight;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+
+// ── HIRING SOURCES ────────────────────────────
+const ALL_SOURCES = ['Indeed','LinkedIn','ZipRecruiter','Facebook','Upwork','OnlineJobs.ph','Workana','Craigslist','Employee Referral','Direct / Other'];
+
+function renderSources() {
+  const rf = document.getElementById('src-role-filter').value;
+  const filtered = rf === 'all' ? C : C.filter(c => c.role === rf);
+
+  // Stats grid — top source cards
+  const srcCounts = {};
+  ALL_SOURCES.forEach(s => srcCounts[s] = 0);
+  filtered.forEach(c => { if (srcCounts[c.source] !== undefined) srcCounts[c.source]++; else srcCounts[c.source] = 1; });
+  const topSources = Object.entries(srcCounts).filter(([,n]) => n > 0).sort((a,b) => b[1]-a[1]);
+  const grid = document.getElementById('src-stat-grid');
+  if (grid) {
+    if (!topSources.length) {
+      grid.innerHTML = '<div style="color:var(--tx3);font-size:12px;grid-column:1/-1">No candidates yet. Add candidates to see source data.</div>';
+    } else {
+      grid.innerHTML = topSources.slice(0,6).map(([s,n]) => {
+        const srcCands = filtered.filter(c => c.source === s);
+        const avg = srcCands.filter(c=>c.score!==null).length ? Math.round(srcCands.filter(c=>c.score!==null).reduce((a,c)=>a+c.score,0)/srcCands.filter(c=>c.score!==null).length) : null;
+        const hired = srcCands.filter(c=>c.stage==='Hired').length;
+        return `<div class="src-stat">
+          <div class="src-stat-n" style="color:${n>=5?'#4ADE80':n>=2?'#60A5FA':'var(--tx)'}">${n}</div>
+          <div class="src-stat-l">${s}</div>
+          <div class="src-stat-sub">${avg?'Avg score: '+avg:' No scores yet'} · ${hired} hired</div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // Detail table
+  const tbody = document.getElementById('src-tbody');
+  const allSrcs = [...new Set(filtered.map(c=>c.source))].sort();
+  if (!allSrcs.length) { tbody.innerHTML = '<tr><td colspan="7" class="empty">No candidates yet.</td></tr>'; return; }
+  tbody.innerHTML = allSrcs.map(src => {
+    const sc = filtered.filter(c => c.source === src);
+    const advancing = sc.filter(c => c.score >= 70).length;
+    const benched = sc.filter(c => c.stage === 'Bench').length;
+    const hired = sc.filter(c => c.stage === 'Hired').length;
+    const scored = sc.filter(c => c.score !== null);
+    const avg = scored.length ? Math.round(scored.reduce((a,c)=>a+c.score,0)/scored.length) : null;
+    const conv = sc.length ? Math.round(advancing/sc.length*100) : 0;
+    return `<tr>
+      <td style="font-weight:500">${src}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-weight:600">${sc.length}</span></td>
+      <td>${advancing > 0 ? `<span class="score-pill sp-hi">${advancing}</span>` : '<span style="color:var(--tx3)">0</span>'}</td>
+      <td>${benched > 0 ? `<span class="score-pill sp-mid">${benched}</span>` : '<span style="color:var(--tx3)">0</span>'}</td>
+      <td>${hired > 0 ? `<span class="score-pill sp-hi">${hired}</span>` : '<span style="color:var(--tx3)">0</span>'}</td>
+      <td>${avg !== null ? `<span class="score-pill ${avg>=70?'sp-hi':avg>=55?'sp-mid':'sp-lo'}">${avg}/100</span>` : '<span style="color:var(--tx3);font-size:11px">No scores</span>'}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:12px;color:${conv>=40?'#4ADE80':conv>=20?'#FCD34D':'var(--tx3)'}">${conv}%</span></td>
+    </tr>`;
+  }).join('');
+
+  // Candidates by source table
+  const ctbody = document.getElementById('src-cand-tbody');
+  ctbody.innerHTML = filtered.length
+    ? filtered.map(c=>`<tr class="clickable" onclick="openModal('${c.id}')">
+        <td><div style="font-weight:500">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
+        <td>${roleBadge(c.role)}</td>
+        <td><span class="bdg bdg-gray">${c.source}</span></td>
+        <td>${scorePill(c.score)}</td>
+        <td>${stageBadge(c.stage)}</td>
+        <td style="font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace">${ago(c.added)}</td>
+        <td><button class="btn btn-sm" onclick="event.stopPropagation();openModal('${c.id}')">View</button></td>
+      </tr>`).join('')
+    : '<tr><td colspan="7" class="empty">No candidates yet.</td></tr>';
+}
+
+// ── SOPs ───────────────────────────────────────
+const SOPS = JSON.parse(document.getElementById('sops-data').textContent);
+
+function showSop(role, el) {
+  document.querySelectorAll('#sop-role-tabs button').forEach(b => { b.className = 'btn btn-sm'; });
+  el.className = 'btn btn-p btn-sm';
+  const s = SOPS[role];
+  if (!s) return;
+  document.getElementById('sop-content').innerHTML = `
+    <div class="sop-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="font-size:16px;font-weight:600">${s.title}</div>
+        <span class="bdg bdg-${s.badge}">${s.priority}</span>
+      </div>
+
+      <div class="sop-section">Scoring Parameters (100 pts total)</div>
+      ${s.params.map(([n,d,p])=>`<div class="sop-score-row">
+        <div style="flex:1"><div style="font-weight:500;font-size:13px">${n}</div><div style="font-size:11px;color:var(--tx3);margin-top:1px">${d}</div></div>
+        <div class="sop-score-pts">${p}</div>
+      </div>`).join('')}
+
+      <div class="sop-section" style="margin-top:18px">Screening Questions</div>
+      ${s.questions.map(q=>`<div class="sop-q">
+        <div style="font-size:10px;font-weight:600;color:var(--blue);margin-bottom:3px;font-family:'DM Mono',monospace">${q.code}</div>
+        <div class="sop-q-text">${q.q}</div>
+        <div class="sop-q-why">Why we ask: ${q.why}</div>
+        <div class="sop-q-score">Scores: ${q.score}</div>
+      </div>`).join('')}
+
+      <div class="sop-section" style="margin-top:18px">Automatic Red Flags</div>
+      ${s.flags.map(f=>`<div class="sop-flag"><div class="fdot" style="background:var(--amber);margin-top:4px;flex-shrink:0"></div>${f}</div>`).join('')}
+
+      <div class="sop-section" style="margin-top:18px">Claude AI Scoring Prompt</div>
+      <div style="font-size:11px;color:var(--tx3);margin-bottom:6px">Copy this prompt into your Zapier Claude action step. Replace [BRACKET] fields with Zapier variables.</div>
+      <div class="sop-prompt" id="prompt-${role}">${s.prompt}</div>
+      <button class="copy-btn" onclick="copyPrompt('${role}')">
+        <svg width="11" height="11" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy Prompt
+      </button>
+    </div>`;
+}
+
+function copyPrompt(role) {
+  const el = document.getElementById('prompt-'+role);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(()=>toast('Prompt copied','ok')).catch(()=>toast('Copy failed — select and copy manually'));
+}
+
+// ── GOOGLE SHEETS ─────────────────────────────
+async function loadFromSheet() {
+  try {
+    const r = await fetch(SHEET_URL + '?t=' + Date.now());
+    const d = await r.json();
+    if (d.success && d.candidates) {
+      C = d.candidates.map(c => ({
+        ...c,
+        id: String(c.id),
+        score: c.score !== '' && c.score !== null ? Number(c.score) : null,
+        report: c.summary ? {
+          score: Number(c.score),
+          tier: c.tier,
+          summary: c.summary,
+          strengths: c.strengths ? c.strengths.split(' | ') : [],
+          concerns: c.concerns ? c.concerns.split(' | ') : [],
+          flags: c.flags ? c.flags.split(' | ') : [],
+          comp_note: c.comp_note,
+          screen_questions: c.screen_questions ? c.screen_questions.split(' | ') : []
+        } : null
+      }));
+      badge();
+      renderDash();
+      renderTable();
+      renderPipeline();
+    }
+  } catch(e) {
+    console.error('Failed to load from sheet:', e);
+    toast('Could not connect to database. Check your connection.');
+  }
+}
+
+async function pushToSheet(action, data) {
+  try {
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action, ...data }),
+    });
+  } catch(e) {
+    console.error('Sheet push failed:', e);
+  }
+}
+
+// Auto-refresh every 30 seconds to pick up new candidates from the form
+setInterval(() => { loadFromSheet(); }, 30000);
+
+// ── MODAL CLOSE ON BG CLICK ────────────────────
+document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// ── INIT ───────────────────────────────────────
+apiStatus();
+badge();
+renderDash();
+// Load candidates from Google Sheets
+loadFromSheet();
+</script>
+
+</body>
+</html>
