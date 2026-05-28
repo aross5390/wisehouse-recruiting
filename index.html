@@ -421,10 +421,14 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
     <div class="page" id="page-settings">
       <div class="sh-ttl" style="margin-bottom:16px">Settings</div>
       <div class="set-card">
-        <div class="set-ttl">Claude API</div>
-        <div class="set-desc">AI scoring and resume parsing are active. This platform is pre-configured and ready to use — no setup required.</div>
-        <div class="api-st"><div class="api-dot" id="api-dot" style="background:var(--green)"></div><span id="api-lbl" style="color:var(--green)">AI scoring active — ready to use</span></div>
-        <input type="hidden" id="api-inp">
+        <div class="set-ttl">Claude API Key</div>
+        <div class="set-desc">Required for AI scoring and resume parsing. Enter your key once — it saves permanently to this browser and will never be asked again.</div>
+        <div style="display:flex;gap:8px">
+          <div class="fg" style="flex:1;margin-bottom:0"><input type="password" id="api-inp" placeholder="sk-ant-api03-..."></div>
+          <button class="btn btn-p btn-sm" onclick="saveKey()">Save</button>
+          <button class="btn btn-sm" onclick="removeKey()">Remove</button>
+        </div>
+        <div class="api-st"><div class="api-dot" id="api-dot"></div><span id="api-lbl"></span></div>
       </div>
       <div class="set-card">
         <div class="set-ttl">Scoring Tiers</div>
@@ -1045,7 +1049,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 <script>
 // ── STATE ──────────────────────────────────────
 let C = []; // loaded from Google Sheets
-let KEY = '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';
+let KEY = localStorage.getItem('wh_key') || '';
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyYsZY_YcqEn7z3Gdts2Qh_c1vWEzf_vnJ17I_VZMe8B5Z-XnoOOdNfQtpc_kXiSZva/exec';
 let AID = null; // active candidate id
 
@@ -1078,12 +1082,15 @@ function badge() {
   document.getElementById('nb').textContent = n;
 }
 function apiStatus() {
+  const ok = !!KEY;
   const ind = document.getElementById('api-ind');
-  if (ind) { ind.textContent = '✓ Connected'; ind.style.color = 'var(--green)'; }
+  if (ind) { ind.textContent = ok ? '✓ Connected' : '⚠ Key needed'; ind.style.color = ok ? 'var(--green)' : 'var(--amber)'; }
   const dot = document.getElementById('api-dot');
-  if (dot) dot.style.background = 'var(--green)';
+  if (dot) dot.style.background = ok ? 'var(--green)' : 'var(--red)';
   const lbl = document.getElementById('api-lbl');
-  if (lbl) { lbl.textContent = 'AI scoring active — ready to use'; lbl.style.color = 'var(--green)'; }
+  if (lbl) { lbl.textContent = ok ? 'AI scoring active' : 'Enter your API key above and click Save'; lbl.style.color = ok ? 'var(--green)' : 'var(--tx3)'; }
+  const inp = document.getElementById('api-inp');
+  if (inp && KEY) inp.value = KEY;
 }
 
 // ── UPLOAD HANDLERS ────────────────────────────
@@ -1438,8 +1445,17 @@ function renderReports() {
 }
 
 // ── SETTINGS ───────────────────────────────────
-function saveKey(){toast('API key is pre-configured','ok');}
-function removeKey(){toast('API key is pre-configured and cannot be removed here');}
+function saveKey(){
+  const k=document.getElementById('api-inp').value.trim();
+  if(!k){toast('Please enter your API key');return;}
+  KEY=k;localStorage.setItem('wh_key',k);
+  apiStatus();toast('API key saved — AI scoring active','ok');
+}
+function removeKey(){
+  KEY='';localStorage.removeItem('wh_key');
+  document.getElementById('api-inp').value='';
+  apiStatus();toast('API key removed');
+}
 
 // ── DATA ───────────────────────────────────────
 function exportData(){const b=new Blob([JSON.stringify({candidates:C,exported:new Date().toISOString()},null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download='wisehouse-candidates.json';a.click();toast('Exported','ok');}
