@@ -322,9 +322,9 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 
     <!-- ALL CANDIDATES -->
     <div class="page" id="page-candidates">
-      <div class="sh">
+      <div class="sh" style="flex-wrap:wrap;gap:8px">
         <div><div class="sh-ttl">All Candidates</div><div class="sh-sub" id="cand-ct"></div></div>
-        <div style="display:flex;gap:6px">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
           <select id="frl" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
             <option value="all">All Roles</option>
             <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
@@ -336,10 +336,36 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
             <option>Final Interview</option><option>Reference Check</option><option>Offer</option>
             <option>Hired</option><option>Bench</option><option>Archived</option>
           </select>
+          <select id="fsrc" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+            <option value="all">All Sources</option>
+            <option>Indeed</option><option>LinkedIn</option><option>ZipRecruiter</option>
+            <option>Facebook</option><option>Upwork</option><option>OnlineJobs.ph</option>
+            <option>Workana</option><option>Craigslist</option><option>Employee Referral</option><option>Direct / Other</option>
+          </select>
+          <select id="fsort" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+            <option value="date_desc">Newest First</option>
+            <option value="date_asc">Oldest First</option>
+            <option value="score_desc">Highest Score</option>
+            <option value="score_asc">Lowest Score</option>
+            <option value="name_asc">Name A–Z</option>
+            <option value="name_desc">Name Z–A</option>
+            <option value="stage">By Stage</option>
+            <option value="source">By Source</option>
+            <option value="role">By Role</option>
+          </select>
+          <button class="btn btn-sm" onclick="resetFilters()" title="Clear all filters" style="padding:5px 10px">✕ Clear</button>
         </div>
       </div>
       <div class="tbl-wrap">
-        <table><thead><tr><th>Candidate</th><th>Role</th><th>Source</th><th>AI Score</th><th>Stage</th><th>Added</th><th></th></tr></thead>
+        <table><thead><tr>
+  <th onclick="setSort('name_asc','name_desc')" style="cursor:pointer;user-select:none">Candidate <span id="sort-name" style="color:var(--tx3)">↕</span></th>
+  <th>Role</th>
+  <th onclick="setSort('source',null)" style="cursor:pointer;user-select:none">Source <span id="sort-source" style="color:var(--tx3)">↕</span></th>
+  <th onclick="setSort('score_desc','score_asc')" style="cursor:pointer;user-select:none">AI Score <span id="sort-score" style="color:var(--tx3)">↕</span></th>
+  <th onclick="setSort('stage',null)" style="cursor:pointer;user-select:none">Stage <span id="sort-stage" style="color:var(--tx3)">↕</span></th>
+  <th onclick="setSort('date_desc','date_asc')" style="cursor:pointer;user-select:none">Added <span id="sort-date" style="color:var(--tx3)">↕</span></th>
+  <th></th>
+</tr></thead>
         <tbody id="cand-tbody"></tbody></table>
       </div>
     </div>
@@ -1070,6 +1096,7 @@ function go(page, el) {
   if (page === 'pipeline') renderPipeline();
   if (page === 'candidates') renderTable();
   if (page === 'reports') renderReports();
+  if (page === 'add') clearForm();
   if (page === 'sources') renderSources();
   if (page === 'sops') showSop('tech', document.querySelector('#sop-role-tabs button'));
   if (page === 'settings') { const i = document.getElementById('api-inp'); if(i && KEY) i.value = KEY; }
@@ -1130,7 +1157,12 @@ async function processFile(file) {
       document.getElementById('parse-banner').innerHTML = '<div class="ok-b">✓ Resume parsed — fields auto-filled. Review before scoring.</div>';
     } else {
       pw.style.display = 'none';
-      document.getElementById('parse-banner').innerHTML = '<div class="warn-b">Could not parse. Try a different format or fill in manually.</div>';
+      document.getElementById('parse-banner').innerHTML = '<div class="warn-b">⚠ Could not read this PDF automatically. Please paste the resume text into the Resume/CV field below, or try uploading a Word (.docx) or text (.txt) file instead.</div>';
+      // Clear any garbage that got filled in
+      const resumeField = document.getElementById('fres');
+      const q1Field = document.getElementById('fq1');
+      if (resumeField && resumeField.value.includes('encoding')) resumeField.value = '';
+      if (q1Field && q1Field.value.includes('Cannot determine')) q1Field.value = '';
     }
   } catch(e) {
     clearInterval(tick); pw.style.display = 'none';
@@ -1144,6 +1176,10 @@ function toText(file) {
   return new Promise((res,rej) => { const r = new FileReader(); r.onload = e => res(e.target.result); r.onerror = rej; r.readAsText(file); });
 }
 async function parseResume(text, isImg, b64, mime) {
+  // If text content is empty or indicates encoding failure, don't bother calling Claude
+  if (!isImg && (!text || text.trim().length < 50 || text.includes('%PDF') || text.includes('\x00'))) {
+    return null;
+  }
   const instr = `Extract info from this resume. Return ONLY valid JSON, no markdown, no extra text:
 {"name":null,"email":null,"phone":null,"comp":null,"availability":null,"resume_text":"2-4 sentence summary","experience_summary":"detailed work history and skills","role_guess":null}
 STRICT RULES — read carefully:
