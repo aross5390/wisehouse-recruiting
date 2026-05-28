@@ -1240,7 +1240,6 @@ async function addCandidate() {
   C.unshift(c);
   badge();
   pushToSheet('add', c);
-  notifyZapier(c);
   if (KEY) {
     document.getElementById('ai-area').innerHTML = `<div class="thinking"><div class="spin"></div><span class="pulse">Claude is reviewing ${name}...</span></div>`;
     const rpt = await scoreCandidate(c);
@@ -1636,10 +1635,6 @@ async function loadFromSheet() {
     const r = await fetch(SHEET_URL + '?t=' + Date.now());
     const d = await r.json();
     if (d.success && d.candidates) {
-      const existingIds = new Set(C.map(x => String(x.id)));
-      const newCandidates = d.candidates.filter(c => !existingIds.has(String(c.id)));
-      // Fire webhook for new candidates detected from form submissions
-      newCandidates.forEach(c => { if (c.name) notifyZapier(c); });
       C = d.candidates.map(c => ({
         ...c,
         id: String(c.id),
