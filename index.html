@@ -1050,7 +1050,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 // ── STATE ──────────────────────────────────────
 let C = []; // loaded from Google Sheets
 let KEY = localStorage.getItem('wh_key') || '';
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxXZzWz5ihAKZfsLQlJaKLtBrZ19TxXwiV2Z2ygspn3o8vengHN0GSpfC7iUAdci3MJ/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyOLI--qsLPsQwKupKwGE_CSTxqgQq3AyzprvKbsQbWnPkSd2oThEna9uOqhDHMsCeb/exec';
 let AID = null; // active candidate id
 
 const ROLES = ['Pest Control Technician','Outbound Sales Rep','CSR / Admin Support','Video Editor','AI Implementation Specialist'];
@@ -1146,7 +1146,15 @@ function toText(file) {
 async function parseResume(text, isImg, b64, mime) {
   const instr = `Extract info from this resume. Return ONLY valid JSON, no markdown, no extra text:
 {"name":null,"email":null,"phone":null,"comp":null,"availability":null,"resume_text":"2-4 sentence summary","experience_summary":"detailed work history and skills","role_guess":null}
-role_guess must be one of: Pest Control Technician, Outbound Sales Rep, CSR / Admin Support, Video Editor, AI Implementation Specialist — or null.`;
+STRICT RULES — read carefully:
+- name: full name of the candidate only
+- email: email address only
+- phone: phone number only
+- comp: ONLY a salary or pay rate like "$18/hr" or "$45,000/year". If not explicitly stated, return null. NEVER put company names, job titles, dates, or anything else here.
+- availability: ONLY if the resume explicitly says when they can start (e.g. "Available immediately", "Can start March 2025"). Do NOT use employment dates or contract end dates. If not stated, return null.
+- resume_text: 2-4 sentence professional summary of their background
+- experience_summary: their work history, years of experience, and key skills
+- role_guess: must be exactly one of: Pest Control Technician, Outbound Sales Rep, CSR / Admin Support, Video Editor, AI Implementation Specialist — or null`;
   const msgs = isImg
     ? [{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:instr}]}]
     : [{role:'user',content:instr+'\n\nRESUME:\n'+text}];
@@ -1221,7 +1229,7 @@ async function scoreCandidate(c) {
   const p = `You are a recruiting assistant for Wise House pest control. Score this ${c.role} candidate.
 Name: ${c.name} | Source: ${c.source} | Comp: ${c.comp||'?'} | Available: ${c.availability||'?'}
 Resume: ${c.resume||'N/A'} | Experience: ${c.q1||'N/A'} | Customer scenario: ${c.q2||'N/A'} | Motivation: ${c.q3||'N/A'} | Video: ${c.video||'N/A'}
-Score 100pts: experience(25)+communication(20)+motivation(15)+reliability(15)+availability(15)+bonus(10). Be fair, never reject — only score.
+Score 100pts: experience(0-25)+communication(0-20)+motivation(0-15)+reliability(0-15)+availability(0-15)+bonus(0-10). Breakdown values MUST add up to total score. Be fair, never reject.
 Return ONLY valid JSON no markdown:
 {"score":75,"breakdown":{"experience":18,"communication":15,"motivation":12,"reliability":13,"availability":12,"bonus":5},"tier":"Advance","summary":"3-sentence summary.","strengths":["s1","s2"],"concerns":["c1","c2"],"flags":["f1 or None identified"],"comp_note":"In range","screen_questions":["q1","q2","q3"]}`;
   try {
@@ -1419,7 +1427,7 @@ async function rescore() {
   const rpt=await scoreCandidate(c);
   if(rpt){
   c.score=rpt.score;c.report=rpt;c.stage=autoStage(rpt.score);
-  pushToSheet('update',{id:c.id,score:c.score,tier:rpt.tier||'',summary:rpt.summary||'',strengths:(rpt.strengths||[]).join(' | '),concerns:(rpt.concerns||[]).join(' | '),flags:(rpt.flags||[]).join(' | '),comp_note:rpt.comp_note||'',screen_questions:(rpt.screen_questions||[]).join(' | ')});
+  pushToSheet('update',{id:c.id,score:c.score,tier:rpt.tier||'',summary:rpt.summary||'',strengths:(rpt.strengths||[]).join(' | '),concerns:(rpt.concerns||[]).join(' | '),flags:(rpt.flags||[]).join(' | '),comp_note:rpt.comp_note||'',screen_questions:(rpt.screen_questions||[]).join(' | '),breakdown:JSON.stringify(rpt.breakdown||{})});
   badge();
   document.getElementById('m-ai').innerHTML=aiPanel(rpt);
   document.getElementById('m-stage').value=c.stage;
@@ -1595,16 +1603,34 @@ async function loadFromSheet() {
         ...c,
         id: String(c.id),
         score: c.score !== '' && c.score !== null ? Number(c.score) : null,
-        report: c.summary ? {
-          score: Number(c.score),
-          tier: c.tier,
-          summary: c.summary,
-          strengths: c.strengths ? c.strengths.split(' | ') : [],
-          concerns: c.concerns ? c.concerns.split(' | ') : [],
-          flags: c.flags ? c.flags.split(' | ') : [],
-          comp_note: c.comp_note,
-          screen_questions: c.screen_questions ? c.screen_questions.split(' | ') : []
-        } : null
+        report: c.summary ? (() => {
+          const sc = Number(c.score) || 0;
+          // Try to parse stored breakdown, otherwise estimate from total score
+          let bd = {};
+          try { bd = c.breakdown ? JSON.parse(c.breakdown) : {}; } catch(e) { bd = {}; }
+          if (!bd.experience && sc > 0) {
+            // Distribute score proportionally across parameters
+            bd = {
+              experience:    Math.round(sc * 0.25),
+              communication: Math.round(sc * 0.20),
+              motivation:    Math.round(sc * 0.15),
+              reliability:   Math.round(sc * 0.15),
+              availability:  Math.round(sc * 0.15),
+              bonus:         Math.round(sc * 0.10),
+            };
+          }
+          return {
+            score: sc,
+            tier: c.tier,
+            summary: c.summary,
+            breakdown: bd,
+            strengths: c.strengths ? c.strengths.split(' | ') : [],
+            concerns: c.concerns ? c.concerns.split(' | ') : [],
+            flags: c.flags ? c.flags.split(' | ') : [],
+            comp_note: c.comp_note,
+            screen_questions: c.screen_questions ? c.screen_questions.split(' | ') : []
+          };
+        })() : null
       }));
       badge();
       renderDash();
