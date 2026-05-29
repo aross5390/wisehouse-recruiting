@@ -583,8 +583,12 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
       <div id="mt-ai" style="display:none"><div id="m-ai"></div></div>
       <div id="mt-answers" style="display:none"><div id="m-ans"></div></div>
       <div id="mt-notes" style="display:none">
+        <div class="fg" style="margin-bottom:12px">
+          <label style="font-size:11px;font-weight:500;color:var(--tx2)">Referred By</label>
+          <input id="m-referred-by" placeholder="Employee who referred this candidate..." style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:8px 11px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:100%">
+        </div>
         <div class="fg"><label>Internal Notes (Gab / Ross)</label><textarea id="m-notes-ta" style="min-height:100px" class="fg" placeholder="Notes from video screen, reference calls, interviews..."></textarea></div>
-        <button class="btn btn-sm" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
+        <button class="btn btn-sm btn-p" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
       </div>
     </div>
   </div>
@@ -1476,15 +1480,19 @@ function openModal(id) {
     }
     return '<span style="color:var(--tx2);font-size:12px">Text resume — view in Answers tab</span>';
   }
+  // Extract referred by from notes if present
+  const refMatch = (c.notes||'').match(/Referred by: ([^\n]+)/);
+  const referredBy = refMatch ? refMatch[1] : null;
   document.getElementById('m-grid').innerHTML = [
     ['Role',roleBadge(c.role)],['Source',c.source||'—'],
+    referredBy ? ['Referred By', `<span style="color:var(--green);font-weight:500">👤 ${referredBy}</span>`] : null,
     ['Email',c.email||'—'],['Phone',c.phone||'—'],
     ['Compensation',c.comp||'—'],['Availability',c.availability||'—'],
     ['Added',new Date(c.added).toLocaleDateString()],
     ['AI Score',scorePill(c.score)],
     ['Resume',resumeDisplay(c.resume)],
     ['Video',videoDisplay(c.video)]
-  ].map(([l,v])=>`<div class="df"><div class="df-l">${l}</div><div class="df-v">${v}</div></div>`).join('');
+  ].filter(Boolean).map(([l,v])=>`<div class="df"><div class="df-l">${l}</div><div class="df-v">${v}</div></div>`).join('');
   document.getElementById('m-stage').value = c.stage;
   document.getElementById('m-ai').innerHTML = c.report ? aiPanel(c.report)
     : `<div class="empty">${KEY?'<button class="btn btn-p btn-sm" onclick="rescore()">Score with Claude AI</button>':'Add API key in Settings to enable scoring.'}</div>`;
@@ -1501,6 +1509,10 @@ function openModal(id) {
     .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
     || '<div class="empty">No answers recorded.</div>';
   document.getElementById('m-notes-ta').value = c.notes||'';
+  // Populate referred by field
+  const refM = (c.notes||'').match(/Referred by: ([^\n]+)/);
+  const refInput = document.getElementById('m-referred-by');
+  if (refInput) refInput.value = refM ? refM[1].trim() : '';
   mTab('overview', document.querySelector('.tab'));
   document.getElementById('modal-overlay').classList.remove('off');
 }
@@ -1519,9 +1531,13 @@ function updateStage() {
 }
 function saveNotes() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
-  c.notes=document.getElementById('m-notes-ta').value;
+  const notesText = document.getElementById('m-notes-ta').value;
+  const referredBy = document.getElementById('m-referred-by') ? document.getElementById('m-referred-by').value.trim() : '';
+  let fullNotes = notesText.replace(/Referred by: [^\n]+\n?/g, '').trim();
+  if (referredBy) fullNotes = 'Referred by: ' + referredBy + (fullNotes ? '\n' + fullNotes : '');
+  c.notes = fullNotes;
   pushToSheet('update', {id:String(c.id), notes:c.notes});
-  toast('Notes saved','ok');
+  toast('Saved','ok');
 }
 function deleteCandidate() {
   if(!confirm('Delete this candidate?')) return;
