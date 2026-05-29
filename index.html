@@ -1823,11 +1823,16 @@ function checkAuth() {
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 // ── INIT ───────────────────────────────────────
+// Force login overlay visible on every load — no exceptions
+document.getElementById('login-overlay').style.display = 'flex';
+// Clear any stored auth tokens
+localStorage.removeItem('wh_auth');
+sessionStorage.removeItem('wh_auth');
+// Focus password field
+setTimeout(() => { const p = document.getElementById('login-pw'); if(p) p.focus(); }, 100);
 apiStatus();
 badge();
 renderDash();
-// Check authentication before loading
-checkAuth();
 </script>
 
 </body>
