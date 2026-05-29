@@ -1795,13 +1795,14 @@ setInterval(() => { loadFromSheet(); }, 30000);
 
 // ── LOGIN ─────────────────────────────────────
 const TEAM_PASSWORD = 'WiseHouse2026!';
+let isAuthenticated = false; // in-memory only — cleared on every page load
 
 function doLogin() {
   const pw = document.getElementById('login-pw').value;
   const err = document.getElementById('login-err');
   if (pw === TEAM_PASSWORD) {
+    isAuthenticated = true;
     document.getElementById('login-overlay').style.display = 'none';
-    sessionStorage.setItem('wh_auth', btoa(TEAM_PASSWORD));
     loadFromSheet();
   } else {
     err.style.display = 'block';
@@ -1811,15 +1812,11 @@ function doLogin() {
 }
 
 function checkAuth() {
-  // Clear any old localStorage auth — force sessionStorage only
+  // Clear ALL stored auth — only in-memory variable is valid
   localStorage.removeItem('wh_auth');
-  // sessionStorage clears when tab or browser is closed
-  const stored = sessionStorage.getItem('wh_auth');
-  if (stored && atob(stored) === TEAM_PASSWORD) {
-    document.getElementById('login-overlay').style.display = 'none';
-    loadFromSheet();
-  }
-  // If not authenticated, login overlay stays visible
+  sessionStorage.removeItem('wh_auth');
+  // isAuthenticated is always false on fresh page load
+  // Login overlay stays visible until correct password entered
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
