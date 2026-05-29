@@ -1811,13 +1811,15 @@ function doLogin() {
 }
 
 function checkAuth() {
+  // Clear any old localStorage auth — force sessionStorage only
+  localStorage.removeItem('wh_auth');
   // sessionStorage clears when tab or browser is closed
-  // stays active while the tab remains open (idle is fine)
   const stored = sessionStorage.getItem('wh_auth');
   if (stored && atob(stored) === TEAM_PASSWORD) {
     document.getElementById('login-overlay').style.display = 'none';
     loadFromSheet();
   }
+  // If not authenticated, login overlay stays visible
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
