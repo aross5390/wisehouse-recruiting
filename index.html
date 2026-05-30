@@ -226,6 +226,33 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 .login-btn{width:100%;padding:12px;background:#2E7D32;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.1s;margin-top:4px}
 .login-btn:hover{background:#1B5E20}
 .login-err{background:rgba(198,40,40,0.08);border:1px solid rgba(198,40,40,0.3);border-radius:8px;padding:9px 12px;font-size:12px;color:#C62828;margin-bottom:12px;display:none;text-align:center}
+.sc-summary{border-radius:10px;padding:16px 18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;transition:background 0.4s ease;background:var(--green)}
+.sc-big{font-size:38px;font-weight:600;font-family:'DM Mono',monospace;color:#fff;line-height:1}
+.sc-max{font-size:12px;color:rgba(255,255,255,0.5);font-family:'DM Mono',monospace}
+.sc-tier{font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);margin-bottom:4px}
+.sc-bar-track{height:5px;background:rgba(255,255,255,0.2);border-radius:3px;overflow:hidden;margin-top:6px;flex:1}
+.sc-bar-fill{height:100%;background:#4CAF50;border-radius:3px;transition:width 0.3s ease}
+.sc-section-title{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:0.8px;margin:14px 0 8px}
+.sc-rating-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bdr)}
+.sc-rating-row:last-child{border-bottom:none}
+.sc-rating-label{flex:1;font-size:13px;font-weight:500;color:var(--tx)}
+.sc-rating-desc{font-size:10px;color:var(--tx3);margin-top:1px}
+.sc-stars{display:flex;gap:3px}
+.sc-star{width:26px;height:26px;border-radius:6px;border:1.5px solid var(--bdr);background:var(--surf2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;transition:all 0.1s;color:var(--tx3)}
+.sc-star:hover{border-color:#2E7D32;background:var(--green-bg)}
+.sc-star.on{background:#E8F5E9;border-color:#2E7D32;color:#1B4332}
+.sc-star.on-red{background:#FFEBEE;border-color:#C62828;color:#B71C1C}
+.sc-rec-row{display:flex;gap:6px;margin:12px 0}
+.sc-rec-btn{flex:1;padding:9px;border-radius:8px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:12px;font-weight:600;color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all 0.15s;text-align:center}
+.sc-rec-btn:hover{border-color:var(--green)}
+.sc-rec-btn.sc-advance{border-color:#2E7D32;background:#E8F5E9;color:#1B4332}
+.sc-rec-btn.sc-bench{border-color:#F57F17;background:#FFF3E0;color:#E65100}
+.sc-rec-btn.sc-archive{border-color:#C62828;background:#C62828;color:#fff}
+.sc-rec-btn.sc-archive-idle{border-color:#C62828;background:#FFEBEE;color:#B71C1C}
+.sc-interviewer{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.sc-iv-pill{padding:5px 12px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:12px;font-weight:500;color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.sc-iv-pill.on{border-color:#2E7D32;background:#E8F5E9;color:#1B4332}
+.sc-saved-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#2E7D32;background:#E8F5E9;border:1px solid rgba(46,125,50,0.2);padding:3px 8px;border-radius:20px;margin-left:8px}
 .toast{position:fixed;bottom:20px;right:20px;background:#1B4332;border:1px solid #2E7D32;border-radius:var(--rl);padding:10px 16px;font-size:12px;color:#FFFFFF;z-index:999;transform:translateY(60px);opacity:0;transition:all 0.25s;max-width:300px;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-color:var(--green-bdr)}
@@ -565,6 +592,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
         <div class="tab on" onclick="mTab('overview',this)">Overview</div>
         <div class="tab" onclick="mTab('ai',this)">AI Assessment</div>
         <div class="tab" onclick="mTab('answers',this)">Answers</div>
+        <div class="tab" onclick="mTab('scorecard',this)">Scorecard</div>
         <div class="tab" onclick="mTab('notes',this)">Notes</div>
       </div>
       <div id="mt-overview">
@@ -582,6 +610,10 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
       </div>
       <div id="mt-ai" style="display:none"><div id="m-ai"></div></div>
       <div id="mt-answers" style="display:none"><div id="m-ans"></div></div>
+      <div id="mt-scorecard" style="display:none">
+        <div id="sc-content"></div>
+      </div>
+
       <div id="mt-notes" style="display:none">
         <div class="fg" style="margin-bottom:12px">
           <label style="font-size:11px;font-weight:500;color:var(--tx2)">Referred By</label>
@@ -1508,7 +1540,12 @@ function openModal(id) {
     [['Resume/CV',c.resume],['Experience',c.q1],['Customer Scenario',c.q2],['Motivation',c.q3]]
     .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
     || '<div class="empty">No answers recorded.</div>';
-  document.getElementById('m-notes-ta').value = c.notes||'';
+  // Strip scorecard data from notes display
+  const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
+  document.getElementById('m-notes-ta').value = notesClean;
+  // Load scorecard from notes
+  const scMatch = (c.notes||'').match(/---SCORECARD---\n([\s\S]*)/);
+  if (scMatch) { try { c.scorecard = scMatch[1].trim(); } catch(e){} }
   // Populate referred by field
   const refM = (c.notes||'').match(/Referred by: ([^\n]+)/);
   const refInput = document.getElementById('m-referred-by');
@@ -1518,9 +1555,10 @@ function openModal(id) {
 }
 function closeModal() { document.getElementById('modal-overlay').classList.add('off'); AID=null; }
 function mTab(tab, el) {
-  ['overview','ai','answers','notes'].forEach(t => { document.getElementById('mt-'+t).style.display = t===tab?'block':'none'; });
+  ['overview','ai','answers','scorecard','notes'].forEach(t => { document.getElementById('mt-'+t).style.display = t===tab?'block':'none'; });
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   if(el) el.classList.add('on');
+  if(tab==='scorecard') renderScorecard();
 }
 function updateStage() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
@@ -1833,6 +1871,163 @@ function checkAuth() {
   sessionStorage.removeItem('wh_auth');
   // isAuthenticated is always false on fresh page load
   // Login overlay stays visible until correct password entered
+}
+
+// ── INTERVIEW SCORECARD ───────────────────────
+const SC_CATS = [
+  {key:'communication', label:'Communication & English', desc:'Clear, professional, easy to understand'},
+  {key:'professionalism', label:'Professionalism', desc:'Confident, respectful, prepared for the call'},
+  {key:'technical', label:'Technical Knowledge', desc:'Knows the tools, understands the work'},
+  {key:'culture', label:'Culture Fit', desc:'Would work well with the Wise House team'},
+  {key:'impression', label:'Overall Impression', desc:'Would you be happy to work with this person?'},
+];
+let scScores = {communication:0,professionalism:0,technical:0,culture:0,impression:0};
+let scInterviewer = 'Gab';
+let scRecommendation = '';
+
+function renderScorecard() {
+  const c = C.find(x=>String(x.id)===String(AID));
+  if (!c) return;
+
+  // Load saved scorecard if exists
+  let saved = {};
+  try { saved = c.scorecard ? JSON.parse(c.scorecard) : {}; } catch(e) { saved = {}; }
+  scScores = saved.scores || {communication:0,professionalism:0,technical:0,culture:0,impression:0};
+  scInterviewer = saved.interviewer || 'Gab';
+  scRecommendation = saved.recommendation || '';
+  const scNotes = saved.notes || '';
+
+  const total = Object.values(scScores).reduce((a,b)=>a+b,0);
+
+  document.getElementById('sc-content').innerHTML = `
+    <div class="sc-summary" id="sc-summary-box">
+      <div>
+        <div class="sc-big" id="sc-total">${total}</div>
+        <div class="sc-max">/ 25</div>
+      </div>
+      <div style="flex:1">
+        <div class="sc-tier" id="sc-tier">${scTierLabel(total)}</div>
+        <div class="sc-bar-track"><div class="sc-bar-fill" id="sc-bar" style="width:${total/25*100}%"></div></div>
+      </div>
+    </div>
+
+    <div class="sc-section-title">Interviewer</div>
+    <div class="sc-interviewer">
+      ${['Gab','Ross','Dennis'].map(n=>`<div class="sc-iv-pill${scInterviewer===n?' on':''}" onclick="scSelectIv(this,'${n}')">${n}</div>`).join('')}
+    </div>
+
+    <div style="height:1px;background:var(--bdr);margin:12px 0"></div>
+
+    ${SC_CATS.map(cat=>`
+    <div class="sc-section-title">${cat.label}</div>
+    <div class="sc-rating-row">
+      <div><div class="sc-rating-label">${cat.label}</div><div class="sc-rating-desc">${cat.desc}</div></div>
+      <div class="sc-stars" data-cat="${cat.key}">
+        ${[1,2,3,4,5].map(n=>`<div class="sc-star${scScores[cat.key]>=n?(scScores[cat.key]<=2?' on-red':' on'):''}" onclick="scRate(this,${n})">${n}</div>`).join('')}
+      </div>
+    </div>`).join('')}
+
+    <div style="height:1px;background:var(--bdr);margin:12px 0"></div>
+
+    <div class="sc-section-title">Recommendation</div>
+    <div class="sc-rec-row">
+      <div class="sc-rec-btn${scRecommendation==='Advance'?' sc-advance':''}" onclick="scSelectRec(this,'Advance')">✓ Advance</div>
+      <div class="sc-rec-btn${scRecommendation==='Bench'?' sc-bench':''}" onclick="scSelectRec(this,'Bench')">↓ Bench</div>
+      <div class="sc-rec-btn${scRecommendation==='Archive'?' sc-archive':' sc-archive-idle'}" onclick="scSelectRec(this,'Archive')">✕ Archive</div>
+    </div>
+
+    <div class="sc-section-title">Interview Notes</div>
+    <textarea id="sc-notes" style="width:100%;background:var(--surf2);border:1px solid var(--bdr);border-radius:8px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tx);resize:vertical;min-height:80px;outline:none" placeholder="Key observations from the video screen...">${scNotes}</textarea>
+
+    <button class="btn btn-p" style="width:100%;margin-top:12px" onclick="saveScorecard()">Save Scorecard</button>
+    ${saved.scores ? `<div style="font-size:11px;color:var(--tx3);text-align:center;margin-top:6px">Last saved by ${saved.interviewer||'—'} · ${saved.savedAt ? new Date(saved.savedAt).toLocaleDateString() : ''}</div>` : ''}
+  `;
+  scUpdateTotal();
+}
+
+function scTierLabel(total) {
+  if (total===0) return 'Not yet rated';
+  if (total>=22) return 'Strong — Recommend Advance';
+  if (total>=17) return 'Good — Consider Advancing';
+  if (total>=12) return 'Average — Consider Benching';
+  return 'Below expectations — Archive';
+}
+
+function scRate(el, val) {
+  const group = el.parentElement;
+  const cat = group.dataset.cat;
+  scScores[cat] = val;
+  group.querySelectorAll('.sc-star').forEach((s,i) => {
+    s.className = 'sc-star';
+    if (i < val) s.classList.add(val <= 2 ? 'on-red' : 'on');
+  });
+  scUpdateTotal();
+}
+
+function scUpdateTotal() {
+  const total = Object.values(scScores).reduce((a,b)=>a+b,0);
+  const totalEl = document.getElementById('sc-total');
+  const barEl = document.getElementById('sc-bar');
+  const tierEl = document.getElementById('sc-tier');
+  const boxEl = document.getElementById('sc-summary-box');
+  if (!totalEl) return;
+  totalEl.textContent = total;
+  barEl.style.width = (total/25*100)+'%';
+  tierEl.textContent = scTierLabel(total);
+  if (total===0) { boxEl.style.background='var(--green)'; barEl.style.background='#4CAF50'; }
+  else if (total>=22) { boxEl.style.background='#1B5E20'; barEl.style.background='#4CAF50'; }
+  else if (total>=17) { boxEl.style.background='#2E7D32'; barEl.style.background='#81C784'; }
+  else if (total>=12) { boxEl.style.background='#E65100'; barEl.style.background='#FFB74D'; }
+  else { boxEl.style.background='#B71C1C'; barEl.style.background='#EF9A9A'; }
+}
+
+function scSelectIv(el, name) {
+  document.querySelectorAll('.sc-iv-pill').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  scInterviewer = name;
+}
+
+function scSelectRec(el, rec) {
+  document.querySelectorAll('.sc-rec-btn').forEach(b=>{
+    b.className = 'sc-rec-btn';
+    if (b.textContent.includes('Archive')) b.classList.add('sc-archive-idle');
+  });
+  scRecommendation = rec;
+  if (rec==='Advance') el.classList.add('sc-advance');
+  else if (rec==='Bench') el.classList.add('sc-bench');
+  else el.className = 'sc-rec-btn sc-archive';
+}
+
+function saveScorecard() {
+  const c = C.find(x=>String(x.id)===String(AID));
+  if (!c) return;
+  const notes = document.getElementById('sc-notes').value;
+  const scorecard = JSON.stringify({
+    scores: scScores,
+    interviewer: scInterviewer,
+    recommendation: scRecommendation,
+    notes,
+    savedAt: new Date().toISOString(),
+    total: Object.values(scScores).reduce((a,b)=>a+b,0)
+  });
+  c.scorecard = scorecard;
+  // Save to Google Sheets notes field with scorecard appended
+  const existingNotes = c.notes || '';
+  const notesWithoutSC = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
+  const fullNotes = notesWithoutSC + (notesWithoutSC ? '\n' : '') + '---SCORECARD---\n' + scorecard;
+  c.notes = fullNotes;
+  pushToSheet('update', {id:String(c.id), notes:c.notes});
+  // Also update stage based on recommendation
+  if (scRecommendation && scRecommendation !== c.stage) {
+    const stageMap = {'Advance':'Screening','Bench':'Bench','Archive':'Archived'};
+    if (stageMap[scRecommendation]) {
+      c.stage = stageMap[scRecommendation];
+      document.getElementById('m-stage').value = c.stage;
+      pushToSheet('update', {id:String(c.id), stage:c.stage});
+    }
+  }
+  renderDash(); renderTable(); renderPipeline();
+  toast('Scorecard saved','ok');
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
