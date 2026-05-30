@@ -211,7 +211,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 .src-stat-n{font-size:22px;font-weight:600;font-family:"DM Mono",monospace}
 .src-stat-l{font-size:11px;color:var(--tx2);margin-top:2px}
 .src-stat-sub{font-size:10px;color:var(--tx3);margin-top:4px}
-.login-overlay{position:fixed;inset:0;background:#1B4332;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif}
+.login-overlay{position:fixed;inset:0;background:#1B4332;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;transition:opacity 0.2s}
 .login-box{background:#FFFFFF;border-radius:16px;padding:40px 36px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
 .login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center}
 .login-logo img{width:40px;height:40px;border-radius:10px}
@@ -1869,7 +1869,10 @@ function doLogin() {
   const err = document.getElementById('login-err');
   if (pw === TEAM_PASSWORD) {
     isAuthenticated = true;
-    document.getElementById('login-overlay').style.display = 'none';
+    const lo = document.getElementById('login-overlay');
+    lo.style.display = 'none';
+    lo.style.pointerEvents = 'none';
+    lo.style.zIndex = '-1';
     loadFromSheet();
   } else {
     err.style.display = 'block';
