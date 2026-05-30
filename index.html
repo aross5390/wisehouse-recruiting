@@ -1147,7 +1147,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 // ── STATE ──────────────────────────────────────
 let C = []; // loaded from Google Sheets
 let KEY = localStorage.getItem('wh_key') || '';
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwQGwNogl1KnwKQFnmFUjGV6B07-0eKvE-QZmtW9hHyG0XlZBTDuKpJ7_m3cx2tZOrh/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwz1Gb78TPHH1PtIPt4BVFNBTcTstm7Vfs-Uwd-aQ0WiIVqH3rC5DEKm_7U7UJ_k9WJ/exec';
 let AID = null; // active candidate id
 
 const ROLES = ['Pest Control Technician','Outbound Sales Rep','CSR / Admin Support','Video Editor','AI Implementation Specialist'];
@@ -1530,7 +1530,7 @@ function openModal(id) {
     : `<div class="empty">${KEY?'<button class="btn btn-p btn-sm" onclick="rescore()">Score with Claude AI</button>':'Add API key in Settings to enable scoring.'}</div>`;
   function answerDisplay(label, val) {
     if (!val) return '';
-    const isUrl = val.trim().startsWith('http') || val.trim().includes('drive.google') || val.trim().includes('dropbox');
+    const isUrl2 = val.trim().startsWith('http') || val.trim().includes('drive.google') || val.trim().includes('dropbox');
     const content = (label === 'Resume/CV' && isUrl)
       ? `<a href="${val.trim()}" target="_blank" style="color:var(--blue);font-weight:500">📄 Open Resume File</a>`
       : `<div style="font-size:12px;color:var(--tx2);line-height:1.6;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px">${val}</div>`;
@@ -1540,16 +1540,22 @@ function openModal(id) {
     [['Resume/CV',c.resume],['Experience',c.q1],['Customer Scenario',c.q2],['Motivation',c.q3]]
     .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
     || '<div class="empty">No answers recorded.</div>';
-  // Strip scorecard data from notes display
+  // Notes tab shows only regular notes — scorecard is separate
   const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
-  document.getElementById('m-notes-ta').value = notesClean;
-  // Load scorecard from notes
+  // Strip referred by from display (shown in overview)
+  const notesDisplay = notesClean.replace(/^Referred by: [^\n]+\n?/,'').trim();
+  document.getElementById('m-notes-ta').value = notesDisplay;
+  // Pre-load referred by field
+  const refM2 = notesClean.match(/^Referred by: ([^\n]+)/);
+  const refInput = document.getElementById('m-referred-by');
+  if (refInput) refInput.value = refM2 ? refM2[1].trim() : '';
+  // Extract scorecard data for scorecard tab
   const scMatch = (c.notes||'').match(/---SCORECARD---\n([\s\S]*)/);
   if (scMatch) { try { c.scorecard = scMatch[1].trim(); } catch(e){} }
   // Populate referred by field
   const refM = (c.notes||'').match(/Referred by: ([^\n]+)/);
-  const refInput = document.getElementById('m-referred-by');
-  if (refInput) refInput.value = refM ? refM[1].trim() : '';
+  const refInputB = document.getElementById('m-referred-by');
+  if (refInputB) refInputB.value = refM ? refM[1].trim() : '';
   mTab('overview', document.querySelector('.tab'));
   document.getElementById('modal-overlay').classList.remove('off');
 }
@@ -1571,9 +1577,16 @@ function saveNotes() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
   const notesText = document.getElementById('m-notes-ta').value;
   const referredBy = document.getElementById('m-referred-by') ? document.getElementById('m-referred-by').value.trim() : '';
-  let fullNotes = notesText.replace(/Referred by: [^\n]+\n?/g, '').trim();
-  if (referredBy) fullNotes = 'Referred by: ' + referredBy + (fullNotes ? '\n' + fullNotes : '');
-  c.notes = fullNotes;
+
+  // Build regular notes section
+  let regularNotes = notesText.replace(/Referred by: [^\n]+\n?/g, '').trim();
+  if (referredBy) regularNotes = 'Referred by: ' + referredBy + (regularNotes ? '\n' + regularNotes : '');
+
+  // Preserve existing scorecard section if any
+  const scMatch = (c.notes||'').match(/(\n?---SCORECARD---[\s\S]*)/);
+  const scSection = scMatch ? scMatch[1] : '';
+
+  c.notes = regularNotes + scSection;
   pushToSheet('update', {id:String(c.id), notes:c.notes});
   toast('Saved','ok');
 }
@@ -2011,11 +2024,10 @@ function saveScorecard() {
     total: Object.values(scScores).reduce((a,b)=>a+b,0)
   });
   c.scorecard = scorecard;
-  // Save to Google Sheets notes field with scorecard appended
+  // Preserve regular notes, replace only scorecard section
   const existingNotes = c.notes || '';
-  const notesWithoutSC = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
-  const fullNotes = notesWithoutSC + (notesWithoutSC ? '\n' : '') + '---SCORECARD---\n' + scorecard;
-  c.notes = fullNotes;
+  const regularPart = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
+  c.notes = regularPart + (regularPart ? '\n' : '') + '---SCORECARD---\n' + scorecard;
   pushToSheet('update', {id:String(c.id), notes:c.notes});
   // Also update stage based on recommendation
   if (scRecommendation && scRecommendation !== c.stage) {
