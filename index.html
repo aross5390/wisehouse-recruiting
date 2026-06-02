@@ -262,10 +262,172 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 .sh-sub{font-size:11px;color:var(--tx3);margin-top:1px}
 /* empty */
 .empty{text-align:center;padding:28px;color:var(--tx3);font-size:12px}
+
+/* ── MOBILE RESPONSIVE ─────────────────────── */
+@media (max-width: 768px) {
+  /* Hide sidebar, show bottom nav */
+  .sidebar { display: none; }
+  .main { width: 100%; }
+  .content { padding: 14px; }
+  .topbar { padding: 0 14px; }
+
+  /* Bottom navigation bar */
+  .mobile-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1B4332;
+    border-top: 1px solid #145229;
+    z-index: 50;
+    height: 60px;
+    align-items: stretch;
+  }
+  .mn-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 6px 2px;
+    border: none;
+    background: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.1s;
+  }
+  .mn-item.on { color: #fff; }
+  .mn-item svg { width: 18px; height: 18px; }
+  .mn-badge {
+    position: absolute;
+    top: 6px;
+    right: calc(50% - 18px);
+    background: #4CAF50;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    min-width: 14px;
+    text-align: center;
+  }
+  .mn-item-wrap { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+
+  /* Add padding at bottom for nav bar */
+  .content { padding-bottom: 74px; }
+
+  /* Stats grid - 2 cols on mobile */
+  .stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat { padding: 12px 14px; }
+  .stat-n { font-size: 20px; }
+
+  /* Pipeline board - horizontal scroll */
+  .board { gap: 8px; }
+  .col { min-width: 160px; }
+
+  /* Table - hide less important columns */
+  table th:nth-child(3),
+  table td:nth-child(3),
+  table th:nth-child(6),
+  table td:nth-child(6) { display: none; }
+
+  /* Modal - full screen */
+  .overlay { padding: 0; align-items: flex-end; }
+  .modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 16px 16px 0 0;
+  }
+  .modal-head { padding: 14px 16px; }
+  .modal-body { padding: 14px 16px; }
+
+  /* Detail grid - single column */
+  .detail-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Breakdown grid - single column */
+  .breakdown { grid-template-columns: 1fr; }
+
+  /* Form rows - single column */
+  .form-row { grid-template-columns: 1fr; }
+
+  /* Reports - single column */
+  .rpt-grid { grid-template-columns: 1fr; }
+
+  /* Sources stat grid */
+  #src-stat-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* SOP role tabs - wrap */
+  #sop-role-tabs { gap: 4px; }
+  #sop-role-tabs button { font-size: 11px; padding: 5px 8px; }
+
+  /* Topbar - hide add candidate button */
+  .topbar .btn-p { display: none; }
+
+  /* Section headers */
+  .sh { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .sh > div:last-child { width: 100%; display: flex; gap: 6px; flex-wrap: wrap; }
+  .sh select { flex: 1; min-width: 0; }
+
+  /* Scorecard */
+  .sc-rec-row { flex-direction: column; gap: 6px; }
+  .sc-rec-btn { flex: none; }
+
+  /* Upload zone */
+  .upload-zone { padding: 16px; }
+
+  /* Login box */
+  .login-box { padding: 28px 20px; margin: 0 12px; }
+}
+
+@media (min-width: 769px) {
+  .mobile-nav { display: none !important; }
+}
+
 </style>
 </head>
 <body>
-<div class="login-overlay" id="login-overlay">
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" style="display:none">
+  <div class="mn-item on" id="mn-dashboard" onclick="go('dashboard',this);setMobileNav(this)">
+    <div class="mn-item-wrap">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Home</span>
+    </div>
+  </div>
+  <div class="mn-item" id="mn-pipeline" onclick="go('pipeline',this);setMobileNav(this)">
+    <div class="mn-item-wrap">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+      <span>Pipeline</span>
+      <span class="mn-badge" id="mn-badge" style="display:none">0</span>
+    </div>
+  </div>
+  <div class="mn-item" id="mn-candidates" onclick="go('candidates',this);setMobileNav(this)">
+    <div class="mn-item-wrap">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"/></svg>
+      <span>Candidates</span>
+    </div>
+  </div>
+  <div class="mn-item" id="mn-add-m" onclick="go('add',this);setMobileNav(this)">
+    <div class="mn-item-wrap">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Add</span>
+    </div>
+  </div>
+  <div class="mn-item" id="mn-settings" onclick="go('settings',this);setMobileNav(this)">
+    <div class="mn-item-wrap">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <span>Settings</span>
+    </div>
+  </div>
+</nav>
+
+<div class="login-overlay"  id="login-overlay">
   <div class="login-box">
     <div class="login-logo">
       <img src="data:image/png;base64,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" alt="Wise House">
@@ -1178,6 +1340,8 @@ function save() { badge(); } // data persisted per-operation to Google Sheets
 function badge() {
   const n = C.filter(c => !['Hired','Archived'].includes(c.stage)).length;
   document.getElementById('nb').textContent = n;
+  const mb = document.getElementById('mn-badge');
+  if (mb) { mb.textContent = n; mb.style.display = n > 0 ? 'block' : 'none'; }
 }
 function apiStatus() {
   const ok = !!KEY;
@@ -2043,6 +2207,21 @@ function saveScorecard() {
   }
   renderDash(); renderTable(); renderPipeline();
   toast('Scorecard saved','ok');
+}
+
+// ── MOBILE NAV ────────────────────────────────
+function setMobileNav(el) {
+  document.querySelectorAll('.mn-item').forEach(i => i.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function updateMobileBadge() {
+  const n = C.filter(c => !['Hired','Archived'].includes(c.stage)).length;
+  const badge = document.getElementById('mn-badge');
+  if (badge) {
+    badge.textContent = n;
+    badge.style.display = n > 0 ? 'block' : 'none';
+  }
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
