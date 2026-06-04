@@ -1537,14 +1537,37 @@ async function addCandidate() {
 }
 
 async function scoreCandidate(c) {
-  const p = `You are a recruiting assistant for Wise House pest control. Score this ${c.role} candidate.
-Name: ${c.name} | Source: ${c.source} | Comp: ${c.comp||'?'} | Available: ${c.availability||'?'}
-Resume: ${c.resume||'N/A'} | Experience: ${c.q1||'N/A'} | Customer scenario: ${c.q2||'N/A'} | Motivation: ${c.q3||'N/A'} | Video: ${c.video||'N/A'}
-Score 100pts: experience(0-25)+communication(0-20)+motivation(0-15)+reliability(0-15)+availability(0-15)+bonus(0-10). Breakdown values MUST add up to total score. Be fair, never reject.
-Return ONLY valid JSON no markdown:
-{"score":75,"breakdown":{"experience":18,"communication":15,"motivation":12,"reliability":13,"availability":12,"bonus":5},"tier":"Advance","summary":"3-sentence summary.","strengths":["s1","s2"],"concerns":["c1","c2"],"flags":["f1 or None identified"],"comp_note":"In range","screen_questions":["q1","q2","q3"]}`;
+  const p = `You are a recruiting assistant for Wise House Pest Control in Palm Beach County, FL. Score this ${c.role} candidate with deep analysis of their work history.
+
+CANDIDATE:
+Name: ${c.name} | Source: ${c.source} | Comp: ${c.comp||'not stated'} | Available: ${c.availability||'not stated'}
+Resume/CV: ${c.resume||'N/A'}
+Experience answer: ${c.q1||'N/A'}
+Customer scenario: ${c.q2||'N/A'}
+Motivation: ${c.q3||'N/A'}
+Video intro: ${c.video ? 'Provided' : 'Not provided'}
+
+TENURE & EMPLOYMENT ANALYSIS — read carefully:
+- Extract every job from the resume/experience. For each job note: company, role, duration, and whether it is relevant to pest control or field service.
+- Flag SHORT STINTS: any job lasting under 12 months (unless it was contract, seasonal, or clearly explained). Multiple short stints in a row is a serious reliability concern.
+- Flag EMPLOYMENT GAPS: any unexplained gap of 3+ months between jobs.
+- Flag FIELD RELEVANCE: how directly does their work history relate to pest control, home services, lawn care, field service, or customer-facing trade work?
+- Flag TRAJECTORY: is the candidate moving toward more relevant work or away from it?
+
+SCORING (100 pts total — breakdown MUST add up to total):
+- experience (0-25): Years + relevance to pest control/field service. Direct pest control = higher. Adjacent (home services, lawn, trades) = moderate. Unrelated = lower.
+- communication (0-20): Written clarity, customer scenario quality, video presence if provided.
+- motivation (0-15): Specificity of interest in Wise House and the role. Generic answers score lower.
+- reliability (0-15): Tenure at previous jobs. Short stints, frequent job changes, or unexplained gaps REDUCE this score significantly.
+- availability (0-15): Can start soon, full-time commitment, location/schedule fit.
+- bonus (0-10): FL pest control license, bilingual, GorillaDesk/CRM experience, referral, relevant certifications.
+
+RULES: Be fair and objective. Never outright reject — only score. Score 0 on a parameter only if there is truly zero evidence.
+
+Return ONLY valid JSON, no markdown, no extra text:
+{"score":75,"breakdown":{"experience":18,"communication":15,"motivation":12,"reliability":13,"availability":12,"bonus":5},"tier":"Advance","summary":"3-sentence factual summary of who this person is and what stands out.","strengths":["specific strength 1","specific strength 2"],"concerns":["specific concern 1","specific concern 2"],"flags":["List each short stint as: Short stint — [Company] ([duration]). List gaps as: Employment gap — [approximate dates]. List as None identified if clean."],"comp_note":"In range / Above range / Below range / Not stated","tenure_analysis":"2-3 sentences specifically about their job history — how long they stayed at each role, any patterns, red flags around stability.","screen_questions":["Question targeting a specific short stint or gap if any, otherwise a role-relevant question","Second targeted question","Third targeted question"]}`;
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:p}]})});
+    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,messages:[{role:'user',content:p}]})});
     const d = await r.json();
     if (d.error) { console.error('API Error:', JSON.stringify(d.error)); window._lastApiError = JSON.stringify(d.error); return null; }
     return JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
@@ -1582,6 +1605,7 @@ function aiPanel(r) {
     ${flags.length?flags.map(f=>`<div class="flag-row"><div class="fdot"></div>${f}</div>`).join(''):'<div style="font-size:11px;color:var(--green)">✓ No red flags</div>'}
     <div class="ai-sec">Comp Note</div>
     <div style="font-size:12px;color:var(--tx2)">${r.comp_note||'Not assessed'}</div>
+    ${r.tenure_analysis ? `<div class="ai-sec">Tenure & Stability Analysis</div><div style="font-size:12px;color:var(--tx2);line-height:1.6;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px">${r.tenure_analysis}</div>` : ''}
     ${qs.length?`<div class="ai-sec">Screen Questions for Gab</div>${qs.map((q,i)=>`<div class="q-row"><span class="qdot">${i+1}</span>${q}</div>`).join('')}`:''}
   </div>`;
 }
@@ -1633,6 +1657,25 @@ function renderPipeline() {
 }
 
 // ── CANDIDATES TABLE ───────────────────────────
+function resetFilters() {
+  ['frl','fst','fsrc','fsort'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.selectedIndex = 0;
+  });
+  renderTable();
+}
+
+function setSort(asc, desc) {
+  const sel = document.getElementById('fsort');
+  if (!sel) return;
+  if (desc && sel.value === asc) {
+    sel.value = desc;
+  } else {
+    sel.value = asc;
+  }
+  renderTable();
+}
+
 function renderTable() {
   const rf = document.getElementById('frl').value;
   const sf = document.getElementById('fst').value;
@@ -1705,7 +1748,7 @@ function openModal(id) {
     .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
     || '<div class="empty">No answers recorded.</div>';
   // Notes tab shows only regular notes — scorecard is separate
-  const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
+  const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
   // Strip referred by from display (shown in overview)
   const notesDisplay = notesClean.replace(/^Referred by: [^\n]+\n?/,'').trim();
   document.getElementById('m-notes-ta').value = notesDisplay;
@@ -2072,6 +2115,15 @@ function renderScorecard() {
   // Load saved scorecard if exists
   let saved = {};
   try { saved = c.scorecard ? JSON.parse(c.scorecard) : {}; } catch(e) { saved = {}; }
+  // Load interview notes and analysis from notes field
+  const interviewMatch = (c.notes||'').match(/---INTERVIEW---\n([\s\S]*)/);
+  if (interviewMatch) {
+    try {
+      const interviewData = JSON.parse(interviewMatch[1].trim());
+      saved.interviewNotes = interviewData.notes || '';
+      saved.interviewAnalysis = interviewData.analysis || null;
+    } catch(e) {}
+  }
   scScores = saved.scores || {communication:0,professionalism:0,technical:0,culture:0,impression:0};
   scInterviewer = saved.interviewer || 'Gab';
   scRecommendation = saved.recommendation || '';
@@ -2121,6 +2173,17 @@ function renderScorecard() {
 
     <button class="btn btn-p" style="width:100%;margin-top:12px" onclick="saveScorecard()">Save Scorecard</button>
     ${saved.scores ? `<div style="font-size:11px;color:var(--tx3);text-align:center;margin-top:6px">Last saved by ${saved.interviewer||'—'} · ${saved.savedAt ? new Date(saved.savedAt).toLocaleDateString() : ''}</div>` : ''}
+
+    <div style="height:1px;background:var(--bdr);margin:20px 0"></div>
+
+    <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:4px">AI Interview Analysis</div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:12px;line-height:1.6">Paste the Gemini meeting notes or interview transcript below. Claude will analyze and score the candidate across 6 key traits automatically.</div>
+    <textarea id="sc-interview-notes" style="width:100%;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--tx);resize:vertical;min-height:120px;outline:none;transition:border-color 0.1s" placeholder="Paste Gemini meeting notes, interview transcript, or your own notes here...">${saved.interviewNotes||''}</textarea>
+    <button class="btn btn-p" style="width:100%;margin-top:8px" onclick="analyzeInterview()">
+      <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" style="margin-right:4px"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Analyze with Claude AI
+    </button>
+    <div id="sc-analysis-result" style="margin-top:12px">${saved.interviewAnalysis ? renderInterviewAnalysis(saved.interviewAnalysis) : ''}</div>
   `;
   scUpdateTotal();
 }
@@ -2193,8 +2256,9 @@ function saveScorecard() {
   c.scorecard = scorecard;
   // Preserve regular notes, replace only scorecard section
   const existingNotes = c.notes || '';
-  const regularPart = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').trim();
-  c.notes = regularPart + (regularPart ? '\n' : '') + '---SCORECARD---\n' + scorecard;
+  const regularPart = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
+  const interviewPart = existingNotes.match(/(\n?---INTERVIEW---[\s\S]*)/)?.[0] || '';
+  c.notes = regularPart + (regularPart ? '\n' : '') + '---SCORECARD---\n' + scorecard + interviewPart;
   pushToSheet('update', {id:String(c.id), notes:c.notes});
   // Also update stage based on recommendation
   if (scRecommendation && scRecommendation !== c.stage) {
@@ -2221,6 +2285,116 @@ function updateMobileBadge() {
   if (badge) {
     badge.textContent = n;
     badge.style.display = n > 0 ? 'block' : 'none';
+  }
+}
+
+// ── INTERVIEW ANALYSIS ────────────────────────
+function renderInterviewAnalysis(r) {
+  if (!r) return '';
+  const traits = [
+    {key:'iq', label:'Problem Solving / IQ', color:'#2E7D32'},
+    {key:'personality', label:'Personality & Energy', color:'#1565C0'},
+    {key:'interview_style', label:'Interview Style', color:'#6A1B9A'},
+    {key:'tech_savvy', label:'Tech Savviness', color:'#00695C'},
+    {key:'integrity', label:'Integrity & Honesty', color:'#E65100'},
+    {key:'coachability', label:'Coachability & Growth Mindset', color:'#1B4332'},
+  ];
+  const traitHTML = traits.map(t => {
+    const score = r.scores?.[t.key] || 0;
+    const pct = score / 10 * 100;
+    const barColor = score >= 8 ? '#2E7D32' : score >= 6 ? '#1565C0' : score >= 4 ? '#F57F17' : '#C62828';
+    return `<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <div style="font-size:12px;font-weight:500;color:var(--tx)">${t.label}</div>
+        <div style="font-size:12px;font-weight:600;font-family:'DM Mono',monospace;color:${barColor}">${score}/10</div>
+      </div>
+      <div style="height:5px;background:var(--bdr);border-radius:3px;overflow:hidden">
+        <div style="height:100%;background:${barColor};width:${pct}%;border-radius:3px;transition:width 0.4s ease"></div>
+      </div>
+      ${r.trait_notes?.[t.key] ? `<div style="font-size:11px;color:var(--tx3);margin-top:3px;line-height:1.5">${r.trait_notes[t.key]}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  const totalScore = Math.round(Object.values(r.scores||{}).reduce((a,b)=>a+b,0) / 6 * 10) / 10;
+  const totalColor = totalScore >= 8 ? '#2E7D32' : totalScore >= 6 ? '#1565C0' : totalScore >= 4 ? '#F57F17' : '#C62828';
+
+  return `<div style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px;margin-top:4px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.6px;color:var(--green);font-family:'DM Mono',monospace">Claude Interview Analysis</div>
+      <div style="font-size:18px;font-weight:600;font-family:'DM Mono',monospace;color:${totalColor}">${totalScore}/10 avg</div>
+    </div>
+    <div style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:14px;padding:10px 12px;background:var(--surf);border-radius:var(--r);border:1px solid var(--bdr)">${r.summary||''}</div>
+    ${traitHTML}
+    ${r.hire_recommendation ? `<div style="margin-top:12px;padding:10px 12px;border-radius:var(--r);background:${r.hire_recommendation==='Strong Hire'?'#E8F5E9':r.hire_recommendation==='Hire'?'#E3F2FD':r.hire_recommendation==='Maybe'?'#FFF3E0':'#FFEBEE'};border:1px solid ${r.hire_recommendation==='Strong Hire'?'rgba(46,125,50,0.3)':r.hire_recommendation==='Hire'?'rgba(21,101,192,0.3)':r.hire_recommendation==='Maybe'?'rgba(245,127,23,0.3)':'rgba(198,40,40,0.3)'}">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx3);margin-bottom:3px">Hire Recommendation</div>
+      <div style="font-size:13px;font-weight:600;color:${r.hire_recommendation==='Strong Hire'?'#1B4332':r.hire_recommendation==='Hire'?'#0D47A1':r.hire_recommendation==='Maybe'?'#E65100':'#B71C1C'}">${r.hire_recommendation}</div>
+      ${r.hire_reason ? `<div style="font-size:11px;color:var(--tx2);margin-top:4px;line-height:1.5">${r.hire_reason}</div>` : ''}
+    </div>` : ''}
+    ${r.red_flags && r.red_flags.length ? `<div style="margin-top:10px"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx3);margin-bottom:6px">Red Flags from Interview</div>${r.red_flags.map(f=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:#FFF3E0;border:1px solid rgba(245,127,23,0.3);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:#E65100"><div style="width:5px;height:5px;border-radius:50%;background:#F57F17;flex-shrink:0;margin-top:4px"></div>${f}</div>`).join('')}</div>` : ''}
+    ${r.follow_up_questions && r.follow_up_questions.length ? `<div style="margin-top:10px"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx3);margin-bottom:6px">Follow-up Questions</div>${r.follow_up_questions.map((q,i)=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:#E8F5E9;border:1px solid rgba(46,125,50,0.2);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:#2E7D32"><span style="font-weight:600;min-width:14px">${i+1}</span>${q}</div>`).join('')}</div>` : ''}
+  </div>`;
+}
+
+async function analyzeInterview() {
+  if (!KEY) { toast('API key required — add it in Settings'); return; }
+  const c = C.find(x=>String(x.id)===String(AID));
+  if (!c) return;
+
+  const notes = document.getElementById('sc-interview-notes').value.trim();
+  if (!notes) { toast('Please paste the interview notes first'); return; }
+
+  const btn = document.querySelector('[onclick="analyzeInterview()"]');
+  const resultDiv = document.getElementById('sc-analysis-result');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spin" style="width:13px;height:13px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;margin-right:6px"></div>Analyzing...'; }
+  resultDiv.innerHTML = '<div class="thinking"><div class="spin"></div><span class="pulse">Claude is reading the interview notes...</span></div>';
+
+  const prompt = `You are an expert talent evaluator for Wise House Pest Control. Analyze these interview notes and score the candidate across 6 key traits.
+
+CANDIDATE: ${c.name} | ROLE: ${c.role}
+
+INTERVIEW NOTES:
+${notes}
+
+Score each trait from 1-10 based ONLY on evidence in the notes. Be specific and fair. Look for:
+- IQ / Problem Solving: How they reason, handle hypotheticals, solve problems on the spot
+- Personality & Energy: Warmth, enthusiasm, likeability, cultural fit with a field service team
+- Interview Style: Preparedness, clarity of answers, confidence, professionalism
+- Tech Savviness: Comfort with technology, CRMs, apps, learning new tools
+- Integrity & Honesty: Consistency, accountability, ownership of mistakes, transparency
+- Coachability: Openness to feedback, growth mindset, willingness to learn
+
+Return ONLY valid JSON, no markdown:
+{"scores":{"iq":7,"personality":8,"interview_style":7,"tech_savvy":6,"integrity":9,"coachability":8},"trait_notes":{"iq":"Gave structured answer to the scheduling problem, showed logical thinking","personality":"Very warm, laughed naturally, would fit the team well","interview_style":"Came prepared with examples, answered directly","tech_savvy":"Mentioned using ServiceTitan but needed prompting on specifics","integrity":"Owned a past mistake without making excuses","coachability":"Asked what success looks like and how to improve"},"summary":"2-3 sentence overall impression of how this candidate interviewed.","hire_recommendation":"Strong Hire","hire_reason":"One sentence explaining the recommendation.","red_flags":["Any concern observed during interview, or empty array if none"],"follow_up_questions":["Question to clarify something unclear from the notes","Second follow-up if needed"]}`;
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error.message);
+    const analysis = JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
+
+    // Save analysis to candidate
+    c.interviewAnalysis = analysis;
+    c.interviewNotes = notes;
+
+    // Persist to notes field
+    const existingNotes = c.notes || '';
+    const regularPart = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
+    const scPart = existingNotes.match(/(\n?---SCORECARD---[\s\S]*?)(?=\n?---|$)/)?.[0] || '';
+    const interviewData = '\n---INTERVIEW---\n' + JSON.stringify({notes, analysis});
+    c.notes = regularPart + scPart + interviewData;
+    pushToSheet('update', {id:String(c.id), notes:c.notes});
+
+    resultDiv.innerHTML = renderInterviewAnalysis(analysis);
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" style="margin-right:4px"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Re-analyze'; }
+    toast('Interview analysis complete', 'ok');
+  } catch(e) {
+    console.error('Interview analysis failed:', e);
+    resultDiv.innerHTML = '<div class="warn-b">Analysis failed. Check your API key and try again.</div>';
+    if (btn) { btn.disabled = false; btn.innerHTML = 'Analyze with Claude AI'; }
   }
 }
 
