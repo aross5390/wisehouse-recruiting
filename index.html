@@ -253,6 +253,10 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 .sc-iv-pill{padding:5px 12px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:12px;font-weight:500;color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
 .sc-iv-pill.on{border-color:#2E7D32;background:#E8F5E9;color:#1B4332}
 .sc-saved-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#2E7D32;background:#E8F5E9;border:1px solid rgba(46,125,50,0.2);padding:3px 8px;border-radius:20px;margin-left:8px}
+.droptarget{transition:background 0.15s,border-color 0.15s}
+.droptarget.drag-over{background:rgba(46,125,50,0.08) !important;border-color:rgba(46,125,50,0.4) !important;outline:2px dashed rgba(46,125,50,0.4);outline-offset:-2px}
+.cc[draggable="true"]{cursor:grab}
+.cc[draggable="true"]:active{cursor:grabbing}
 .toast{position:fixed;bottom:20px;right:20px;background:#1B4332;border:1px solid #2E7D32;border-radius:var(--rl);padding:10px 16px;font-size:12px;color:#FFFFFF;z-index:999;transform:translateY(60px);opacity:0;transition:all 0.25s;max-width:300px;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.ok{border-color:var(--green-bdr)}
@@ -557,7 +561,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
           <select id="fst" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
             <option value="all">All Stages</option>
             <option>Applied</option><option>Screening</option><option>Video Screen</option>
-            <option>Final Interview</option><option>Reference Check</option><option>Offer</option>
+            <option>Final Interview</option><option>Ride-Along</option><option>Requirements Processing</option><option>Offer</option>
             <option>Hired</option><option>Bench</option><option>Archived</option>
           </select>
           <select id="fsrc" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
@@ -764,7 +768,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
           <label>Stage:</label>
           <select id="m-stage" onchange="updateStage()">
             <option>Applied</option><option>Screening</option><option>Video Screen</option>
-            <option>Final Interview</option><option>Reference Check</option><option>Offer</option>
+            <option>Final Interview</option><option>Ride-Along</option><option>Requirements Processing</option><option>Offer</option>
             <option>Hired</option><option>Bench</option><option>Archived</option>
           </select>
           <button class="btn btn-sm btn-danger" onclick="deleteCandidate()">Delete</button>
@@ -1314,8 +1318,8 @@ let AID = null; // active candidate id
 
 const ROLES = ['Pest Control Technician','Outbound Sales Rep','CSR / Admin Support','Video Editor','AI Implementation Specialist'];
 const RC = {Technician:'coral','Pest Control Technician':'red','Outbound Sales Rep':'amber','CSR / Admin Support':'blue','Video Editor':'green','AI Implementation Specialist':'purple'};
-const SC = {Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Reference Check':'amber',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};
-const STAGES = ['Applied','Screening','Video Screen','Final Interview','Reference Check','Offer','Hired','Bench','Archived'];
+const SC = {Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Ride-Along':'green','Requirements Processing':'purple',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};
+const STAGES = ['Applied','Screening','Video Screen','Final Interview','Ride-Along','Requirements Processing','Offer','Hired','Bench','Archived'];
 
 // ── NAVIGATION ─────────────────────────────────
 function go(page, el) {
@@ -1637,23 +1641,76 @@ function renderDash() {
 }
 
 // ── PIPELINE ───────────────────────────────────
+let dragId = null;
+
 function renderPipeline() {
   const rf = document.getElementById('prf').value;
   const f = rf==='all'?C:C.filter(c=>c.role===rf);
-  document.getElementById('board').innerHTML = ['Applied','Screening','Video Screen','Final Interview','Reference Check','Offer','Hired','Bench'].map(stage=>{
+  document.getElementById('board').innerHTML = ['Applied','Screening','Video Screen','Final Interview','Ride-Along','Requirements Processing','Offer','Hired','Bench'].map(stage=>{
     const sc = f.filter(c=>c.stage===stage);
     return `<div class="col">
       <div class="col-head"><span class="col-ttl">${stage}</span><span class="col-ct">${sc.length}</span></div>
-      <div class="col-body">${sc.length
-        ? sc.map(c=>`<div class="cc" onclick="openModal('${c.id}')">
-            <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
-            <div class="cc-role">${c.role}</div>
-            <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
-          </div>`).join('')
-        : '<div style="text-align:center;padding:14px 6px;color:var(--tx3);font-size:11px">Empty</div>'}
+      <div class="col-body droptarget" 
+        data-stage="${stage}"
+        ondragover="pipeDragOver(event)"
+        ondragleave="pipeDragLeave(event)"
+        ondrop="pipeDrop(event,'${stage}')">
+        ${sc.length
+          ? sc.map(c=>`<div class="cc" 
+              draggable="true"
+              data-id="${c.id}"
+              ondragstart="pipeDragStart(event,'${c.id}')"
+              ondragend="pipeDragEnd(event)"
+              onclick="openModal('${c.id}')">
+              <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
+              <div class="cc-role">${c.role}</div>
+              <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
+            </div>`).join('')
+          : '<div class="col-empty" style="text-align:center;padding:14px 6px;color:var(--tx3);font-size:11px">Empty</div>'}
       </div>
     </div>`;
   }).join('');
+}
+
+function pipeDragStart(e, id) {
+  dragId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', id);
+  setTimeout(() => { const el = e.target; if(el) el.style.opacity = '0.4'; }, 0);
+}
+
+function pipeDragEnd(e) {
+  e.target.style.opacity = '1';
+  document.querySelectorAll('.droptarget').forEach(el => {
+    el.classList.remove('drag-over');
+  });
+  dragId = null;
+}
+
+function pipeDragOver(e) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+
+function pipeDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function pipeDrop(e, newStage) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const id = e.dataTransfer.getData('text/plain') || dragId;
+  if (!id) return;
+  const c = C.find(x=>String(x.id)===String(id));
+  if (!c || c.stage === newStage) return;
+  c.stage = newStage;
+  pushToSheet('update', {id:String(c.id), stage:c.stage});
+  badge();
+  renderPipeline();
+  renderDash();
+  renderTable();
+  toast(`${c.name} → ${newStage}`, 'ok');
 }
 
 // ── CANDIDATES TABLE ───────────────────────────
@@ -1857,7 +1914,7 @@ function clearAll(){toast('Clear not available — manage data directly in Googl
 
 // ── HELPERS ────────────────────────────────────
 function roleBadge(role){const map={'Pest Control Technician':'red','Outbound Sales Rep':'amber','CSR / Admin Support':'blue','Video Editor':'green','AI Implementation Specialist':'purple'};return`<span class="bdg bdg-${map[role]||'gray'}">${role}</span>`;}
-function stageBadge(s){const map={Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Reference Check':'amber',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};return`<span class="bdg bdg-${map[s]||'gray'}">${s}</span>`;}
+function stageBadge(s){const map={Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Ride-Along':'green',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};return`<span class="bdg bdg-${map[s]||'gray'}">${s}</span>`;}
 function scorePill(s){if(s===null||s===undefined)return'<span style="font-size:11px;color:var(--tx3)">Pending</span>';const cls=s>=70?'sp-hi':s>=55?'sp-mid':'sp-lo';return`<span class="score-pill ${cls}">${s}/100</span>`;}
 function ago(iso){if(!iso)return'—';const d=Math.floor((Date.now()-new Date(iso))/86400000),h=Math.floor((Date.now()-new Date(iso))/3600000),m=Math.floor((Date.now()-new Date(iso))/60000);if(d>0)return d+'d ago';if(h>0)return h+'h ago';if(m>0)return m+'m ago';return'Just now';}
 function toast(msg,type=''){const t=document.getElementById('toast-el');t.textContent=msg;t.className='toast'+(type==='ok'?' ok':'');void t.offsetHeight;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
