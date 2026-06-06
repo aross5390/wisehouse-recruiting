@@ -1313,7 +1313,7 @@ tr.clickable:hover td{background:var(--surf2);cursor:pointer}
 // ── STATE ──────────────────────────────────────
 let C = []; // loaded from Google Sheets
 let KEY = localStorage.getItem('wh_key') || '';
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwz1Gb78TPHH1PtIPt4BVFNBTcTstm7Vfs-Uwd-aQ0WiIVqH3rC5DEKm_7U7UJ_k9WJ/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxs4Xgn8TVmDpOAAEBKI3upX3EIw6kl0rKosG6or89jAoyzMPHqln7wjsYt9aX6w1az/exec';
 let AID = null; // active candidate id
 
 const ROLES = ['Pest Control Technician','Outbound Sales Rep','CSR / Admin Support','Video Editor','AI Implementation Specialist'];
@@ -2166,6 +2166,7 @@ let scInterviewer = 'Gab';
 let scRecommendation = '';
 
 function renderScorecard() {
+  window._currentAID = AID;
   const c = C.find(x=>String(x.id)===String(AID));
   if (!c) return;
 
@@ -2389,6 +2390,33 @@ function renderInterviewAnalysis(r) {
     </div>` : ''}
     ${r.red_flags && r.red_flags.length ? `<div style="margin-top:10px"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx3);margin-bottom:6px">Red Flags from Interview</div>${r.red_flags.map(f=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:#FFF3E0;border:1px solid rgba(245,127,23,0.3);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:#E65100"><div style="width:5px;height:5px;border-radius:50%;background:#F57F17;flex-shrink:0;margin-top:4px"></div>${f}</div>`).join('')}</div>` : ''}
     ${r.follow_up_questions && r.follow_up_questions.length ? `<div style="margin-top:10px"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx3);margin-bottom:6px">Follow-up Questions</div>${r.follow_up_questions.map((q,i)=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:#E8F5E9;border:1px solid rgba(46,125,50,0.2);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:#2E7D32"><span style="font-weight:600;min-width:14px">${i+1}</span>${q}</div>`).join('')}</div>` : ''}
+    ${r.follow_up_email ? `
+    <div style="margin-top:14px;border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden">
+      <div style="background:var(--surf2);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr)">
+        <div>
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx3)">AI-Generated Follow-up Email</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:2px">Based on red flags from the interview</div>
+        </div>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <span style="font-size:11px;color:var(--tx2)">Auto-send</span>
+          <div class="toggle-wrap" onclick="toggleAutoSend(this)" data-id="${window._currentAID||''}">
+            <div class="toggle-track" id="autosend-track" style="width:36px;height:20px;background:var(--bdr);border-radius:10px;position:relative;transition:background 0.2s;cursor:pointer">
+              <div class="toggle-thumb" style="width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2)"></div>
+            </div>
+          </div>
+        </label>
+      </div>
+      <div style="padding:12px 14px">
+        <div style="font-size:11px;color:var(--tx3);margin-bottom:4px">Subject</div>
+        <div style="font-size:12px;font-weight:500;color:var(--tx);margin-bottom:10px">${r.follow_up_email.subject||''}</div>
+        <div style="font-size:11px;color:var(--tx3);margin-bottom:4px">Body</div>
+        <div style="font-size:12px;color:var(--tx2);line-height:1.7;white-space:pre-line">${r.follow_up_email.body||''}</div>
+      </div>
+      <div style="padding:10px 14px;border-top:1px solid var(--bdr);display:flex;gap:6px">
+        <button class="btn btn-p btn-sm" onclick="sendFollowUpEmail()">Send Now</button>
+        <button class="btn btn-sm" onclick="copyFollowUpEmail()">Copy Email</button>
+      </div>
+    </div>` : ''}
   </div>`;
 }
 
@@ -2421,7 +2449,8 @@ Score each trait from 1-10 based ONLY on evidence in the notes. Be specific and 
 - Coachability: Openness to feedback, growth mindset, willingness to learn
 
 Return ONLY valid JSON, no markdown:
-{"scores":{"iq":7,"personality":8,"interview_style":7,"tech_savvy":6,"integrity":9,"coachability":8},"trait_notes":{"iq":"Gave structured answer to the scheduling problem, showed logical thinking","personality":"Very warm, laughed naturally, would fit the team well","interview_style":"Came prepared with examples, answered directly","tech_savvy":"Mentioned using ServiceTitan but needed prompting on specifics","integrity":"Owned a past mistake without making excuses","coachability":"Asked what success looks like and how to improve"},"summary":"2-3 sentence overall impression of how this candidate interviewed.","hire_recommendation":"Strong Hire","hire_reason":"One sentence explaining the recommendation.","red_flags":["Any concern observed during interview, or empty array if none"],"follow_up_questions":["Question to clarify something unclear from the notes","Second follow-up if needed"]}`;
+{"scores":{"iq":7,"personality":8,"interview_style":7,"tech_savvy":6,"integrity":9,"coachability":8},"trait_notes":{"iq":"Gave structured answer to the scheduling problem, showed logical thinking","personality":"Very warm, laughed naturally, would fit the team well","interview_style":"Came prepared with examples, answered directly","tech_savvy":"Mentioned using ServiceTitan but needed prompting on specifics","integrity":"Owned a past mistake without making excuses","coachability":"Asked what success looks like and how to improve"},"summary":"2-3 sentence overall impression of how this candidate interviewed.","hire_recommendation":"Strong Hire","hire_reason":"One sentence explaining the recommendation.","red_flags":["Any concern observed during interview, or empty array if none"],"follow_up_questions":["Question to clarify something unclear from the notes","Second follow-up if needed"],"follow_up_email":{"subject":"Following up on your interview — [Candidate Name]","body":"Hi [First Name],\n\nThank you for taking the time to interview with us. We enjoyed learning more about your background.\n\nWe did want to follow up on a couple of things from our conversation:\n\n[Address each red flag as a professional clarifying question — e.g. 'You mentioned leaving X after a short time — could you share a bit more about what happened there?']\n\nWe appreciate your transparency and want to make sure we have a full picture before moving forward.\n\nLooking forward to hearing from you.\n\nWarm regards,\nThe Wise House Team"}}
+IMPORTANT: If there are NO red flags, set follow_up_email to null. Only generate the email if there are actual red flags worth clarifying.`;
 
   try {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
@@ -2448,11 +2477,72 @@ Return ONLY valid JSON, no markdown:
     resultDiv.innerHTML = renderInterviewAnalysis(analysis);
     if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" style="margin-right:4px"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Re-analyze'; }
     toast('Interview analysis complete', 'ok');
+    // Auto-send follow-up email if enabled and red flags exist
+    if (autoSendEnabled && analysis.follow_up_email && c.email) {
+      await sendFollowUpEmail();
+    }
   } catch(e) {
     console.error('Interview analysis failed:', e);
     resultDiv.innerHTML = '<div class="warn-b">Analysis failed. Check your API key and try again.</div>';
     if (btn) { btn.disabled = false; btn.innerHTML = 'Analyze with Claude AI'; }
   }
+}
+
+// ── FOLLOW-UP EMAIL ───────────────────────────
+let autoSendEnabled = false;
+
+function toggleAutoSend(el) {
+  autoSendEnabled = !autoSendEnabled;
+  const track = el.querySelector('.toggle-track');
+  const thumb = el.querySelector('.toggle-thumb');
+  if (autoSendEnabled) {
+    track.style.background = '#2E7D32';
+    thumb.style.left = '18px';
+    toast('Auto-send enabled — email will send automatically after analysis', 'ok');
+  } else {
+    track.style.background = 'var(--bdr)';
+    thumb.style.left = '2px';
+    toast('Auto-send disabled');
+  }
+}
+
+async function sendFollowUpEmail() {
+  const c = C.find(x=>String(x.id)===String(AID));
+  if (!c || !c.email) { toast('No email address for this candidate'); return; }
+  if (!c.interviewAnalysis?.follow_up_email) { toast('No follow-up email generated'); return; }
+
+  const email = c.interviewAnalysis.follow_up_email;
+  const firstName = c.name ? c.name.split(' ')[0] : 'there';
+  const subject = (email.subject||'').replace('[Candidate Name]', c.name);
+  const body = (email.body||'').replace('[First Name]', firstName).replace('[Candidate Name]', c.name);
+
+  try {
+    // Send via Apps Script
+    const resp = await fetch(SHEET_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({
+        action: 'sendEmail',
+        to: c.email,
+        subject,
+        body,
+        candidateName: c.name
+      })
+    });
+    toast('Follow-up email sent to ' + c.email, 'ok');
+  } catch(e) {
+    console.error('Email send failed:', e);
+    toast('Failed to send — try copying and sending manually');
+  }
+}
+
+function copyFollowUpEmail() {
+  const c = C.find(x=>String(x.id)===String(AID));
+  if (!c?.interviewAnalysis?.follow_up_email) return;
+  const email = c.interviewAnalysis.follow_up_email;
+  const firstName = c.name ? c.name.split(' ')[0] : 'there';
+  const full = 'Subject: ' + (email.subject||'').replace('[Candidate Name]', c.name) + '\n\n' + (email.body||'').replace('[First Name]', firstName).replace('[Candidate Name]', c.name);
+  navigator.clipboard.writeText(full).then(()=>toast('Email copied to clipboard','ok')).catch(()=>toast('Copy failed'));
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
