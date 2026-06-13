@@ -1792,7 +1792,12 @@ function openModal(id) {
   const refM = (c.notes||'').match(/Referred by: ([^\n]+)/);
   const refInputB = document.getElementById('m-referred-by');
   if (refInputB) refInputB.value = refM ? refM[1].trim() : '';
-  mTab('overview', document.querySelector('.tab'));
+  // Reset all tabs to show overview
+  ['overview','ai','answers','scorecard','notes'].forEach(t => {
+    const el = document.getElementById('mt-'+t);
+    if (el) el.style.display = t==='overview' ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('on', i===0));
   document.getElementById('modal-overlay').classList.remove('off');
 }
 function closeModal() { document.getElementById('modal-overlay').classList.add('off'); AID=null; }
