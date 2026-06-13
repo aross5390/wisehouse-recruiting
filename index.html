@@ -366,6 +366,19 @@ tr.clickable:hover td:first-child{padding-left:18px}
 
 /* ── CV UPLOAD ────────────────────────────── */
 .cv-drag{border-color:var(--green-mid) !important;background:var(--green-pale) !important}
+
+/* ── REPORTS CHARTS ───────────────────────── */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bar-lbl{font-size:11px;color:var(--tx2);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:7px;background:var(--surf2);border-radius:4px;overflow:hidden;border:1px solid var(--bdr)}
+.bar-fill{height:100%;background:var(--green-mid);border-radius:4px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1)}
+.bar-val{font-size:11px;font-weight:600;color:var(--tx3);font-family:'DM Mono',monospace;min-width:28px;text-align:right}
+.fn-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bdr)}
+.fn-row:last-child{border-bottom:none}
+.fn-stg{font-size:12px;color:var(--tx2);flex:1;font-weight:500}
+.fn-ct{font-size:12px;font-weight:700;color:var(--tx);font-family:'DM Mono',monospace;min-width:24px;text-align:center}
+.fn-pct{font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;min-width:36px;text-align:right}
+
 </style>
 </head>
 <body>
@@ -1710,20 +1723,50 @@ function setSort(asc, desc) {
 }
 
 function renderTable() {
-  const rf = document.getElementById('frl').value;
-  const sf = document.getElementById('fst').value;
-  let f = C;
-  if (rf!=='all') f=f.filter(c=>c.role===rf);
-  if (sf!=='all') f=f.filter(c=>c.stage===sf);
-  document.getElementById('cand-ct').textContent = `${f.length} candidate${f.length!==1?'s':''}`;
+  const rf  = document.getElementById('frl')?.value  || 'all';
+  const sf  = document.getElementById('fst')?.value  || 'all';
+  const src = document.getElementById('fsrc')?.value || 'all';
+  const srt = document.getElementById('fsort')?.value || 'date_desc';
+  const q   = (document.getElementById('search')?.value || '').toLowerCase();
+
+  let f = C.slice();
+
+  // Filters
+  if (rf  !== 'all') f = f.filter(c => c.role   === rf);
+  if (sf  !== 'all') f = f.filter(c => c.stage  === sf);
+  if (src !== 'all') f = f.filter(c => c.source === src);
+  if (q) f = f.filter(c => (c.name+c.email+c.role+c.source).toLowerCase().includes(q));
+
+  // Sort
+  f.sort((a, b) => {
+    switch(srt) {
+      case 'date_desc': return new Date(b.added) - new Date(a.added);
+      case 'date_asc':  return new Date(a.added) - new Date(b.added);
+      case 'score_desc': return (b.score||0) - (a.score||0);
+      case 'score_asc':  return (a.score||0) - (b.score||0);
+      case 'name_asc':  return a.name.localeCompare(b.name);
+      case 'name_desc': return b.name.localeCompare(a.name);
+      case 'stage':     return STAGES.indexOf(a.stage) - STAGES.indexOf(b.stage);
+      case 'source':    return (a.source||'').localeCompare(b.source||'');
+      case 'role':      return (a.role||'').localeCompare(b.role||'');
+      default:          return new Date(b.added) - new Date(a.added);
+    }
+  });
+
+  const ct = document.getElementById('cand-ct');
+  if (ct) ct.textContent = `${f.length} candidate${f.length!==1?'s':''}`;
+
   const tbody = document.getElementById('cand-tbody');
+  if (!tbody) return;
   tbody.innerHTML = f.length
-    ? f.map(c=>`<tr>
-        <td><div style="font-weight:500">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
-        <td>${roleBadge(c.role)}</td><td style="font-size:12px;color:var(--tx2)">${c.source}</td>
-        <td>${scorePill(c.score)}</td><td>${stageBadge(c.stage)}</td>
+    ? f.map(c=>`<tr class="clickable" onclick="openModal(String('${c.id}'))">
+        <td><div style="font-weight:600;color:var(--tx)">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
+        <td>${roleBadge(c.role)}</td>
+        <td style="font-size:12px;color:var(--tx2)">${c.source||'—'}</td>
+        <td>${scorePill(c.score)}</td>
+        <td>${stageBadge(c.stage)}</td>
         <td style="font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace">${ago(c.added)}</td>
-        <td><button class="btn btn-sm" onclick="openModal(String('${c.id}'))">View</button></td>
+        <td><button class="btn btn-sm" onclick="event.stopPropagation();openModal(String('${c.id}'))">View</button></td>
       </tr>`).join('')
     : '<tr><td colspan="7" class="empty">No candidates match this filter.</td></tr>';
 }
