@@ -1634,7 +1634,7 @@ function renderDash() {
   const tbody = document.getElementById('dash-tbody');
   const rows = C.slice(0,8);
   tbody.innerHTML = rows.length
-    ? rows.map(c=>`<tr class="clickable" onclick="openModal('${c.id}')">
+    ? rows.map(c=>`<tr class="clickable" onclick="openModal(this.dataset.id)" data-id="${c.id}">
         <td><div style="font-weight:500">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
         <td>${roleBadge(c.role)}</td><td style="font-size:12px;color:var(--tx2)">${c.source}</td>
         <td>${scorePill(c.score)}</td><td>${stageBadge(c.stage)}</td>
@@ -1664,7 +1664,7 @@ function renderPipeline() {
               data-id="${c.id}"
               ondragstart="pipeDragStart(event,'${c.id}')"
               ondragend="pipeDragEnd(event)"
-              onclick="openModal('${c.id}')">
+              onclick="openModal(this.dataset.id)">
               <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
               <div class="cc-role">${c.role}</div>
               <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
@@ -2013,7 +2013,7 @@ function renderSources() {
   // Candidates by source table
   const ctbody = document.getElementById('src-cand-tbody');
   ctbody.innerHTML = filtered.length
-    ? filtered.map(c=>`<tr class="clickable" onclick="openModal('${c.id}')">
+    ? filtered.map(c=>`<tr class="clickable" onclick="openModal(this.dataset.id)" data-id="${c.id}">
         <td><div style="font-weight:500">${c.name}</div><div style="font-size:11px;color:var(--tx3)">${c.email||'—'}</div></td>
         <td>${roleBadge(c.role)}</td>
         <td><span class="bdg bdg-gray">${c.source}</span></td>
