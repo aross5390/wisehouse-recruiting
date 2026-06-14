@@ -1330,9 +1330,23 @@ function go(page, el) {
 
 // ── PERSIST ────────────────────────────────────
 function save() { badge(); } // data persisted per-operation to Google Sheets
+function animCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = '0';
+  if (target === 0) return;
+  let n = 0;
+  const step = Math.max(1, Math.ceil(target / 20));
+  const t = setInterval(() => {
+    n = Math.min(n + step, target);
+    el.textContent = n;
+    if (n >= target) clearInterval(t);
+  }, 30);
+}
+
 function badge() {
   const n = C.filter(c => !['Hired','Archived'].includes(c.stage)).length;
-  document.getElementById('nb').textContent = n;
+  const nb = document.getElementById('nav-badge'); if(nb) nb.textContent = n;
   const mb = document.getElementById('mn-badge');
   if (mb) { mb.textContent = n; mb.style.display = n > 0 ? 'block' : 'none'; }
 }
@@ -1613,10 +1627,10 @@ function clearForm() {
 
 // ── DASHBOARD ──────────────────────────────────
 function renderDash() {
-  document.getElementById('s-total').textContent = C.length;
-  document.getElementById('s-adv').textContent = C.filter(c=>c.score>=70).length;
-  document.getElementById('s-bench').textContent = C.filter(c=>c.stage==='Bench').length;
-  document.getElementById('s-scored').textContent = C.filter(c=>c.score!==null).length;
+  animCount('s-total', C.length);
+  animCount('s-adv', C.filter(c=>c.score>=70).length);
+  animCount('s-bench', C.filter(c=>c.stage==='Bench').length);
+  animCount('s-scored', C.filter(c=>c.score!==null).length);
   const tbody = document.getElementById('dash-tbody');
   const rows = C.slice(0,8);
   tbody.innerHTML = rows.length
@@ -2061,6 +2075,11 @@ function copyPrompt(role) {
 
 // ── GOOGLE SHEETS ─────────────────────────────
 async function loadFromSheet() {
+  // Show loading spinners while fetching
+  ['s-total','s-adv','s-bench','s-screened'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.textContent === '0') el.innerHTML = '<span style="opacity:0.4;font-size:16px">…</span>';
+  });
   try {
     const r = await fetch(SHEET_URL + '?t=' + Date.now());
     const d = await r.json();
@@ -2105,7 +2124,9 @@ async function loadFromSheet() {
     }
   } catch(e) {
     console.error('Failed to load from sheet:', e);
-    toast('Could not connect to database. Check your connection.');
+    toast('Could not connect to database. Check your connection.', 'err');
+    // Retry after 5 seconds
+    setTimeout(loadFromSheet, 5000);
   }
 }
 
