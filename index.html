@@ -379,6 +379,13 @@ tr.clickable:hover td:first-child{padding-left:18px}
 .fn-ct{font-size:12px;font-weight:700;color:var(--tx);font-family:'DM Mono',monospace;min-width:24px;text-align:center}
 .fn-pct{font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;min-width:36px;text-align:right}
 
+
+/* Hide any injected third-party widgets/bubbles */
+#zapier-widget, .zapier-widget, [id*="zapier"], [class*="zapier"],
+div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.mobile-nav) {
+  display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -1664,7 +1671,7 @@ function renderPipeline() {
               data-id="${c.id}"
               ondragstart="pipeDragStart(event,'${c.id}')"
               ondragend="pipeDragEnd(event)"
-              onclick="openModal(this.dataset.id)">
+              onclick="if(!window._dragging) openModal(this.dataset.id)">
               <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
               <div class="cc-role">${c.role}</div>
               <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
@@ -1677,6 +1684,7 @@ function renderPipeline() {
 
 function pipeDragStart(e, id) {
   dragId = id;
+  window._dragging = true;
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/plain', id);
   setTimeout(() => { const el = e.target; if(el) el.style.opacity = '0.4'; }, 0);
@@ -1688,6 +1696,7 @@ function pipeDragEnd(e) {
     el.classList.remove('drag-over');
   });
   dragId = null;
+  setTimeout(() => { window._dragging = false; }, 100);
 }
 
 function pipeDragOver(e) {
@@ -1826,12 +1835,16 @@ function openModal(id) {
   document.getElementById('m-ai').innerHTML = c.report ? aiPanel(c.report)
     : `<div class="empty">${KEY?'<button class="btn btn-p btn-sm" onclick="rescore()">Score with Claude AI</button>':'Add API key in Settings to enable scoring.'}</div>`;
   function answerDisplay(label, val) {
-    if (!val) return '';
-    const isUrl2 = val.trim().startsWith('http') || val.trim().includes('drive.google') || val.trim().includes('dropbox');
+    try {
+      if (val === null || val === undefined || val === '') return '';
+      val = String(val).trim();
+      if (!val) return '';
+      const isUrl2 = val.startsWith('http') || val.includes('drive.google') || val.includes('dropbox');
     const content = (label === 'Resume/CV' && isUrl2)
-      ? `<a href="${val.trim()}" target="_blank" style="color:var(--blue);font-weight:500">📄 Open Resume File</a>`
+      ? `<a href="${val}" target="_blank" style="color:var(--blue);font-weight:500">📄 Open Resume File</a>`
       : `<div style="font-size:12px;color:var(--tx2);line-height:1.6;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px">${val}</div>`;
     return `<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:600;color:var(--tx3);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">${label}</div>${content}</div>`;
+    } catch(e) { console.error('answerDisplay error:', e); return ''; }
   }
   document.getElementById('m-ans').innerHTML =
     [['Resume/CV',c.resume],['Experience',c.q1],['Customer Scenario',c.q2],['Motivation',c.q3]]
@@ -2593,7 +2606,18 @@ function copyFollowUpEmail() {
 // ── MODAL CLOSE ON BG CLICK ────────────────────
 document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
+// ── GLOBAL ERROR HANDLER ─────────────────────
+window.addEventListener('error', function(e) {
+  console.error('Platform error:', e.message, 'at', e.filename, e.lineno);
+});
+
 // ── INIT ───────────────────────────────────────
+// ── GLOBAL ERROR HANDLER ─────────────────────
+window.onerror = function(msg, src, line) {
+  console.error('Error:', msg, 'line:', line);
+  return true; // prevent default error handling
+};
+
 // Force login overlay visible on every load — no exceptions
 document.getElementById('login-overlay').style.display = 'flex';
 // Clear any stored auth tokens
