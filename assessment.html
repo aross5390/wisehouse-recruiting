@@ -291,6 +291,17 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Check if already completed
+    const completedKey = 'assessment_done_' + candidateId;
+    if (localStorage.getItem(completedKey)) {
+      document.getElementById('screen-invalid').innerHTML = `
+        <div style="font-size:32px;margin-bottom:12px">✅</div>
+        <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:8px">Already Completed</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.7">You have already submitted your assessment. Our team will be in touch within 2 business days.</div>`;
+      document.getElementById('screen-invalid').style.display = 'block';
+      return;
+    }
+
     const qs = QUESTIONS[candidateRole];
     if (!qs) {
       document.getElementById('screen-invalid').innerHTML = `
@@ -517,6 +528,26 @@ Return ONLY valid JSON, no markdown:
     } catch(saveErr) {
       console.error('v3 Sheet save failed:', saveErr.message);
     }
+
+    // Mark as completed in localStorage — prevents retaking
+    localStorage.setItem('assessment_done_' + candidateId, '1');
+
+    // Notify team via Apps Script
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          action: 'notifyAssessmentComplete',
+          candidateId,
+          candidateName,
+          candidateEmail,
+          candidateRole,
+          aiResult: result,
+          submittedAt: new Date().toISOString()
+        })
+      });
+    } catch(notifyErr) { console.log('Notify failed:', notifyErr.message); }
 
     document.getElementById('screen-scoring').style.display = 'none';
     document.getElementById('screen-success').style.display = 'block';
