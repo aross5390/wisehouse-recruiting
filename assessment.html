@@ -508,11 +508,10 @@ Return ONLY valid JSON, no markdown:
         headers: { 'Content-Type': 'text/plain' },
         body: savePayload
       });
-      console.log('Assessment save attempted');
-      console.log('Candidate ID:', candidateId);
-      console.log('Payload size:', savePayload.length);
+      const saveResult = await saveResp.json();
+      console.log('Assessment saved:', saveResult);
     } catch(saveErr) {
-      console.error('Sheet save failed:', saveErr);
+      console.error('Sheet save failed:', saveErr.message);
     }
 
     document.getElementById('screen-scoring').style.display = 'none';
