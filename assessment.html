@@ -505,7 +505,6 @@ Return ONLY valid JSON, no markdown:
     try {
       const saveResp = await fetch(SHEET_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
         body: savePayload
       });
@@ -525,7 +524,7 @@ Return ONLY valid JSON, no markdown:
     try {
       await fetch(SHEET_URL, {
         method: 'POST',
-        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({
           action: 'saveAssessment',
           candidateId,
