@@ -1,7 +1,11 @@
+<!-- assessment v3 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wise House — Candidate Assessment</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -509,9 +513,9 @@ Return ONLY valid JSON, no markdown:
         body: savePayload
       });
       const saveResult = await saveResp.json();
-      console.log('Assessment saved:', saveResult);
+      console.log('v3 Assessment saved:', JSON.stringify(saveResult));
     } catch(saveErr) {
-      console.error('Sheet save failed:', saveErr.message);
+      console.error('v3 Sheet save failed:', saveErr.message);
     }
 
     document.getElementById('screen-scoring').style.display = 'none';
