@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wise House — Candidate Assessment</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#1B4332;--gm:#2E7D32;--gl:#4CAF50;--gpale:#E8F5E9;
+  --bg:#F0F4F0;--surf:#fff;--surf2:#F4F8F4;--bdr:#D0E0D0;
+  --tx:#1A2E1A;--tx2:#4A6741;--tx3:#7A9A78;--red:#C62828;
+  --r:8px;--rl:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.95)}100%{opacity:1;transform:scale(1)}}
+
+.header{background:var(--g);padding:18px 24px;display:flex;align-items:center;gap:12px}
+.header-logo{width:36px;height:36px;border-radius:9px;overflow:hidden;flex-shrink:0}
+.header-logo img{width:100%;height:100%;object-fit:cover}
+.header-brand{font-size:14px;font-weight:700;color:#fff}
+.header-sub{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.8px;margin-top:1px}
+
+.wrap{max-width:680px;margin:0 auto;padding:24px 16px 60px}
+
+/* INTRO */
+.intro-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:28px 28px 24px;margin-bottom:20px;animation:fadeUp 0.4s ease}
+.intro-role{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--tx3);margin-bottom:6px}
+.intro-title{font-size:20px;font-weight:700;color:var(--tx);margin-bottom:8px;letter-spacing:-0.3px}
+.intro-sub{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:18px}
+.intro-pills{display:flex;flex-wrap:wrap;gap:6px}
+.intro-pill{font-size:11px;font-weight:500;background:var(--gpale);color:var(--gm);border:1px solid rgba(46,125,50,0.2);padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:4px}
+
+/* PROGRESS */
+.progress-wrap{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 20px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.progress-label{font-size:12px;font-weight:600;color:var(--tx2);white-space:nowrap}
+.progress-track{flex:1;height:6px;background:var(--surf2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gl);border-radius:3px;transition:width 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.progress-pct{font-size:12px;font-weight:700;color:var(--gm);font-family:'DM Mono',monospace;white-space:nowrap;min-width:36px;text-align:right}
+
+/* QUESTION CARD */
+.q-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:24px 24px 20px;margin-bottom:14px;animation:fadeUp 0.3s ease}
+.q-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--tx3);margin-bottom:8px}
+.q-text{font-size:15px;font-weight:600;color:var(--tx);line-height:1.6;margin-bottom:16px}
+.q-hint{font-size:12px;color:var(--tx3);margin-top:-10px;margin-bottom:14px;line-height:1.5;font-style:italic}
+
+/* MULTIPLE CHOICE */
+.mc-options{display:flex;flex-direction:column;gap:8px}
+.mc-opt{display:flex;align-items:flex-start;gap:11px;padding:11px 14px;border:1.5px solid var(--bdr);border-radius:var(--r);cursor:pointer;transition:all 0.15s;background:var(--surf)}
+.mc-opt:hover{border-color:var(--gm);background:var(--gpale)}
+.mc-opt.selected{border-color:var(--gm);background:var(--gpale)}
+.mc-opt.selected .mc-radio{background:var(--gm);border-color:var(--gm)}
+.mc-opt.selected .mc-radio::after{opacity:1}
+.mc-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--bdr);flex-shrink:0;margin-top:1px;position:relative;transition:all 0.15s}
+.mc-radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#fff;opacity:0;transition:opacity 0.1s}
+.mc-label{font-size:13px;color:var(--tx2);line-height:1.5;flex:1}
+.mc-opt.selected .mc-label{color:var(--tx);font-weight:500}
+
+/* OPEN ENDED */
+.oe-textarea{width:100%;background:var(--surf2);border:1.5px solid var(--bdr);border-radius:var(--r);padding:11px 14px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tx);resize:vertical;min-height:100px;outline:none;transition:all 0.15s;line-height:1.6}
+.oe-textarea:focus{border-color:var(--gm);background:var(--surf);box-shadow:0 0 0 3px rgba(46,125,50,0.08)}
+.oe-count{font-size:11px;color:var(--tx3);text-align:right;margin-top:5px}
+
+/* NAVIGATION */
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+.btn{padding:10px 20px;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--bdr);background:var(--surf);color:var(--tx2);font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.btn:hover{border-color:var(--gm);color:var(--g)}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-p{background:var(--g);color:#fff;border-color:var(--g)}
+.btn-p:hover{background:var(--gm);border-color:var(--gm);transform:translateY(-1px);box-shadow:0 4px 12px rgba(27,67,50,0.25)}
+.btn-p:active{transform:scale(0.97)}
+
+/* ERROR */
+.err-msg{background:#FFEBEE;border:1px solid rgba(198,40,40,0.3);color:var(--red);padding:8px 12px;border-radius:var(--r);font-size:12px;font-weight:500;margin-top:8px;display:none}
+
+/* SUBMIT SCREEN */
+.submit-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:28px;animation:fadeUp 0.4s ease}
+.submit-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:8px}
+.submit-sub{font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:20px}
+.submit-review{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px;margin-bottom:20px;max-height:280px;overflow-y:auto}
+.review-item{padding:10px 0;border-bottom:1px solid var(--bdr)}
+.review-item:last-child{border-bottom:none}
+.review-q{font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:4px}
+.review-a{font-size:13px;color:var(--tx);line-height:1.5}
+
+/* SCORING SCREEN */
+.scoring-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:40px 28px;text-align:center;animation:fadeUp 0.4s ease}
+.scoring-spinner{width:40px;height:40px;border:3px solid var(--bdr);border-top-color:var(--gm);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+.scoring-title{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:8px}
+.scoring-sub{font-size:13px;color:var(--tx3);animation:pulse 2s infinite}
+
+/* SUCCESS SCREEN */
+.success-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:40px 28px;text-align:center;animation:popIn 0.4s ease}
+.success-icon{font-size:48px;margin-bottom:16px}
+.success-title{font-size:20px;font-weight:700;color:var(--tx);margin-bottom:8px;letter-spacing:-0.3px}
+.success-sub{font-size:14px;color:var(--tx2);line-height:1.7}
+
+/* ERROR SCREEN */
+.error-screen{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:40px 28px;text-align:center}
+
+/* MOBILE */
+@media(max-width:600px){
+  .wrap{padding:16px 12px 60px}
+  .intro-card,.q-card,.submit-card,.scoring-card,.success-card{padding:18px 16px}
+  .q-text{font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">
+    <img src="https://recruiting.wisehousebugs.com/icon-192.png" alt="Wise House" onerror="this.style.display='none'">
+  </div>
+  <div>
+    <div class="header-brand">Wise House Pest Control</div>
+    <div class="header-sub">Candidate Assessment</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- LOADING -->
+  <div id="screen-loading" style="text-align:center;padding:60px 20px">
+    <div style="width:32px;height:32px;border:3px solid var(--bdr);border-top-color:var(--gm);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px"></div>
+    <div style="font-size:13px;color:var(--tx3)">Loading your assessment...</div>
+  </div>
+
+  <!-- INVALID -->
+  <div id="screen-invalid" style="display:none" class="error-screen">
+    <div style="font-size:32px;margin-bottom:12px">⚠️</div>
+    <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:8px">Invalid Assessment Link</div>
+    <div style="font-size:13px;color:var(--tx2);line-height:1.7">This link is missing required information. Please use the link that was sent to your email after you submitted your application.</div>
+  </div>
+
+  <!-- INTRO -->
+  <div id="screen-intro" style="display:none">
+    <div class="intro-card">
+      <div class="intro-role" id="intro-role">Loading...</div>
+      <div class="intro-title" id="intro-title">Wise House Candidate Assessment</div>
+      <div class="intro-sub" id="intro-sub">Hi! This short assessment helps us better understand your thinking and approach. There are no trick questions — just be yourself and answer honestly.</div>
+      <div class="intro-pills">
+        <div class="intro-pill">⏱ 5–7 minutes</div>
+        <div class="intro-pill" id="intro-q-count">📝 10 questions</div>
+        <div class="intro-pill">🤖 AI-scored instantly</div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn btn-p" onclick="startAssessment()">Start Assessment →</button>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="screen-questions" style="display:none">
+    <div class="progress-wrap">
+      <div class="progress-label" id="prog-label">Question 1 of 10</div>
+      <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:10%"></div></div>
+      <div class="progress-pct" id="prog-pct">10%</div>
+    </div>
+    <div id="q-container"></div>
+    <div class="err-msg" id="q-err">Please answer this question before continuing.</div>
+    <div class="nav-row">
+      <button class="btn" id="btn-back" onclick="prevQ()" style="display:none">← Back</button>
+      <button class="btn btn-p" id="btn-next" onclick="nextQ()">Next →</button>
+    </div>
+  </div>
+
+  <!-- REVIEW & SUBMIT -->
+  <div id="screen-submit" style="display:none">
+    <div class="submit-card">
+      <div class="submit-title">Review your answers</div>
+      <div class="submit-sub">Take a moment to review before submitting. You can go back to change any answer.</div>
+      <div class="submit-review" id="review-list"></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn" onclick="goBack()">← Edit answers</button>
+        <button class="btn btn-p" onclick="submitAssessment()" style="flex:1">Submit Assessment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div id="screen-scoring" style="display:none">
+    <div class="scoring-card">
+      <div class="scoring-spinner"></div>
+      <div class="scoring-title">Scoring your assessment...</div>
+      <div class="scoring-sub">Claude AI is analyzing your answers. This takes about 10 seconds.</div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="screen-success" style="display:none">
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Assessment Complete!</div>
+      <div class="success-sub">Thank you for completing the assessment. Our team will review your results and be in touch within <strong>2 business days</strong>.<br><br>You're all set — you can close this page.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── CONFIG ─────────────────────────────────
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwtwumocVn89K913ZHWwldLal7tmiCNsTCsz-whxwAtOfLcP8l2hK3TMy1r8e_tlhhs/exec';
+const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
+
+// ── QUESTIONS BY ROLE ───────────────────────
+const QUESTIONS = {
+  'Outbound Sales Rep': [
+    { type:'mc', q:'A homeowner you called says "I'm not interested, remove me from your list." What do you do?', opts:['Apologize and immediately remove them','Say "I understand, but can I ask why?" to understand the objection','Thank them and ask if they know anyone who might be interested','Ask when would be a better time to call back'] },
+    { type:'mc', q:'You've made 40 calls today with zero pickups. It's 3pm. What do you do?', opts:['Call it a day — the numbers will be better tomorrow','Review your script and try a different approach for the last 2 hours','Keep dialing — it's a numbers game','Message your manager for advice'] },
+    { type:'mc', q:'A customer says your pest control quote is $50 more than the competitor. What's your best response?', opts:['"I can match their price"','"Let me check with my manager"','"That difference comes down to X — here's what you get with us that you won't get there"','Offer a discount immediately'] },
+    { type:'mc', q:'Which of the following best describes a strong sales pipeline?', opts:['Lots of calls made','A mix of new leads, follow-ups, and closing conversations at various stages','High conversion rate on first calls','Sending proposals to everyone who picks up'] },
+    { type:'mc', q:'You close a deal and the customer calls back the next day wanting to cancel. You find out your company made a scheduling mistake — not the customer's fault. What do you do?', opts:['Transfer to customer service — not your problem anymore','Apologize, own the mistake, and personally make sure it gets resolved','Offer a discount to keep them','Explain that cancellations have a fee'] },
+    { type:'mc', q:'What does CRM stand for and what is it used for?', opts:['Customer Revenue Management — tracking commissions','Customer Relationship Management — tracking leads, contacts, and deals','Client Record Management — storing contracts','Centralized Reporting Module — generating reports'] },
+    { type:'mc', q:'You have 3 warm leads to follow up with and 20 cold calls to make. How do you prioritize your day?', opts:['Cold calls first — get them out of the way','Warm leads first — they have higher conversion potential','Mix them throughout the day so it doesn't get monotonous','Focus on whichever paid more last time'] },
+    { type:'oe', q:'Tell us about the largest deal or sale you ever closed. What was it, how much was it worth, and what did you do to win it?', hint:'Be specific — we want to know your process, not just the outcome.' },
+    { type:'oe', q:'You've been assigned a territory that has been neglected for 6 months — cold leads, no relationships, bad reputation from a previous rep. How do you approach rebuilding it?', hint:'Walk us through your first 30 days.' },
+    { type:'mc', q:'What motivates you most in a sales role?', opts:['The commission — money is the motivator','Beating my personal best — I compete with myself','Winning against competitors','Helping customers solve real problems — the commission follows'] },
+  ],
+
+  'CSR / Admin Support': [
+    { type:'mc', q:'A customer calls furious — a technician was 2 hours late and nobody called them. They demand a refund. What's your first move?', opts:['Transfer to a supervisor immediately','Apologize and explain the technician had an emergency','Let them vent fully, acknowledge their frustration, and apologize without making excuses','Offer a discount on the next service'] },
+    { type:'mc', q:'You receive 3 urgent tasks at the same time: a customer on hold, an email from the owner marked urgent, and a scheduling conflict for tomorrow. How do you handle it?', opts:['Handle the customer on hold first — they're waiting','Read the owner's email first — they're the boss','Ask the customer to hold 30 seconds, scan the email, then handle in order of urgency','Tell everyone you'll get back to them shortly'] },
+    { type:'mc', q:'A technician calls in sick at 7am. You have 8 jobs scheduled for them starting at 8am. What do you do?', opts:['Send an email to customers and wait','Call each customer immediately, explain the situation, and offer reschedule options','Post in Slack and wait for someone to take action','Cancel all jobs and offer to reschedule next week'] },
+    { type:'mc', q:'Which of these is the most important quality in a remote admin support role?', opts:['Typing speed','Proactive communication — keeping everyone informed without being asked','Being available 24/7','Having a fast internet connection'] },
+    { type:'mc', q:'A customer claims they were charged twice. You look at the account and can only see one charge. What do you do?', opts:['Tell them there's only one charge and close the ticket','Apologize and issue a refund just to keep the peace','Ask them to send a screenshot of both charges and escalate to billing while keeping the customer updated','Tell them to call their bank'] },
+    { type:'mc', q:'You use GorillaDesk, ServiceTitan, or a similar field service CRM. A job is scheduled but the address is wrong. You notice it 30 minutes before the technician is set to leave. What do you do?', opts:['Update the address in the system and hope the tech sees it','Call the technician directly AND update the system','Send a Slack message and update the system','Wait — the tech will probably figure it out'] },
+    { type:'mc', q:'How comfortable are you using AI tools like ChatGPT or Claude in your daily work?', opts:['Never used them','Tried them a few times but don't use regularly','Use them occasionally for specific tasks','Use them daily — they're part of my workflow'] },
+    { type:'oe', q:'Describe a time you dealt with a very difficult customer or situation at work. What happened, what did you do, and what was the outcome?', hint:'We want to see how you handle pressure — be honest and specific.' },
+    { type:'oe', q:'You're supporting a team of 8 field technicians remotely from the Philippines. It's 8pm your time (8am Eastern). Describe what your morning routine looks like — what do you check, what do you prepare, and how do you stay on top of things?', hint:'There's no perfect answer — we want to see how you think about the role.' },
+    { type:'mc', q:'What does working for a US company remotely mean to you in terms of schedule and availability?', opts:['I work US hours — my schedule matches theirs','I work my local hours and communicate during overlapping time','I work whenever tasks come in','I'm flexible and can adjust based on what the team needs'] },
+  ],
+
+  'Video Editor': [
+    { type:'mc', q:'A client gives you 45 minutes of raw interview footage and says "make it engaging — 60 seconds for Instagram." What's your first step?', opts:['Start cutting immediately — you'll figure out the story as you go','Watch all 45 minutes and take notes on the best moments first','Ask the client what their key message is before touching the footage','Pick the first 5 minutes and work from there'] },
+    { type:'mc', q:'You finish an edit and the client says "it doesn't feel right — I don't know why, I just don't like it." What do you do?', opts:['Redo it completely in a different style','Ask specific questions — what's the goal of the video, who's the audience, what emotion should it create','Tell them you need more specific feedback','Send them 3 different versions and ask them to pick'] },
+    { type:'mc', q:'What software do you primarily use for short-form content?', opts:['Premiere Pro + After Effects','CapCut','DaVinci Resolve','Final Cut Pro'] },
+    { type:'mc', q:'You have 20 short-form videos due this week across 3 clients. On Wednesday a client requests 5 emergency rush edits. What do you do?', opts:['Agree to everything and work through the night','Tell the rush client it's not possible this week','Communicate clearly with all clients, set honest timelines, and ask if any existing deadlines can flex','Deliver the rush client first and push the others back without telling them'] },
+    { type:'mc', q:'Which of these best describes what makes short-form video content perform well?', opts:['High production quality — better cameras and lighting','A strong hook in the first 2-3 seconds that stops the scroll','Long captions that explain the content','Consistent posting schedule regardless of content quality'] },
+    { type:'mc', q:'A pest control company wants to grow on Instagram Reels. They have no existing content. What type of content would you recommend starting with?', opts:['Polished branded content with the company logo throughout','Behind-the-scenes and day-in-the-life content showing real technicians on real jobs','Educational content about common pests','Customer testimonial videos'] },
+    { type:'mc', q:'You're editing a 60-second Reel and the audio doesn't quite sync with the visuals in one section. What's the fastest professional fix?', opts:['Re-export with a different codec','Use a J-cut or L-cut to make the transition feel natural','Add a sound effect to mask it','Ask the client to reshoot that section'] },
+    { type:'oe', q:'Share the link to your best piece of short-form content (Instagram Reel, TikTok, or YouTube Short). Tell us what made it work and what you would do differently now.', hint:'No portfolio = no consideration. Be honest about what you'd change.' },
+    { type:'oe', q:'Walk us through your editing workflow from the moment you receive raw footage to the moment you deliver the final file. Be specific about tools, steps, and how long each stage takes.', hint:'We want to understand your process, not just your output.' },
+    { type:'mc', q:'How many short-form videos (60 seconds or under) can you realistically deliver per week at consistent quality?', opts:['1-5','6-10','11-20','20+'] },
+  ],
+
+  'AI Implementation Specialist': [
+    { type:'mc', q:'A field service company wants to automatically send a follow-up message to customers 24 hours after a service visit. What's the best way to build this?', opts:['Write a Python script that runs on a server and checks the CRM every hour','Use a no-code automation tool (Make.com, Zapier) to trigger on job completion','Build a custom webhook integration directly into the CRM','Set up a cron job on Google Cloud'] },
+    { type:'mc', q:'You're integrating two systems but the source API doesn't have a webhook. How do you still automate it?', opts:['It's not possible without a webhook','Use polling — check the API on a schedule and trigger actions when something changes','Ask the vendor to add a webhook','Build a middleware that monitors database changes'] },
+    { type:'mc', q:'A client wants to use an LLM (like Claude or GPT-4) to automatically categorize incoming customer emails. What do you use as the decision-making layer?', opts:['A rule-based keyword filter first, then LLM for unclear cases','The LLM on every email — it's accurate enough','Human review for everything — LLMs make too many mistakes','A fine-tuned model trained on their historical emails'] },
+    { type:'mc', q:'What does "prompt engineering" mean in practice?', opts:['Writing code to send API requests','Designing inputs that reliably get the output you want from an LLM','Setting up the infrastructure for AI models','Training custom AI models'] },
+    { type:'mc', q:'You've built an automation that has been running for 2 weeks. It suddenly stops working. What's your debugging process?', opts:['Rebuild from scratch — faster than debugging','Check the logs first, identify which step failed, test that step in isolation, fix and redeploy','Contact the platform support team','Ask the client what changed on their end'] },
+    { type:'mc', q:'GorillaDesk is a field service CRM. Assume it has a REST API. A client wants new leads from their website form to automatically create a job in GorillaDesk. Walk through the architecture.', opts:['Website form → Zapier → GorillaDesk API','Website form → webhook → Make.com → parse data → POST to GorillaDesk /jobs endpoint','Website form → email notification → manual entry into GorillaDesk','Website form → Google Sheets → Apps Script → GorillaDesk'] },
+    { type:'mc', q:'What's the biggest risk when deploying an AI-powered automation in a business setting?', opts:['The AI is too slow','Hallucinations or wrong outputs that nobody catches because it looks automated','The cost of API calls','The AI becomes outdated quickly'] },
+    { type:'oe', q:'Describe the most complex AI or automation workflow you've ever built. What was the problem, what did you build, what tools did you use, and what was the measurable result?', hint:'Specific > impressive. A real small project beats a vague big one.' },
+    { type:'oe', q:'Wise House uses GorillaDesk as their CRM, Slack for internal communication, and Google Sheets for reporting. They want to automatically score incoming job leads and route high-value ones to a senior sales rep. How would you build this? Walk through your full approach.', hint:'Tell us what tools, what architecture, and what assumptions you're making.' },
+    { type:'mc', q:'How do you stay current with AI tools and automation platforms?', opts:['I follow specific newsletters and communities — I can name them','I experiment with new tools as they come out','I take courses when I have time','My knowledge is mostly from past projects'] },
+  ]
+};
+
+// ── STATE ───────────────────────────────────
+let candidateId = '';
+let candidateName = '';
+let candidateEmail = '';
+let candidateRole = '';
+let questions = [];
+let answers = {};
+let currentQ = 0;
+
+// ── INIT ────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  candidateId   = params.get('id')   || '';
+  candidateName = params.get('name') || '';
+  candidateEmail= params.get('email')|| '';
+  candidateRole = params.get('role') || '';
+
+  setTimeout(() => {
+    document.getElementById('screen-loading').style.display = 'none';
+
+    if (!candidateId || !candidateRole) {
+      document.getElementById('screen-invalid').style.display = 'block';
+      return;
+    }
+
+    const qs = QUESTIONS[candidateRole];
+    if (!qs) {
+      document.getElementById('screen-invalid').innerHTML = `
+        <div style="font-size:32px;margin-bottom:12px">ℹ️</div>
+        <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:8px">No Assessment Required</div>
+        <div style="font-size:13px;color:var(--tx2);line-height:1.7">The ${candidateRole} role doesn't require a separate assessment. Our team will be in touch soon.</div>`;
+      document.getElementById('screen-invalid').style.display = 'block';
+      return;
+    }
+
+    questions = qs;
+    const firstName = candidateName.split(' ')[0] || 'there';
+    document.getElementById('intro-role').textContent = candidateRole;
+    document.getElementById('intro-title').textContent = `Hi ${firstName} — let's get started`;
+    document.getElementById('intro-sub').textContent = `This short assessment is part of your application for the ${candidateRole} position at Wise House Pest Control. There are no trick questions — just answer honestly and to the best of your ability.`;
+    document.getElementById('intro-q-count').textContent = `📝 ${questions.length} questions`;
+    document.getElementById('screen-intro').style.display = 'block';
+  }, 600);
+});
+
+function startAssessment() {
+  document.getElementById('screen-intro').style.display = 'none';
+  document.getElementById('screen-questions').style.display = 'block';
+  renderQ(0);
+}
+
+// ── RENDER QUESTION ─────────────────────────
+function renderQ(idx) {
+  currentQ = idx;
+  const q = questions[idx];
+  const total = questions.length;
+  const pct = Math.round(((idx + 1) / total) * 100);
+
+  document.getElementById('prog-label').textContent = `Question ${idx + 1} of ${total}`;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('btn-back').style.display = idx > 0 ? 'inline-flex' : 'none';
+  document.getElementById('btn-next').textContent = idx === total - 1 ? 'Review Answers →' : 'Next →';
+  document.getElementById('q-err').style.display = 'none';
+
+  let html = `<div class="q-card">
+    <div class="q-num">Question ${idx + 1} of ${total}</div>
+    <div class="q-text">${q.q}</div>`;
+
+  if (q.hint) html += `<div class="q-hint">${q.hint}</div>`;
+
+  if (q.type === 'mc') {
+    html += `<div class="mc-options">`;
+    q.opts.forEach((opt, i) => {
+      const selected = answers[idx] === opt ? ' selected' : '';
+      html += `<div class="mc-opt${selected}" onclick="selectMC(${idx}, '${opt.replace(/'/g, "\\'")}', this)">
+        <div class="mc-radio"></div>
+        <div class="mc-label">${opt}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    const val = answers[idx] || '';
+    html += `<textarea class="oe-textarea" id="oe-input" placeholder="Type your answer here..." oninput="updateOE(${idx}, this.value)">${val}</textarea>
+    <div class="oe-count" id="oe-count">${val.length} characters</div>`;
+  }
+
+  html += `</div>`;
+  document.getElementById('q-container').innerHTML = html;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function selectMC(idx, val, el) {
+  answers[idx] = val;
+  document.querySelectorAll('.mc-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('q-err').style.display = 'none';
+}
+
+function updateOE(idx, val) {
+  answers[idx] = val;
+  const ct = document.getElementById('oe-count');
+  if (ct) ct.textContent = val.length + ' characters';
+}
+
+function nextQ() {
+  const q = questions[currentQ];
+  const ans = answers[currentQ];
+
+  if (!ans || (typeof ans === 'string' && ans.trim() === '')) {
+    document.getElementById('q-err').style.display = 'block';
+    return;
+  }
+
+  if (currentQ === questions.length - 1) {
+    showReview();
+  } else {
+    renderQ(currentQ + 1);
+  }
+}
+
+function prevQ() {
+  if (currentQ > 0) renderQ(currentQ - 1);
+}
+
+// ── REVIEW ──────────────────────────────────
+function showReview() {
+  document.getElementById('screen-questions').style.display = 'none';
+  document.getElementById('screen-submit').style.display = 'block';
+
+  const list = questions.map((q, i) => `
+    <div class="review-item">
+      <div class="review-q">Q${i+1}: ${q.q}</div>
+      <div class="review-a">${answers[i] || '—'}</div>
+    </div>`).join('');
+
+  document.getElementById('review-list').innerHTML = list;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goBack() {
+  document.getElementById('screen-submit').style.display = 'none';
+  document.getElementById('screen-questions').style.display = 'block';
+  renderQ(questions.length - 1);
+}
+
+// ── SUBMIT & SCORE ──────────────────────────
+async function submitAssessment() {
+  document.getElementById('screen-submit').style.display = 'none';
+  document.getElementById('screen-scoring').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  // Build answers text for Claude
+  const answersText = questions.map((q, i) =>
+    `Q${i+1} [${q.type==='mc'?'Multiple Choice':'Open Ended'}]: ${q.q}\nAnswer: ${answers[i] || '—'}`
+  ).join('\n\n');
+
+  const prompt = `You are evaluating a candidate assessment for Wise House Pest Control.
+
+Candidate: ${candidateName}
+Role: ${candidateRole}
+
+ASSESSMENT ANSWERS:
+${answersText}
+
+Score this candidate across these dimensions (1-10 each):
+1. Logical Thinking / IQ — How well do they reason through problems?
+2. Role Knowledge — Do they understand the fundamentals of this role?
+3. Judgment & Decision Making — Do they make smart choices under pressure?
+4. Communication — Are their written answers clear, specific, and professional?
+5. Culture Fit — Do their answers suggest they'd thrive at a field service company?
+
+Also provide:
+- overall_score: weighted average out of 100
+- tier: "Strong Advance" (85+), "Advance" (70-84), "Review" (55-69), "Pass" (below 55)
+- summary: 2-3 sentence overall impression
+- strengths: 2-3 specific strengths with evidence from their answers
+- concerns: 1-2 concerns if any
+- recommendation: one sentence recommendation for the hiring team
+
+Return ONLY valid JSON, no markdown:
+{"scores":{"logical_thinking":7,"role_knowledge":8,"judgment":7,"communication":8,"culture_fit":9},"overall_score":78,"tier":"Advance","summary":"...","strengths":["...","..."],"concerns":["..."],"recommendation":"..."}`;
+
+  try {
+    // Try to get API key from platform's localStorage
+    let apiKey = localStorage.getItem('wh_api_key') || '';
+
+    let result = null;
+
+    if (apiKey) {
+      // Score with Claude if API key available
+      const r = await fetch(CLAUDE_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      const d = await r.json();
+      if (!d.error) {
+        result = JSON.parse((d.content?.[0]?.text || '').replace(/```json|```/g, '').trim());
+      }
+    }
+
+    // Save to Google Sheet via Apps Script
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'saveAssessment',
+        candidateId,
+        answers: answers,
+        questions: questions.map(q => q.q),
+        aiResult: result,
+        submittedAt: new Date().toISOString()
+      })
+    });
+
+    document.getElementById('screen-scoring').style.display = 'none';
+    document.getElementById('screen-success').style.display = 'block';
+
+  } catch(e) {
+    console.error('Submission error:', e);
+    // Still show success to candidate — save raw answers at minimum
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action: 'saveAssessment',
+        candidateId,
+        answers: answers,
+        questions: questions.map(q => q.q),
+        aiResult: null,
+        submittedAt: new Date().toISOString()
+      })
+    });
+    document.getElementById('screen-scoring').style.display = 'none';
+    document.getElementById('screen-success').style.display = 'block';
+  }
+}
+</script>
+</body>
+</html>
