@@ -464,7 +464,7 @@ Return ONLY valid JSON, no markdown:
 
   try {
     // Try to get API key from platform's localStorage
-    let apiKey = localStorage.getItem('wh_api_key') || '';
+    let apiKey = localStorage.getItem('wh_api_key') || localStorage.getItem('whApiKey') || localStorage.getItem('apiKey') || '';
 
     let result = null;
 
@@ -493,37 +493,46 @@ Return ONLY valid JSON, no markdown:
     }
 
     // Save to Google Sheet via Apps Script
-    await fetch(SHEET_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        action: 'saveAssessment',
-        candidateId,
-        answers: answers,
-        questions: questions.map(q => q.q),
-        aiResult: result,
-        submittedAt: new Date().toISOString()
-      })
+    const savePayload = JSON.stringify({
+      action: 'saveAssessment',
+      candidateId,
+      answers: answers,
+      questions: questions.map(q => q.q),
+      aiResult: result,
+      submittedAt: new Date().toISOString()
     });
+
+    try {
+      const saveResp = await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: savePayload
+      });
+      console.log('Assessment saved to sheet');
+    } catch(saveErr) {
+      console.error('Sheet save failed:', saveErr);
+    }
 
     document.getElementById('screen-scoring').style.display = 'none';
     document.getElementById('screen-success').style.display = 'block';
 
   } catch(e) {
     console.error('Submission error:', e);
-    // Still show success to candidate — save raw answers at minimum
-    await fetch(SHEET_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        action: 'saveAssessment',
-        candidateId,
-        answers: answers,
-        questions: questions.map(q => q.q),
-        aiResult: null,
-        submittedAt: new Date().toISOString()
-      })
-    });
+    // Still try to save raw answers
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({
+          action: 'saveAssessment',
+          candidateId,
+          answers: answers,
+          questions: questions.map(q => q.q),
+          aiResult: null,
+          submittedAt: new Date().toISOString()
+        })
+      });
+    } catch(saveErr) { console.error('Fallback save failed:', saveErr); }
     document.getElementById('screen-scoring').style.display = 'none';
     document.getElementById('screen-success').style.display = 'block';
   }
