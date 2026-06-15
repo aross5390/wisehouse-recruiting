@@ -1454,7 +1454,7 @@ STRICT RULES:
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 800,
         messages: [{
           role: 'user',
@@ -1496,7 +1496,7 @@ STRICT RULES — read carefully:
     ? [{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:instr}]}]
     : [{role:'user',content:instr+'\n\nRESUME:\n'+text}];
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:msgs})});
+    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:msgs})});
     const d = await r.json();
     const raw = d.content?.[0]?.text || '';
     return JSON.parse(raw.replace(/```json|```/g,'').trim());
@@ -1593,7 +1593,7 @@ RULES: Be fair and objective. Never outright reject — only score. Score 0 on a
 Return ONLY valid JSON, no markdown, no extra text:
 {"score":75,"breakdown":{"experience":18,"communication":15,"motivation":12,"reliability":13,"availability":12,"bonus":5},"tier":"Advance","summary":"3-sentence factual summary of who this person is and what stands out.","strengths":["specific strength 1","specific strength 2"],"concerns":["specific concern 1","specific concern 2"],"flags":["List each short stint as: Short stint — [Company] ([duration]). List gaps as: Employment gap — [approximate dates]. List as None identified if clean."],"comp_note":"In range / Above range / Below range / Not stated","tenure_analysis":"2-3 sentences specifically about their job history — how long they stayed at each role, any patterns, red flags around stability.","screen_questions":["Question targeting a specific short stint or gap if any, otherwise a role-relevant question","Second targeted question","Third targeted question"]}`;
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,messages:[{role:'user',content:p}]})});
+    const r = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1400,messages:[{role:'user',content:p}]})});
     const d = await r.json();
     if (d.error) { console.error('API Error:', JSON.stringify(d.error)); window._lastApiError = JSON.stringify(d.error); return null; }
     return JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
@@ -2527,7 +2527,7 @@ IMPORTANT: If there are NO red flags, set follow_up_email to null. Only generate
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+      body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:prompt}]})
     });
     const d = await r.json();
     if (d.error) throw new Error(d.error.message);
