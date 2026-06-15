@@ -419,31 +419,48 @@ async function submitAssessment() {
     `Q${i+1} [${q.type==='mc'?'Multiple Choice':'Open Ended'}]: ${q.q}\nAnswer: ${answers[i] || '—'}`
   ).join('\n\n');
 
-  const prompt = `You are evaluating a candidate assessment for Wise House Pest Control.
+  const prompt = `You are a rigorous psychometric evaluator. Your scores will be used by a hiring manager to make real employment decisions. Be precise, calibrated, and consistent. Do not inflate scores.
 
 Candidate: ${candidateName}
 Role: ${candidateRole}
 
-ASSESSMENT ANSWERS:
+ANSWERS:
 ${answersText}
 
-Score this candidate across these dimensions (1-10 each):
-1. Logical Thinking / IQ — How well do they reason through problems?
-2. Role Knowledge — Do they understand the fundamentals of this role?
-3. Judgment & Decision Making — Do they make smart choices under pressure?
-4. Communication — Are their written answers clear, specific, and professional?
-5. Culture Fit — Do their answers suggest they'd thrive at a field service company?
+===== LOGICAL THINKING — IQ SCALE (70–140) =====
+Evaluate ONLY the quality of reasoning. Ignore tone, effort, or pleasantness.
 
-Also provide:
-- overall_score: weighted average out of 100
-- tier: "Strong Advance" (85+), "Advance" (70-84), "Review" (55-69), "Pass" (below 55)
-- summary: 2-3 sentence overall impression
-- strengths: 2-3 specific strengths with evidence from their answers
-- concerns: 1-2 concerns if any
-- recommendation: one sentence recommendation for the hiring team
+Start at 85 (population average). Add or subtract points based on evidence:
+
+POSITIVE indicators (add points):
++15 if answers show multi-step cause-and-effect reasoning (not just stating what they would do)
++10 if candidate identifies root cause before jumping to a solution
++10 if candidate anticipates second-order consequences
++8 if open-ended answers are logically structured (situation, action, result)
++7 if candidate acknowledges tradeoffs in their decisions
+
+NEGATIVE indicators (subtract points):
+-5 for each generic platitude without specific reasoning ("communication is important")
+-8 if candidate jumps to solutions without diagnosing the problem
+-10 if candidate contradicts themselves across answers
+-12 if open-ended answers are vague, under 3 sentences, or show no real experience
+-15 if multiple choice answers show poor judgment on 3 or more questions
+
+Floor: 70. Cap: 140. Most candidates: 88-112. 120+ requires exceptional evidence.
+
+===== OTHER SCORES (1-10) =====
+role_knowledge: 10=hands-on direct experience, 7=strong understanding, 5=basic, 3=limited, 1=unfamiliar
+judgment: 10=consistently right calls with clear reasoning, 7=mostly good, 5=mixed, 3=poor calls, 1=consistently wrong
+communication: 10=specific, structured, professional with real examples, 7=clear and mostly specific, 5=generic, 3=vague, 1=incomprehensible  
+culture_fit: 10=strong ownership/accountability/customer-first mindset, 7=positive signals, 5=neutral, 3=blame-shifting or entitlement, 1=values misalignment
+
+===== CALCULATION =====
+overall_score = (logical_thinking - 70) / 70 * 100 * 0.40 + role_knowledge * 10 * 0.25 + judgment * 10 * 0.20 + communication * 10 * 0.10 + culture_fit * 10 * 0.05
+Round to nearest integer.
+tier: overall 85+ = Strong Advance, 70-84 = Advance, 55-69 = Review, below 55 = Pass
 
 Return ONLY valid JSON, no markdown:
-{"scores":{"logical_thinking":7,"role_knowledge":8,"judgment":7,"communication":8,"culture_fit":9},"overall_score":78,"tier":"Advance","summary":"...","strengths":["...","..."],"concerns":["..."],"recommendation":"..."}`;
+{"scores":{"logical_thinking":105,"role_knowledge":7,"judgment":8,"communication":7,"culture_fit":8},"overall_score":79,"tier":"Advance","iq_label":"Average","summary":"2-3 sentence evidence-based summary referencing specific answers.","strengths":["Specific strength citing actual answer","Second strength"],"concerns":["Specific concern citing actual answer — empty array if none"],"recommendation":"One concrete sentence for the hiring manager."}`;  
 
   try {
     // Try to get API key from platform's localStorage
@@ -469,7 +486,9 @@ Return ONLY valid JSON, no markdown:
       });
       const d = await r.json();
       if (!d.error) {
-        result = JSON.parse((d.content?.[0]?.text || '').replace(/```json|```/g, '').trim());
+        const rawText = d.content && d.content[0] ? d.content[0].text || '' : '';
+        const cleanText = rawText.split('\n').filter(l => !l.startsWith('\x60\x60\x60')).join('\n').trim();
+        result = JSON.parse(cleanText);
       }
     }
 
