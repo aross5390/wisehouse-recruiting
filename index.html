@@ -2620,7 +2620,10 @@ function copyFollowUpEmail() {
 // ── ASSESSMENT TAB ────────────────────────────
 function renderAssessmentFromResult(el, r, qs, ans, submittedAt) {
   const submitted = submittedAt ? new Date(submittedAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
-  let html = `<div style="margin-bottom:14px;font-size:11px;color:var(--tx3)">Submitted: ${submitted}</div>`;
+  let html = `<div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:11px;color:var(--tx3)">Submitted: ${submitted}</div>
+    ${(!r || !r.scores || !r.scores.logical_thinking) && qs && qs.length ? `<button onclick="scoreFromAssessmentAnswers()" class="btn btn-p btn-sm" style="font-size:11px">Score for IQ</button>` : ''}
+  </div>`;
 
   const scoreColor = r.overall_score >= 85 ? '#1B4332' : r.overall_score >= 70 ? '#2E7D32' : r.overall_score >= 55 ? '#E65100' : '#C62828';
   html += `<div style="background:var(--green);border-radius:var(--rl);padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px">
@@ -2639,7 +2642,8 @@ function renderAssessmentFromResult(el, r, qs, ans, submittedAt) {
   
   // Detect which format: assessment format has logical_thinking, rescore has experience
   const isAssessmentFormat = sc.logical_thinking !== undefined;
-  const isRescoreFormat = bd.experience !== undefined;
+  const isRescoreFormat = bd.experience !== undefined || sc.experience !== undefined;
+  const rescoreData = bd.experience !== undefined ? bd : sc;
 
   if (isAssessmentFormat) {
     // Assessment format — IQ scale for logical_thinking, 1-10 for others
@@ -2680,7 +2684,7 @@ function renderAssessmentFromResult(el, r, qs, ans, submittedAt) {
     ];
     html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">`;
     traits.forEach(t => {
-      const s = Math.min(t.max, Math.max(0, bd[t.key] || 0));
+      const s = Math.min(t.max, Math.max(0, rescoreData[t.key] || 0));
       const pct = Math.round((s / t.max) * 100);
       const col = pct >= 80 ? '#2E7D32' : pct >= 60 ? '#1565C0' : pct >= 40 ? '#E65100' : '#C62828';
       html += `<div style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px">
@@ -2739,7 +2743,8 @@ function renderAssessmentTab() {
         strengths: c.strengths ? c.strengths.split(' | ') : [],
         concerns: c.concerns ? c.concerns.split(' | ') : [],
         recommendation: c.comp_note || '',
-        scores: (() => { try { return JSON.parse(c.breakdown || '{}'); } catch(e) { return {}; } })()
+        scores: (() => { try { return JSON.parse(c.breakdown || '{}'); } catch(e) { return {}; } })(),
+        breakdown: (() => { try { return JSON.parse(c.breakdown || '{}'); } catch(e) { return {}; } })()
       };
       renderAssessmentFromResult(el, fallbackResult, [], {}, c.added);
     } else {
@@ -2762,6 +2767,12 @@ function renderAssessmentTab() {
   }
 
   const r = data.aiResult;
+  // Normalize: ensure breakdown is set if scores has rescore format data
+  if (r && r.scores && r.scores.experience !== undefined && !r.breakdown) {
+    r.breakdown = r.scores;
+  }
+  // Flag if IQ score is missing (rescore format, no logical_thinking)
+  const hasIQ = r && r.scores && r.scores.logical_thinking;
   const qs = data.questions || [];
   const ans = data.answers || {};
   const submittedAt = data.submittedAt ? new Date(data.submittedAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
@@ -2843,6 +2854,107 @@ function renderAssessmentTab() {
   });
 
   el.innerHTML = html;
+}
+
+// ── SCORE FROM ASSESSMENT ANSWERS ────────────────
+async function scoreFromAssessmentAnswers() {
+  if (!KEY) { toast('API key required', 'err'); return; }
+  const c = C.find(x => String(x.id) === String(AID));
+  if (!c) return;
+
+  const notesRaw = c.notes || '';
+  const assessMatch = notesRaw.match(/---ASSESSMENT---\n([\s\S]*)/);
+  if (!assessMatch) { toast('No assessment data found', 'err'); return; }
+
+  let data = {};
+  try {
+    const raw = assessMatch[1].replace(/---SCORECARD---[\s\S]*/,'').replace(/---INTERVIEW---[\s\S]*/,'').trim();
+    data = JSON.parse(raw);
+  } catch(e) { toast('Could not parse assessment data', 'err'); return; }
+
+  const qs = data.questions || [];
+  const ans = data.answers || {};
+  if (!qs.length) { toast('No questions found in assessment', 'err'); return; }
+
+  // Show loading
+  document.getElementById('assessment-content').innerHTML = `<div class="thinking"><div class="spin"></div><span class="pulse">Scoring assessment answers with AI...</span></div>`;
+
+  const answersText = qs.map((q, i) => `Q${i+1}: ${q}\nAnswer: ${ans[i] || '—'}`).join('\n\n');
+
+  const prompt = `You are a rigorous psychometric evaluator. Your scores will be used by a hiring manager to make real employment decisions.
+
+Candidate: ${c.name}
+Role: ${c.role}
+
+ASSESSMENT ANSWERS:
+${answersText}
+
+===== LOGICAL THINKING — IQ SCALE (70–140) =====
+Start at 85. Add/subtract based on evidence:
++15 multi-step cause-and-effect reasoning
++10 identifies root cause before solution
++10 anticipates second-order consequences
++8 logically structured open-ended answers
++7 acknowledges tradeoffs
+-5 per generic platitude without reasoning
+-8 jumps to solution without diagnosing
+-10 contradicts themselves
+-12 vague/short open-ended answers (under 3 sentences)
+-15 poor judgment on 3+ multiple choice questions
+Floor 70, cap 140. Most score 88-112. Reserve 120+ for exceptional reasoning.
+
+===== OTHER SCORES (1-10) =====
+role_knowledge: 10=hands-on direct experience, 7=strong understanding, 5=basic, 3=limited, 1=unfamiliar
+judgment: 10=consistently right calls with clear reasoning, 7=mostly good, 5=mixed, 3=poor, 1=wrong
+communication: 10=specific structured professional with real examples, 7=clear mostly specific, 5=generic, 3=vague, 1=incomprehensible
+culture_fit: 10=strong ownership/accountability/customer-first, 7=positive signals, 5=neutral, 3=blame-shifting, 1=values misalignment
+
+===== FORMULA =====
+overall_score = (logical_thinking-70)/70*100*0.40 + role_knowledge*10*0.25 + judgment*10*0.20 + communication*10*0.10 + culture_fit*10*0.05
+Round to nearest integer.
+tier: 85+ Strong Advance, 70-84 Advance, 55-69 Review, below 55 Pass
+
+Return ONLY valid JSON, no markdown:
+{"scores":{"logical_thinking":105,"role_knowledge":7,"judgment":8,"communication":7,"culture_fit":8},"overall_score":79,"tier":"Advance","iq_label":"Average","summary":"2-3 sentence evidence-based summary.","strengths":["Specific strength","Second strength"],"concerns":["Specific concern"],"recommendation":"One sentence for hiring manager."}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const d = await resp.json();
+    if (d.error) throw new Error(JSON.stringify(d.error));
+
+    const rawText = d.content && d.content[0] ? d.content[0].text || '' : '';
+    const cleanText = rawText.split('\n').filter(l => !l.startsWith('\x60\x60\x60')).join('\n').trim();
+    const result = JSON.parse(cleanText);
+
+    // Save back to Notes
+    const cleanNotes = notesRaw.replace(/\n?---ASSESSMENT---[\s\S]*/,'').trim();
+    data.aiResult = result;
+    const newNotes = cleanNotes + (cleanNotes ? '\n' : '') + '---ASSESSMENT---\n' + JSON.stringify(data);
+    c.notes = newNotes;
+    await pushToSheet('update', { id: c.id, notes: newNotes });
+
+    toast('IQ scored: ' + result.scores.logical_thinking, 'ok');
+    renderAssessmentTab();
+
+  } catch(err) {
+    console.error('Assessment scoring error:', err);
+    document.getElementById('assessment-content').innerHTML = `<div class="err-b">Scoring failed: ${err.message}</div>`;
+    toast('Scoring failed', 'err');
+  }
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
