@@ -2639,11 +2639,13 @@ function renderAssessmentFromResult(el, r, qs, ans, submittedAt) {
 
   const sc = r.scores || {};
   const bd = r.breakdown || {};
+  // Merge — data could be in either scores or breakdown
+  const allScores = Object.assign({}, bd, sc);
   
-  // Detect which format: assessment format has logical_thinking, rescore has experience
-  const isAssessmentFormat = sc.logical_thinking !== undefined;
-  const isRescoreFormat = bd.experience !== undefined || sc.experience !== undefined;
-  const rescoreData = bd.experience !== undefined ? bd : sc;
+  // Detect which format
+  const isAssessmentFormat = allScores.logical_thinking !== undefined && allScores.logical_thinking > 0;
+  const isRescoreFormat = !isAssessmentFormat && (allScores.experience !== undefined);
+  const rescoreData = allScores;
 
   if (isAssessmentFormat) {
     // Assessment format — IQ scale for logical_thinking, 1-10 for others
