@@ -1934,6 +1934,31 @@ async function rescore() {
   if(rpt){
   c.score=rpt.score;c.report=rpt;c.stage=autoStage(rpt.score);
   pushToSheet('update',{id:c.id,score:c.score,tier:rpt.tier||'',summary:rpt.summary||'',strengths:(rpt.strengths||[]).join(' | '),concerns:(rpt.concerns||[]).join(' | '),flags:(rpt.flags||[]).join(' | '),comp_note:rpt.comp_note||'',screen_questions:(rpt.screen_questions||[]).join(' | '),breakdown:JSON.stringify(rpt.breakdown||{})});
+
+  // Also update ---ASSESSMENT--- notes with AI result so Assessment tab shows it
+  const notesRaw = c.notes || '';
+  const assessMatch = notesRaw.match(/---ASSESSMENT---\n([\s\S]*)/);
+  if (assessMatch) {
+    try {
+      const existingData = JSON.parse(assessMatch[1].replace(/---SCORECARD---[\s\S]*/,'').replace(/---INTERVIEW---[\s\S]*/,'').trim());
+      existingData.aiResult = {
+        overall_score: rpt.score,
+        tier: rpt.tier || '',
+        iq_label: rpt.breakdown && rpt.breakdown.logical_thinking ? 
+          (rpt.breakdown.logical_thinking >= 130 ? 'Exceptional' : rpt.breakdown.logical_thinking >= 120 ? 'Superior' : rpt.breakdown.logical_thinking >= 110 ? 'High Average' : rpt.breakdown.logical_thinking >= 100 ? 'Average' : rpt.breakdown.logical_thinking >= 90 ? 'Low Average' : 'Below Average') : '',
+        summary: rpt.summary || '',
+        strengths: rpt.strengths || [],
+        concerns: rpt.concerns || [],
+        recommendation: rpt.comp_note || '',
+        scores: rpt.breakdown || {}
+      };
+      const cleanNotes = notesRaw.replace(/\n?---ASSESSMENT---[\s\S]*/,'').trim();
+      const newNotes = cleanNotes + (cleanNotes ? '\n' : '') + '---ASSESSMENT---\n' + JSON.stringify(existingData);
+      c.notes = newNotes;
+      pushToSheet('update', {id: c.id, notes: newNotes});
+    } catch(e) { console.log('Could not update assessment notes:', e); }
+  }
+
   badge();
   document.getElementById('m-ai').innerHTML=aiPanel(rpt);
   document.getElementById('m-stage').value=c.stage;
