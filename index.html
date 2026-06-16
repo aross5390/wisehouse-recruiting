@@ -2842,7 +2842,7 @@ function renderAssessmentTab() {
       html += `<div style="margin-top:10px;padding:10px 12px;background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);font-size:12px;color:var(--tx2)"><strong>Recommendation:</strong> ${r.recommendation}</div>`;
     }
   } else {
-    html += `<div class="warn-b" style="margin-bottom:14px">⚠ Assessment submitted but AI scoring was not completed — API key may not have been set.</div>`;
+    html += `<div class="warn-b" style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px"><span>⚠ Assessment answers found but AI scoring not completed.</span><button onclick="scoreFromAssessmentAnswers()" style="background:var(--green);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:inherit">Score for IQ</button></div>`;
   }
 
   // Answers
