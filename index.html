@@ -2622,7 +2622,7 @@ function renderAssessmentFromResult(el, r, qs, ans, submittedAt) {
   const submitted = submittedAt ? new Date(submittedAt).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
   let html = `<div style="margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
     <div style="font-size:11px;color:var(--tx3)">Submitted: ${submitted}</div>
-    ${(!r || !r.scores || !r.scores.logical_thinking) && qs && qs.length ? `<button onclick="scoreFromAssessmentAnswers()" class="btn btn-p btn-sm" style="font-size:11px">Score for IQ</button>` : ''}
+    ${(!r || !r.scores || !r.scores.logical_thinking) ? `<button onclick="scoreFromAssessmentAnswers()" class="btn btn-p btn-sm" style="font-size:11px;background:var(--green);color:#fff;border-color:var(--green)">Score for IQ</button>` : ''}
   </div>`;
 
   const scoreColor = r.overall_score >= 85 ? '#1B4332' : r.overall_score >= 70 ? '#2E7D32' : r.overall_score >= 55 ? '#E65100' : '#C62828';
