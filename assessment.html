@@ -352,9 +352,10 @@ function renderQ(idx) {
     html += `<div class="mc-options">`;
     q.opts.forEach((opt, i) => {
       const selected = answers[idx] === opt ? ' selected' : '';
-      html += `<div class="mc-opt${selected}" onclick="selectMC(${idx}, '${opt.replace(/'/g, "\\'")}', this)">
+      const safeOpt = opt.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      html += `<div class="mc-opt${selected}" data-qidx="${idx}" data-optidx="${i}" onclick="selectMCByIndex(this)">
         <div class="mc-radio"></div>
-        <div class="mc-label">${opt}</div>
+        <div class="mc-label">${safeOpt}</div>
       </div>`;
     });
     html += `</div>`;
@@ -369,8 +370,13 @@ function renderQ(idx) {
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function selectMC(idx, val, el) {
-  answers[idx] = val;
+function selectMCByIndex(el) {
+  const qIdx = parseInt(el.getAttribute('data-qidx'));
+  const optIdx = parseInt(el.getAttribute('data-optidx'));
+  const q = questions[qIdx];
+  if (!q || !q.opts || !q.opts[optIdx]) return;
+  const val = q.opts[optIdx];
+  answers[qIdx] = val;
   document.querySelectorAll('.mc-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   document.getElementById('q-err').style.display = 'none';
