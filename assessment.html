@@ -209,7 +209,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-h
 <script>
 // ── CONFIG ─────────────────────────────────
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbw7AoEKq5xXsg6YgPjIU-OJ2yghikqN8dq0Zhh5i0Jn0SQMR2VS7sceVMSj3bcVxmWo/exec';
-const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
 
 // ── QUESTIONS BY ROLE ───────────────────────
 const QUESTIONS = {
@@ -429,156 +428,42 @@ function goBack() {
   renderQ(questions.length - 1);
 }
 
-// ── SUBMIT & SCORE ──────────────────────────
+// ── SUBMIT ──────────────────────────────────
 async function submitAssessment() {
   document.getElementById('screen-submit').style.display = 'none';
   document.getElementById('screen-scoring').style.display = 'block';
   window.scrollTo({top:0,behavior:'smooth'});
 
-  // Build answers text for Claude
-  const answersText = questions.map((q, i) =>
-    `Q${i+1} [${q.type==='mc'?'Multiple Choice':'Open Ended'}]: ${q.q}\nAnswer: ${answers[i] || '—'}`
-  ).join('\n\n');
-
-  const prompt = `You are a rigorous psychometric evaluator. Your scores will be used by a hiring manager to make real employment decisions. Be precise, calibrated, and consistent. Do not inflate scores.
-
-Candidate: ${candidateName}
-Role: ${candidateRole}
-
-ANSWERS:
-${answersText}
-
-===== LOGICAL THINKING — IQ SCALE (70–140) =====
-Evaluate ONLY the quality of reasoning. Ignore tone, effort, or pleasantness.
-
-Start at 85 (population average). Add or subtract points based on evidence:
-
-POSITIVE indicators (add points):
-+15 if answers show multi-step cause-and-effect reasoning (not just stating what they would do)
-+10 if candidate identifies root cause before jumping to a solution
-+10 if candidate anticipates second-order consequences
-+8 if open-ended answers are logically structured (situation, action, result)
-+7 if candidate acknowledges tradeoffs in their decisions
-
-NEGATIVE indicators (subtract points):
--5 for each generic platitude without specific reasoning ("communication is important")
--8 if candidate jumps to solutions without diagnosing the problem
--10 if candidate contradicts themselves across answers
--12 if open-ended answers are vague, under 3 sentences, or show no real experience
--15 if multiple choice answers show poor judgment on 3 or more questions
-
-Floor: 70. Cap: 140. Most candidates: 88-112. 120+ requires exceptional evidence.
-
-===== OTHER SCORES (1-10) =====
-role_knowledge: 10=hands-on direct experience, 7=strong understanding, 5=basic, 3=limited, 1=unfamiliar
-judgment: 10=consistently right calls with clear reasoning, 7=mostly good, 5=mixed, 3=poor calls, 1=consistently wrong
-communication: 10=specific, structured, professional with real examples, 7=clear and mostly specific, 5=generic, 3=vague, 1=incomprehensible  
-culture_fit: 10=strong ownership/accountability/customer-first mindset, 7=positive signals, 5=neutral, 3=blame-shifting or entitlement, 1=values misalignment
-
-===== CALCULATION =====
-overall_score = (logical_thinking - 70) / 70 * 100 * 0.40 + role_knowledge * 10 * 0.25 + judgment * 10 * 0.20 + communication * 10 * 0.10 + culture_fit * 10 * 0.05
-Round to nearest integer.
-tier: overall 85+ = Strong Advance, 70-84 = Advance, 55-69 = Review, below 55 = Pass
-
-Return ONLY valid JSON, no markdown:
-{"scores":{"logical_thinking":105,"role_knowledge":7,"judgment":8,"communication":7,"culture_fit":8},"overall_score":79,"tier":"Advance","iq_label":"Average","summary":"2-3 sentence evidence-based summary referencing specific answers.","strengths":["Specific strength citing actual answer","Second strength"],"concerns":["Specific concern citing actual answer — empty array if none"],"recommendation":"One concrete sentence for the hiring manager."}`;  
+  // Scoring now happens entirely on the backend (Apps Script + Claude API),
+  // so every candidate gets scored the same way regardless of browser/device.
+  const savePayload = JSON.stringify({
+    action: 'saveAssessment',
+    candidateId,
+    candidateName,
+    candidateEmail,
+    candidateRole,
+    answers: answers,
+    questions: questions.map(q => ({ type: q.type, q: q.q })),
+    submittedAt: new Date().toISOString()
+  });
 
   try {
-    // Try to get API key from platform's localStorage
-    let apiKey = localStorage.getItem('wh_api_key') || localStorage.getItem('whApiKey') || localStorage.getItem('apiKey') || '';
-
-    let result = null;
-
-    if (apiKey) {
-      // Score with Claude if API key available
-      const r = await fetch(CLAUDE_API, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-      const d = await r.json();
-      if (!d.error) {
-        const rawText = d.content && d.content[0] ? d.content[0].text || '' : '';
-        const cleanText = rawText.split('\n').filter(l => !l.startsWith('\x60\x60\x60')).join('\n').trim();
-        result = JSON.parse(cleanText);
-      }
-    }
-
-    // Save to Google Sheet via Apps Script
-    const savePayload = JSON.stringify({
-      action: 'saveAssessment',
-      candidateId,
-      answers: answers,
-      questions: questions.map(q => q.q),
-      aiResult: result,
-      submittedAt: new Date().toISOString()
+    await fetch(SHEET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: savePayload
     });
-
-    try {
-      const saveResp = await fetch(SHEET_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: savePayload
-      });
-      const saveResult = await saveResp.json();
-      console.log('v3 Assessment saved:', JSON.stringify(saveResult));
-    } catch(saveErr) {
-      console.error('v3 Sheet save failed:', saveErr.message);
-    }
-
-    // Mark as completed in localStorage — prevents retaking
-    localStorage.setItem('assessment_done_' + candidateId, '1');
-
-    // Notify team via Apps Script
-    try {
-      await fetch(SHEET_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'notifyAssessmentComplete',
-          candidateId,
-          candidateName,
-          candidateEmail,
-          candidateRole,
-          aiResult: result,
-          submittedAt: new Date().toISOString()
-        })
-      });
-    } catch(notifyErr) { console.log('Notify failed:', notifyErr.message); }
-
-    document.getElementById('screen-scoring').style.display = 'none';
-    document.getElementById('screen-success').style.display = 'block';
-
-  } catch(e) {
-    console.error('Submission error:', e);
-    // Still try to save raw answers
-    try {
-      await fetch(SHEET_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          action: 'saveAssessment',
-          candidateId,
-          answers: answers,
-          questions: questions.map(q => q.q),
-          aiResult: null,
-          submittedAt: new Date().toISOString()
-        })
-      });
-    } catch(saveErr) { console.error('Fallback save failed:', saveErr); }
-    document.getElementById('screen-scoring').style.display = 'none';
-    document.getElementById('screen-success').style.display = 'block';
+  } catch(err) {
+    console.error('Save failed:', err.message);
   }
+
+  // Mark as completed in localStorage — prevents retaking
+  localStorage.setItem('assessment_done_' + candidateId, '1');
+
+  document.getElementById('screen-scoring').style.display = 'none';
+  document.getElementById('screen-success').style.display = 'block';
 }
+
 </script>
 </body>
 </html>
