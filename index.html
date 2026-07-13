@@ -374,6 +374,25 @@ tr.clickable:hover td:first-child{padding-left:18px}
 /* ── CV UPLOAD ────────────────────────────── */
 .cv-drag{border-color:var(--green-mid) !important;background:var(--green-pale) !important}
 
+/* ── TOP 5 CARDS ──────────────────────────── */
+.top5-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;position:relative;overflow:hidden}
+.top5-card:hover{border-color:var(--green-mid);transform:translateX(4px);box-shadow:0 4px 16px rgba(27,67,50,0.08)}
+.top5-rank{font-size:22px;font-weight:800;font-family:'DM Mono',monospace;color:var(--bdr);min-width:32px;text-align:center}
+.top5-rank.gold{color:#F59E0B}
+.top5-rank.silver{color:#9CA3AF}
+.top5-rank.bronze{color:#CD7F32}
+.top5-score-bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green-light)}
+
+/* ── NOTE PILLS ───────────────────────────── */
+.note-author-pill.selected{background:var(--green-pale) !important;border-color:var(--green-mid) !important;color:var(--green) !important;font-weight:600 !important}
+.note-tag-chip.selected{background:#EDE9FE !important;border-color:#7C3AED !important;color:#5B21B6 !important;font-weight:600 !important}
+.note-entry{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px}
+.note-entry-header{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.note-author-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:var(--green-pale);color:var(--green-mid);border:1px solid rgba(46,125,50,0.2)}
+.note-time{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace}
+.note-text{font-size:13px;color:var(--tx2);line-height:1.6}
+.note-tag{color:#7C3AED;font-weight:600}
+
 /* ── REPORTS CHARTS ───────────────────────── */
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 .bar-lbl{font-size:11px;color:var(--tx2);width:110px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -536,6 +555,17 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
         <table><thead><tr><th>Candidate</th><th>Role</th><th>Source</th><th>AI Score</th><th>Stage</th><th>Added</th></tr></thead>
         <tbody id="dash-tbody"></tbody></table>
       </div>
+
+      <!-- TOP 5 CANDIDATES -->
+      <div class="sh" style="margin-top:22px">
+        <div><div class="sh-ttl">🏆 Top 5 Candidates by AI Score</div><div class="sh-sub">Highest scoring active candidates across all roles</div></div>
+        <select id="top5-role" onchange="renderTop5()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
+          <option value="all">All Roles</option>
+          <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
+          <option>CSR / Admin Support</option><option>Video Editor</option><option>AI Implementation Specialist</option>
+        </select>
+      </div>
+      <div id="top5-container"></div>
     </div>
 
     <!-- PIPELINE -->
@@ -565,7 +595,7 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
             <option value="all">All Stages</option>
             <option>Applied</option><option>Screening</option><option>Video Screen</option>
             <option>Final Interview</option><option>Ride-Along</option><option>Requirements Processing</option><option>Offer</option>
-            <option>Hired</option><option>Bench</option><option>Archived</option>
+            <option>Hired</option><option>Bench</option><option>Rejected</option><option>Archived</option>
           </select>
           <select id="fsrc" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
             <option value="all">All Sources</option>
@@ -773,7 +803,7 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
           <select id="m-stage" onchange="updateStage()">
             <option>Applied</option><option>Screening</option><option>Video Screen</option>
             <option>Final Interview</option><option>Ride-Along</option><option>Requirements Processing</option><option>Offer</option>
-            <option>Hired</option><option>Bench</option><option>Archived</option>
+            <option>Hired</option><option>Bench</option><option>Rejected</option><option>Archived</option>
           </select>
           <button class="btn btn-sm btn-danger" onclick="deleteCandidate()">Delete</button>
         </div>
@@ -793,8 +823,34 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
           <label style="font-size:11px;font-weight:500;color:var(--tx2)">Referred By</label>
           <input id="m-referred-by" placeholder="Employee who referred this candidate..." style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:8px 11px;color:var(--tx);font-size:13px;font-family:'DM Sans',sans-serif;width:100%">
         </div>
-        <div class="fg"><label>Internal Notes (Gab / Ross)</label><textarea id="m-notes-ta" style="min-height:100px" class="fg" placeholder="Notes from video screen, reference calls, interviews..."></textarea></div>
-        <button class="btn btn-sm btn-p" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
+
+        <!-- TAGGED NOTES FEED -->
+        <div style="font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:8px">Team Notes</div>
+        <div id="notes-feed" style="margin-bottom:14px;display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto"></div>
+
+        <!-- ADD NOTE -->
+        <div style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 14px">
+          <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+            <div style="font-size:11px;font-weight:600;color:var(--tx2);align-self:center;margin-right:2px">From:</div>
+            ${['Gab','Ross','Dennis','Joy','Joane'].map(name => 
+              `<div class="note-author-pill" onclick="selectNoteAuthor(this,'${name}')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">${name}</div>`
+            ).join('')}
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+            <div style="font-size:11px;font-weight:600;color:var(--tx2);align-self:center;margin-right:2px">Tag:</div>
+            ${['@Gab','@Ross','@Dennis','@Joy','@Joane'].map(tag => 
+              `<div class="note-tag-chip" onclick="toggleNoteTag(this,'${tag}')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">${tag}</div>`
+            ).join('')}
+          </div>
+          <textarea id="note-input" placeholder="Add a note... Use @mention to tag a team member" style="width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tx);resize:none;min-height:70px;outline:none;transition:border-color 0.1s" onfocus="this.style.borderColor='var(--green-mid)'" onblur="this.style.borderColor='var(--bdr)'" oninput="autoTagNote(this)"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div style="font-size:11px;color:var(--tx3)" id="note-tag-preview"></div>
+            <button class="btn btn-sm btn-p" onclick="addNote()">Post Note</button>
+          </div>
+        </div>
+
+        <div style="height:1px;background:var(--bdr);margin:14px 0"></div>
+        <button class="btn btn-sm btn-p" style="width:100%" onclick="saveNotes()">Save Referred By</button>
       </div>
     </div>
   </div>
@@ -1326,8 +1382,8 @@ let AID = null; // active candidate id
 
 const ROLES = ['Pest Control Technician','Outbound Sales Rep','CSR / Admin Support','Video Editor','AI Implementation Specialist'];
 const RC = {Technician:'coral','Pest Control Technician':'red','Outbound Sales Rep':'amber','CSR / Admin Support':'blue','Video Editor':'green','AI Implementation Specialist':'purple'};
-const SC = {Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Ride-Along':'green','Requirements Processing':'purple',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};
-const STAGES = ['Applied','Screening','Video Screen','Final Interview','Ride-Along','Requirements Processing','Offer','Hired','Bench','Archived'];
+const SC = {Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Ride-Along':'green','Requirements Processing':'purple',Offer:'green',Hired:'green',Bench:'amber',Rejected:'red',Archived:'gray'};
+const STAGES = ['Applied','Screening','Video Screen','Final Interview','Ride-Along','Requirements Processing','Offer','Hired','Bench','Rejected','Archived'];
 
 // ── NAVIGATION ─────────────────────────────────
 function go(page, el) {
@@ -1567,7 +1623,8 @@ async function scoreCandidate(c) {
 
 CANDIDATE:
 Name: ${c.name} | Source: ${c.source} | Comp: ${c.comp||'not stated'} | Available: ${c.availability||'not stated'}
-Resume/CV: ${c.resume||'N/A'}
+Resume link: ${c.resume||'N/A'}
+Resume text: ${(()=>{const m=(c.notes||'').match(/---RESUME TEXT---\n([\s\S]*?)(?=---|$)/);return m?m[1].trim():c.q1||'N/A';})()}
 Experience answer: ${c.q1||'N/A'}
 Customer scenario: ${c.q2||'N/A'}
 Motivation: ${c.q3||'N/A'}
@@ -1650,6 +1707,7 @@ function renderDash() {
   animCount('s-adv', C.filter(c=>c.score>=70).length);
   animCount('s-bench', C.filter(c=>c.stage==='Bench').length);
   animCount('s-scored', C.filter(c=>c.score!==null).length);
+  renderTop5();
   const tbody = document.getElementById('dash-tbody');
   const rows = C.slice(0,8);
   tbody.innerHTML = rows.length
@@ -1668,7 +1726,7 @@ let dragId = null;
 function renderPipeline() {
   const rf = document.getElementById('prf').value;
   const f = rf==='all'?C:C.filter(c=>c.role===rf);
-  document.getElementById('board').innerHTML = ['Applied','Screening','Video Screen','Final Interview','Ride-Along','Requirements Processing','Offer','Hired','Bench'].map(stage=>{
+  document.getElementById('board').innerHTML = ['Applied','Screening','Video Screen','Final Interview','Ride-Along','Requirements Processing','Offer','Hired','Bench','Rejected'].map(stage=>{
     const sc = f.filter(c=>c.stage===stage);
     return `<div class="col">
       <div class="col-head"><span class="col-ttl">${stage}</span><span class="col-ct">${sc.length}</span></div>
@@ -1878,6 +1936,8 @@ function openModal(id) {
   const refM = (c.notes||'').match(/Referred by: ([^\n]+)/);
   const refInputB = document.getElementById('m-referred-by');
   if (refInputB) refInputB.value = refM ? refM[1].trim() : '';
+  // Load team notes feed
+  setTimeout(() => loadNotesFeed(c), 0);
   // Reset all tabs to show overview
   ['overview','ai','answers','scorecard','assessment','notes'].forEach(t => {
     const el = document.getElementById('mt-'+t);
@@ -1893,6 +1953,7 @@ function mTab(tab, el) {
   if(el) el.classList.add('on');
   if(tab==='scorecard') renderScorecard();
   if(tab==='assessment') renderAssessmentTab();
+  if(tab==='notes') { const c=C.find(x=>String(x.id)===String(AID)); if(c) loadNotesFeed(c); }
 }
 function updateStage() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
@@ -1979,7 +2040,7 @@ function clearAll(){toast('Clear not available — manage data directly in Googl
 
 // ── HELPERS ────────────────────────────────────
 function roleBadge(role){const map={'Pest Control Technician':'red','Outbound Sales Rep':'amber','CSR / Admin Support':'blue','Video Editor':'green','AI Implementation Specialist':'purple'};return`<span class="bdg bdg-${map[role]||'gray'}">${role}</span>`;}
-function stageBadge(s){const map={Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Ride-Along':'green',Offer:'green',Hired:'green',Bench:'amber',Archived:'gray'};return`<span class="bdg bdg-${map[s]||'gray'}">${s}</span>`;}
+function stageBadge(s){const map={Applied:'gray',Screening:'blue','Video Screen':'teal','Final Interview':'purple','Ride-Along':'green',Offer:'green',Hired:'green',Bench:'amber',Rejected:'red',Archived:'gray'};return`<span class="bdg bdg-${map[s]||'gray'}">${s}</span>`;}
 function scorePill(s){if(s===null||s===undefined)return'<span style="font-size:11px;color:var(--tx3)">Pending</span>';const cls=s>=70?'sp-hi':s>=55?'sp-mid':'sp-lo';return`<span class="score-pill ${cls}">${s}/100</span>`;}
 function ago(iso){if(!iso)return'—';const d=Math.floor((Date.now()-new Date(iso))/86400000),h=Math.floor((Date.now()-new Date(iso))/3600000),m=Math.floor((Date.now()-new Date(iso))/60000);if(d>0)return d+'d ago';if(h>0)return h+'h ago';if(m>0)return m+'m ago';return'Just now';}
 function toast(msg,type=''){const t=document.getElementById('toast-el');t.textContent=msg;t.className='toast'+(type==='ok'?' ok':'');void t.offsetHeight;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
@@ -2146,6 +2207,7 @@ async function loadFromSheet() {
       }));
       badge();
       renderDash();
+      renderTop5();
       renderTable();
       renderPipeline();
     }
@@ -2957,6 +3019,158 @@ Return ONLY valid JSON, no markdown:
     document.getElementById('assessment-content').innerHTML = `<div class="err-b">Scoring failed: ${err.message}</div>`;
     toast('Scoring failed', 'err');
   }
+}
+
+// ── TOP 5 CANDIDATES ─────────────────────────────
+function renderTop5() {
+  const role = document.getElementById('top5-role')?.value || 'all';
+  let candidates = C.filter(c => c.score !== null && !['Hired','Archived','Rejected'].includes(c.stage));
+  if (role !== 'all') candidates = candidates.filter(c => c.role === role);
+  const top5 = candidates.sort((a,b) => b.score - a.score).slice(0, 5);
+  const container = document.getElementById('top5-container');
+  if (!container) return;
+  if (!top5.length) {
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--tx3);font-size:13px;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl)">No scored candidates yet. Add candidates and score them with AI.</div>';
+    return;
+  }
+  const medals = ['🥇','🥈','🥉','4','5'];
+  const rankClasses = ['gold','silver','bronze','',''];
+  container.innerHTML = top5.map((c, i) => `
+    <div class="top5-card" onclick="openModal('${c.id}')">
+      <div class="top5-score-bar" style="background:${c.score>=85?'var(--green)':c.score>=70?'var(--green-mid)':'var(--amber)'}"></div>
+      <div class="top5-rank ${rankClasses[i]}">${medals[i]}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13px;color:var(--tx)">${c.name}</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:2px">${c.role} · ${c.source}</div>
+      </div>
+      <div style="text-align:right">
+        ${scorePill(c.score)}
+        <div style="font-size:10px;color:var(--tx3);margin-top:4px">${stageBadge(c.stage)}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── TAGGED NOTES SYSTEM ───────────────────────────
+let selectedNoteAuthor = 'Gab';
+let selectedNoteTags = [];
+
+function selectNoteAuthor(el, name) {
+  document.querySelectorAll('.note-author-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedNoteAuthor = name;
+}
+
+function toggleNoteTag(el, tag) {
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) {
+    if (!selectedNoteTags.includes(tag)) selectedNoteTags.push(tag);
+  } else {
+    selectedNoteTags = selectedNoteTags.filter(t => t !== tag);
+  }
+  updateNoteTagPreview();
+}
+
+function updateNoteTagPreview() {
+  const preview = document.getElementById('note-tag-preview');
+  if (preview) {
+    preview.textContent = selectedNoteTags.length ? 'Tagging: ' + selectedNoteTags.join(', ') : '';
+  }
+}
+
+function autoTagNote(textarea) {
+  // Auto-detect @mentions typed in the textarea
+  const text = textarea.value;
+  const members = ['Gab','Ross','Dennis','Joy','Joane'];
+  members.forEach(name => {
+    const tag = '@' + name;
+    if (text.includes(tag) && !selectedNoteTags.includes(tag)) {
+      selectedNoteTags.push(tag);
+      // Highlight the chip
+      document.querySelectorAll('.note-tag-chip').forEach(chip => {
+        if (chip.textContent === tag) chip.classList.add('selected');
+      });
+    }
+  });
+  updateNoteTagPreview();
+}
+
+function addNote() {
+  const c = C.find(x => String(x.id) === String(AID));
+  if (!c) return;
+  const input = document.getElementById('note-input');
+  const text = input?.value?.trim();
+  if (!text) { toast('Please enter a note'); return; }
+
+  const note = {
+    author: selectedNoteAuthor,
+    tags: [...selectedNoteTags],
+    text,
+    timestamp: new Date().toISOString()
+  };
+
+  // Get existing notes data
+  const existingNotes = c.notes || '';
+  const regularPart = existingNotes.replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').replace(/\n?---ASSESSMENT---[\s\S]*/,'').replace(/\n?---TEAM_NOTES---[\s\S]*/,'').trim();
+  const scPart = existingNotes.match(/(\n?---SCORECARD---[\s\S]*?)(?=\n?---|$)/)?.[0] || '';
+  const intPart = existingNotes.match(/(\n?---INTERVIEW---[\s\S]*?)(?=\n?---|$)/)?.[0] || '';
+  const assPart = existingNotes.match(/(\n?---ASSESSMENT---[\s\S]*?)(?=\n?---|$)/)?.[0] || '';
+
+  // Get existing team notes
+  const teamNotesMatch = existingNotes.match(/---TEAM_NOTES---\n([\s\S]*?)(?=\n?---|$)/);
+  let teamNotes = [];
+  try { teamNotes = teamNotesMatch ? JSON.parse(teamNotesMatch[1].trim()) : []; } catch(e) { teamNotes = []; }
+  teamNotes.unshift(note); // newest first
+
+  const newNotes = regularPart + scPart + intPart + assPart + '\n---TEAM_NOTES---\n' + JSON.stringify(teamNotes);
+  c.notes = newNotes;
+  pushToSheet('update', {id: String(c.id), notes: newNotes});
+
+  // Clear input and reset tags
+  input.value = '';
+  selectedNoteTags = [];
+  document.querySelectorAll('.note-tag-chip').forEach(chip => chip.classList.remove('selected'));
+  updateNoteTagPreview();
+
+  renderNotesFeed(teamNotes);
+  toast('Note posted', 'ok');
+}
+
+function renderNotesFeed(notes) {
+  const feed = document.getElementById('notes-feed');
+  if (!feed) return;
+  if (!notes || !notes.length) {
+    feed.innerHTML = '<div style="text-align:center;padding:16px;color:var(--tx3);font-size:12px">No notes yet. Be the first to add one.</div>';
+    return;
+  }
+  const authorColors = {Gab:'#2E7D32',Ross:'#1565C0',Dennis:'#6A1B9A',Joy:'#E65100',Joane:'#00695C'};
+  feed.innerHTML = notes.map(note => {
+    const color = authorColors[note.author] || '#2E7D32';
+    const bg = color === '#2E7D32' ? 'var(--green-pale)' : color === '#1565C0' ? '#E3F2FD' : color === '#6A1B9A' ? '#F3E5F5' : color === '#E65100' ? '#FFF3E0' : '#E0F2F1';
+    const time = note.timestamp ? new Date(note.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+    const textWithTags = (note.text || '').replace(/@(Gab|Ross|Dennis|Joy|Joane)/g, '<span class="note-tag">@$1</span>');
+    return `<div class="note-entry">
+      <div class="note-entry-header">
+        <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:${bg};color:${color};border:1px solid ${color}33">${note.author}</span>
+        ${note.tags && note.tags.length ? note.tags.map(t => `<span style="font-size:10px;font-weight:600;color:#7C3AED;background:#EDE9FE;padding:2px 7px;border-radius:10px;border:1px solid #DDD6FE">${t}</span>`).join('') : ''}
+        <span class="note-time" style="margin-left:auto">${time}</span>
+      </div>
+      <div class="note-text">${textWithTags}</div>
+    </div>`;
+  }).join('');
+}
+
+function loadNotesFeed(c) {
+  const teamNotesMatch = (c.notes||'').match(/---TEAM_NOTES---\n([\s\S]*?)(?=\n?---|$)/);
+  let teamNotes = [];
+  try { teamNotes = teamNotesMatch ? JSON.parse(teamNotesMatch[1].trim()) : []; } catch(e) { teamNotes = []; }
+  renderNotesFeed(teamNotes);
+  // Set first author pill as selected
+  selectedNoteAuthor = 'Gab';
+  selectedNoteTags = [];
+  setTimeout(() => {
+    const firstPill = document.querySelector('.note-author-pill');
+    if (firstPill) firstPill.classList.add('selected');
+  }, 0);
 }
 
 // ── MODAL CLOSE ON BG CLICK ────────────────────
