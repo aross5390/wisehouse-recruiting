@@ -1758,6 +1758,7 @@ function renderDash() {
 
 // ── PIPELINE ───────────────────────────────────
 let dragId = null;
+const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
 function renderPipeline() {
   const rf = document.getElementById('prf').value;
@@ -1779,10 +1780,10 @@ function renderPipeline() {
         ondrop="pipeDrop(event,'${stage}')">
         ${sc.length
           ? sc.map(c=>`<div class="cc" 
-              draggable="true"
-              data-id="${c.id}"
+              ${isTouchDevice ? '' : `draggable="true"
               ondragstart="pipeDragStart(event,'${c.id}')"
-              ondragend="pipeDragEnd(event)"
+              ondragend="pipeDragEnd(event)"`}
+              data-id="${c.id}"
               onclick="if(!window._dragging) openModal(this.dataset.id)">
               <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
               <div class="cc-role">${c.role}</div>
