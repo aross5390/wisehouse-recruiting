@@ -1786,8 +1786,8 @@ function renderPipeline() {
               data-id="${c.id}"
               onclick="if(!window._dragging) openModal(this.dataset.id)">
               <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
-              <div class="cc-role">${c.role}</div>
-              <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
+              ${c.role ? `<div class="cc-role">${c.role}</div>` : ''}
+              <div class="cc-meta">${c.source ? `<span class="src-tag">${c.source}</span>` : '<span></span>'}<span class="ago">${ago(c.added)}</span></div>
             </div>`).join('')
           : '<div class="col-empty" style="text-align:center;padding:14px 6px;color:var(--tx3);font-size:11px">Empty</div>'}
       </div>
@@ -1968,14 +1968,6 @@ function openModal(id) {
     .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
     || '<div class="empty">No answers recorded.</div>';
   // Notes tab shows only regular notes — scorecard is separate
-  const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
-  // Strip referred by from display (shown in overview)
-  const notesDisplay = notesClean.replace(/^Referred by: [^\n]+\n?/,'').trim();
-  document.getElementById('m-notes-ta').value = notesDisplay;
-  // Pre-load referred by field
-  const refM2 = notesClean.match(/^Referred by: ([^\n]+)/);
-  const refInput = document.getElementById('m-referred-by');
-  if (refInput) refInput.value = refM2 ? refM2[1].trim() : '';
   // Extract scorecard data for scorecard tab
   const scMatch = (c.notes||'').match(/---SCORECARD---\n([\s\S]*)/);
   if (scMatch) { try { c.scorecard = scMatch[1].trim(); } catch(e){} }
@@ -2011,18 +2003,14 @@ function updateStage() {
 }
 function saveNotes() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
-  const notesText = document.getElementById('m-notes-ta').value;
   const referredBy = document.getElementById('m-referred-by') ? document.getElementById('m-referred-by').value.trim() : '';
 
-  // Build regular notes section
-  let regularNotes = notesText.replace(/Referred by: [^\n]+\n?/g, '').trim();
-  if (referredBy) regularNotes = 'Referred by: ' + referredBy + (regularNotes ? '\n' + regularNotes : '');
+  // Keep everything else (scorecard/interview/assessment/team notes, any legacy text) intact —
+  // only replace the leading "Referred by:" line.
+  const existingNotes = c.notes || '';
+  const rest = existingNotes.replace(/^Referred by: [^\n]+\n?/,'');
+  c.notes = referredBy ? ('Referred by: ' + referredBy + (rest ? '\n' + rest : '')) : rest;
 
-  // Preserve existing scorecard section if any
-  const scMatch = (c.notes||'').match(/(\n?---SCORECARD---[\s\S]*)/);
-  const scSection = scMatch ? scMatch[1] : '';
-
-  c.notes = regularNotes + scSection;
   pushToSheet('update', {id:String(c.id), notes:c.notes});
   toast('Saved','ok');
 }
