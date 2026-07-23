@@ -157,7 +157,7 @@ tr.clickable:hover td:first-child{padding-left:18px}
 .col.collapsed{max-height:none}
 .col-toggle{font-size:10px;color:var(--tx3);margin-left:6px;transition:transform 0.2s}
 .col.collapsed .col-toggle{transform:rotate(-90deg)}
-.cc{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 10px;cursor:grab;transition:all var(--fast);position:relative;overflow:hidden}
+.cc{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 10px;cursor:grab;transition:all var(--fast);position:relative;overflow:hidden;flex-shrink:0}
 .cc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green-light);transform:scaleY(0);transition:transform 0.2s var(--ease)}
 .cc:hover{border-color:var(--green-mid);box-shadow:0 3px 12px rgba(27,67,50,0.1);transform:translateY(-1px)}
 .cc:hover::before{transform:scaleY(1)}
