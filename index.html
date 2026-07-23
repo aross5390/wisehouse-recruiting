@@ -157,7 +157,7 @@ tr.clickable:hover td:first-child{padding-left:18px}
 .col.collapsed{max-height:none}
 .col-toggle{font-size:10px;color:var(--tx3);margin-left:6px;transition:transform 0.2s}
 .col.collapsed .col-toggle{transform:rotate(-90deg)}
-.cc{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 10px;cursor:grab;transition:all var(--fast);position:relative;overflow:hidden;flex-shrink:0}
+.cc{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 10px;cursor:grab;transition:all var(--fast);position:relative;overflow:hidden}
 .cc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green-light);transform:scaleY(0);transition:transform 0.2s var(--ease)}
 .cc:hover{border-color:var(--green-mid);box-shadow:0 3px 12px rgba(27,67,50,0.1);transform:translateY(-1px)}
 .cc:hover::before{transform:scaleY(1)}
@@ -437,100 +437,6 @@ tr.clickable:hover td:first-child{padding-left:18px}
 .fn-ct{font-size:12px;font-weight:700;color:var(--tx);font-family:'DM Mono',monospace;min-width:24px;text-align:center}
 .fn-pct{font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;min-width:36px;text-align:right}
 
-/* ── FIXES: classes referenced in markup/JS that had no matching CSS ──
-   Most of these are leftover mismatches from class-renaming passes
-   (e.g. sh-title -> sh-ttl, bk-item -> bp) where the CSS was never updated. */
-
-/* Section header title (was ".sh-title") — used on nearly every page */
-.sh-ttl{font-size:13px;font-weight:700;color:var(--tx);letter-spacing:-0.2px}
-
-/* Reports card title (was ".rpt-title") */
-.rpt-ttl{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:14px}
-
-/* Dashboard/Hiring-Sources stat label (was ".stat-label") */
-.stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--tx3);margin-bottom:8px}
-
-/* Unified role/stage badge system (was ".role-b"/".role-*" and ".stage-b"/".stage-*") */
-.bdg{font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap;display:inline-block}
-.bdg-red{background:#FFEBEE;color:var(--red);border:1px solid rgba(198,40,40,0.2)}
-.bdg-amber{background:#FFF3E0;color:#E65100;border:1px solid rgba(245,127,23,0.2)}
-.bdg-blue{background:#E3F2FD;color:#1565C0;border:1px solid rgba(21,101,192,0.2)}
-.bdg-teal{background:#E0F2F1;color:#00695C;border:1px solid rgba(0,105,92,0.2)}
-.bdg-purple{background:#F3E5F5;color:#6A1B9A;border:1px solid rgba(106,27,154,0.2)}
-.bdg-green{background:var(--green-pale);color:var(--green-mid);border:1px solid rgba(46,125,50,0.2)}
-.bdg-gray{background:#F5F5F5;color:#616161;border:1px solid #E0E0E0}
-
-/* Score pill tiers (was ".score-strong/.score-ok/.score-mid/.score-low") */
-.sp-hi{background:#E8F5E9;color:#1B4332;border:1px solid rgba(27,67,50,0.2)}
-.sp-mid{background:#FFF3E0;color:#E65100;border:1px solid rgba(245,127,23,0.2)}
-.sp-lo{background:#FFEBEE;color:var(--red);border:1px solid rgba(198,40,40,0.2)}
-
-/* AI Assessment tab (was ".bk-item/.bk-label/.bk-bar/.bk-fill/.strength-tag/.flag-item/.flag-dot") */
-.ai-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--tx3);margin-bottom:10px}
-.ai-score-big{font-size:42px;font-weight:700;font-family:'DM Mono',monospace;line-height:1}
-.ai-sub{font-size:12px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:4px}
-.bp{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:8px 10px}
-.bp-n{font-size:10px;color:var(--tx3);margin-bottom:4px}
-.bp-row{display:flex;align-items:center;gap:8px}
-.bp-num{font-size:11px;font-weight:600;color:var(--tx2);font-family:'DM Mono',monospace;flex-shrink:0;min-width:34px}
-.bar-t{flex:1;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden}
-.bar-f{height:100%;background:var(--green-light);border-radius:3px;animation:barGrow 0.6s var(--ease)}
-.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
-.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;border:1px solid;padding:3px 9px;border-radius:20px}
-.flag-row{display:flex;align-items:flex-start;gap:7px;padding:7px 10px;background:#FFF3E0;border:1px solid rgba(245,127,23,0.3);border-radius:var(--r);margin-bottom:4px;font-size:12px;color:#E65100}
-.fdot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:5px}
-
-/* Modal chrome */
-.close-btn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.7);font-size:14px;flex-shrink:0;transition:all 0.15s}
-.close-btn:hover{background:rgba(255,255,255,0.15);color:#fff}
-.divider{height:1px;background:var(--bdr);margin:14px 0}
-.stage-row{display:flex;align-items:center;gap:10px;margin-top:4px}
-.stage-row label{font-size:12px;font-weight:600;color:var(--tx2)}
-
-/* Generic empty-state text (tables, panels) */
-.empty{text-align:center;color:var(--tx3);font-size:12px;padding:24px 12px}
-
-/* Add Candidate form */
-.fsec-ttl{font-size:13px;font-weight:700;color:var(--tx);margin:20px 0 12px;padding-top:16px;border-top:1px solid var(--bdr)}
-.form-row+.fsec-ttl,.fsec-ttl:first-child{border-top:none;padding-top:0;margin-top:0}
-.form-full{width:100%}
-.form-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr)}
-
-/* Upload dropzone text (container ".upload-zone" already styled) */
-.upload-icon{font-size:28px;margin-bottom:8px}
-.upload-ttl{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:4px}
-.upload-sub{font-size:11px;color:var(--tx3)}
-.upload-zone.drag{border-color:var(--green-mid) !important;background:var(--green-pale) !important}
-.prog-wrap{height:auto !important;background:none !important;overflow:visible !important}
-.prog-bar{height:4px;background:var(--bdr);border-radius:2px;overflow:hidden;margin-top:6px}
-
-/* Sidebar footer (API connection status) */
-.sb-foot{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0}
-.api-ind{font-size:11px;color:rgba(255,255,255,0.5)}
-.api-st{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:11px;color:var(--tx3)}
-.api-dot{width:7px;height:7px;border-radius:50%;background:var(--tx3);flex-shrink:0}
-
-/* Settings page */
-.set-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px}
-.set-ttl{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:6px}
-.set-desc{font-size:12px;color:var(--tx3);line-height:1.5;margin-bottom:14px}
-
-/* SOPs page (was ".prompt-box" for the prompt block) */
-.sop-prompt{background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:12px;font-size:11.5px;color:var(--tx2);line-height:1.6;font-family:'DM Mono',monospace;white-space:pre-wrap;word-break:break-word;max-height:200px;overflow-y:auto;margin-bottom:8px}
-.copy-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--bdr);background:var(--surf);color:var(--tx2);font-size:12px;font-weight:600;cursor:pointer;transition:all var(--fast)}
-.copy-btn:hover{border-color:var(--green-mid);color:var(--green);background:var(--green-pale)}
-.sop-score-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--bdr)}
-.sop-score-row:last-child{border-bottom:none}
-.sop-score-pts{font-size:14px;font-weight:700;color:var(--green-mid);font-family:'DM Mono',monospace;flex-shrink:0}
-.sop-q-text{font-weight:600;color:var(--tx);margin-bottom:4px}
-.sop-q-why{font-size:11px;color:var(--tx3);margin-top:2px}
-.sop-q-score{font-size:11px;color:var(--tx3);margin-top:2px}
-
-/* Hiring Sources stat cards (mirrors ".stat/.stat-n/.stat-sub") */
-.src-stat{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px 18px}
-.src-stat-n{font-size:30px;font-weight:700;font-family:'DM Mono',monospace;line-height:1}
-.src-stat-l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--tx3);margin-top:8px}
-.src-stat-sub{font-size:11px;color:var(--tx3);margin-top:5px}
 
 /* Hide any injected third-party widgets/bubbles */
 #zapier-widget, .zapier-widget, [id*="zapier"], [class*="zapier"],
@@ -714,10 +620,6 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
       <div class="sh" style="flex-wrap:wrap;gap:8px">
         <div><div class="sh-ttl">All Candidates</div><div class="sh-sub" id="cand-ct"></div></div>
         <div style="display:flex;gap:6px;align-items:center;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap">
-          <div class="search-wrap">
-            <svg class="search-icon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <input id="search" class="search-input" placeholder="Search candidates..." oninput="renderTable()">
-          </div>
           <select id="frl" onchange="renderTable()" style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);padding:5px 9px;color:var(--tx);font-size:12px;font-family:'DM Sans',sans-serif">
             <option value="all">All Roles</option>
             <option>Pest Control Technician</option><option>Outbound Sales Rep</option>
@@ -914,7 +816,7 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
 <div class="overlay off" id="modal-overlay">
   <div class="modal" id="modal">
     <div class="modal-head">
-      <div class="modal-head-name" id="m-name"></div>
+      <div class="modal-ttl" id="m-name"></div>
       <div style="display:flex;gap:6px;align-items:center">
         <button class="btn btn-sm" onclick="rescore()">↺ Re-score</button>
         <div class="close-btn" onclick="closeModal()">✕</div>
@@ -966,19 +868,15 @@ div[style*="position: fixed"][style*="bottom"][style*="right"]:not(.toast):not(.
         <div style="background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--rl);padding:12px 14px">
           <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
             <div style="font-size:11px;font-weight:600;color:var(--tx2);align-self:center;margin-right:2px">From:</div>
-            <div class="note-author-pill" onclick="selectNoteAuthor(this,'Gab')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">Gab</div>
-            <div class="note-author-pill" onclick="selectNoteAuthor(this,'Ross')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">Ross</div>
-            <div class="note-author-pill" onclick="selectNoteAuthor(this,'Dennis')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">Dennis</div>
-            <div class="note-author-pill" onclick="selectNoteAuthor(this,'Joy')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">Joy</div>
-            <div class="note-author-pill" onclick="selectNoteAuthor(this,'Joane')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">Joane</div>
+            ${['Gab','Ross','Dennis','Joy','Joane'].map(name => 
+              `<div class="note-author-pill" onclick="selectNoteAuthor(this,'${name}')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">${name}</div>`
+            ).join('')}
           </div>
           <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
             <div style="font-size:11px;font-weight:600;color:var(--tx2);align-self:center;margin-right:2px">Tag:</div>
-            <div class="note-tag-chip" onclick="toggleNoteTag(this,'@Gab')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">@Gab</div>
-            <div class="note-tag-chip" onclick="toggleNoteTag(this,'@Ross')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">@Ross</div>
-            <div class="note-tag-chip" onclick="toggleNoteTag(this,'@Dennis')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">@Dennis</div>
-            <div class="note-tag-chip" onclick="toggleNoteTag(this,'@Joy')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">@Joy</div>
-            <div class="note-tag-chip" onclick="toggleNoteTag(this,'@Joane')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">@Joane</div>
+            ${['@Gab','@Ross','@Dennis','@Joy','@Joane'].map(tag => 
+              `<div class="note-tag-chip" onclick="toggleNoteTag(this,'${tag}')" style="padding:3px 10px;border-radius:20px;border:1.5px solid var(--bdr);background:var(--surf);cursor:pointer;font-size:11px;font-weight:500;color:var(--tx2);transition:all 0.1s">${tag}</div>`
+            ).join('')}
           </div>
           <textarea id="note-input" placeholder="Add a note... Use @mention to tag a team member" style="width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:9px 11px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--tx);resize:none;min-height:70px;outline:none;transition:border-color 0.1s" onfocus="this.style.borderColor='var(--green-mid)'" onblur="this.style.borderColor='var(--bdr)'" oninput="autoTagNote(this)"></textarea>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
@@ -1529,7 +1427,7 @@ function go(page, el) {
   document.querySelectorAll('.ni, .nav-item').forEach(n => n.classList.remove('on'));
   document.getElementById('page-' + page).classList.add('on');
   if (el) el.classList.add('on');
-  const titles = {dashboard:'Dashboard',pipeline:'Pipeline',candidates:'All Candidates',add:'Add Candidate',reports:'Reports',sources:'Hiring Sources',sops:'SOPs',settings:'Settings'};
+  const titles = {dashboard:'Dashboard',pipeline:'Pipeline',candidates:'All Candidates',add:'Add Candidate',reports:'Reports',settings:'Settings'};
   document.getElementById('page-ttl').textContent = titles[page] || page;
   if (page === 'dashboard') renderDash();
   if (page === 'pipeline') renderPipeline();
@@ -1806,7 +1704,7 @@ function autoStage(s) {
 
 function aiPanel(r) {
   if (!r) return '<div class="empty">No AI report.</div>';
-  const sc = r.score>=85?'var(--green)':r.score>=70?'var(--blue)':r.score>=55?'var(--amber)':'var(--red)';
+  const sc = r.score>=85?'#4ADE80':r.score>=70?'#60A5FA':r.score>=55?'#FCD34D':'#FCA5A5';
   const bd = r.breakdown||{};
   const params = [['Experience',bd.experience||0,25],['Communication',bd.communication||0,20],['Motivation',bd.motivation||0,15],['Reliability',bd.reliability||0,15],['Availability',bd.availability||0,15],['Bonus',bd.bonus||0,10]];
   const flags = (r.flags||[]).filter(f=>f&&!f.toLowerCase().includes('none'));
@@ -1819,9 +1717,9 @@ function aiPanel(r) {
     </div>
     <div class="breakdown">${params.map(([n,v,m])=>`<div class="bp"><div class="bp-n">${n}</div><div class="bp-row"><span class="bp-num">${v}/${m}</span><div class="bar-t"><div class="bar-f" style="width:${Math.round(v/m*100)}%"></div></div></div></div>`).join('')}</div>
     <div class="ai-sec">Strengths</div>
-    <div class="chip-row">${(r.strengths||[]).map(s=>`<span class="chip" style="color:var(--green-mid);background:var(--green-pale);border-color:rgba(46,125,50,0.2)">✓ ${s}</span>`).join('')}</div>
+    <div class="chip-row">${(r.strengths||[]).map(s=>`<span class="chip" style="color:#4ADE80;border-color:rgba(74,222,128,0.2)">✓ ${s}</span>`).join('')}</div>
     <div class="ai-sec">Concerns</div>
-    <div class="chip-row">${(r.concerns||[]).map(c=>`<span class="chip" style="color:#E65100;background:#FFF3E0;border-color:rgba(230,81,0,0.2)">⚠ ${c}</span>`).join('')}</div>
+    <div class="chip-row">${(r.concerns||[]).map(c=>`<span class="chip" style="color:#FCD34D;border-color:rgba(252,211,77,0.2)">⚠ ${c}</span>`).join('')}</div>
     <div class="ai-sec">Red Flags</div>
     ${flags.length?flags.map(f=>`<div class="flag-row"><div class="fdot"></div>${f}</div>`).join(''):'<div style="font-size:11px;color:var(--green)">✓ No red flags</div>'}
     <div class="ai-sec">Comp Note</div>
@@ -1860,7 +1758,6 @@ function renderDash() {
 
 // ── PIPELINE ───────────────────────────────────
 let dragId = null;
-const isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
 function renderPipeline() {
   const rf = document.getElementById('prf').value;
@@ -1882,14 +1779,14 @@ function renderPipeline() {
         ondrop="pipeDrop(event,'${stage}')">
         ${sc.length
           ? sc.map(c=>`<div class="cc" 
-              ${isTouchDevice ? '' : `draggable="true"
-              ondragstart="pipeDragStart(event,'${c.id}')"
-              ondragend="pipeDragEnd(event)"`}
+              draggable="true"
               data-id="${c.id}"
+              ondragstart="pipeDragStart(event,'${c.id}')"
+              ondragend="pipeDragEnd(event)"
               onclick="if(!window._dragging) openModal(this.dataset.id)">
               <div class="cc-name">${c.name}${c.score!==null?` ${scorePill(c.score)}`:''}</div>
-              ${c.role ? `<div class="cc-role">${c.role}</div>` : ''}
-              <div class="cc-meta">${c.source ? `<span class="src-tag">${c.source}</span>` : '<span></span>'}<span class="ago">${ago(c.added)}</span></div>
+              <div class="cc-role">${c.role}</div>
+              <div class="cc-meta"><span class="src-tag">${c.source}</span><span class="ago">${ago(c.added)}</span></div>
             </div>`).join('')
           : '<div class="col-empty" style="text-align:center;padding:14px 6px;color:var(--tx3);font-size:11px">Empty</div>'}
       </div>
@@ -1950,8 +1847,6 @@ function resetFilters() {
     const el = document.getElementById(id);
     if (el) el.selectedIndex = 0;
   });
-  const search = document.getElementById('search');
-  if (search) search.value = '';
   renderTable();
 }
 
@@ -2072,6 +1967,14 @@ function openModal(id) {
     .map(([l,v]) => answerDisplay(l,v)).filter(Boolean).join('')
     || '<div class="empty">No answers recorded.</div>';
   // Notes tab shows only regular notes — scorecard is separate
+  const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
+  // Strip referred by from display (shown in overview)
+  const notesDisplay = notesClean.replace(/^Referred by: [^\n]+\n?/,'').trim();
+  document.getElementById('m-notes-ta').value = notesDisplay;
+  // Pre-load referred by field
+  const refM2 = notesClean.match(/^Referred by: ([^\n]+)/);
+  const refInput = document.getElementById('m-referred-by');
+  if (refInput) refInput.value = refM2 ? refM2[1].trim() : '';
   // Extract scorecard data for scorecard tab
   const scMatch = (c.notes||'').match(/---SCORECARD---\n([\s\S]*)/);
   if (scMatch) { try { c.scorecard = scMatch[1].trim(); } catch(e){} }
@@ -2107,14 +2010,18 @@ function updateStage() {
 }
 function saveNotes() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
+  const notesText = document.getElementById('m-notes-ta').value;
   const referredBy = document.getElementById('m-referred-by') ? document.getElementById('m-referred-by').value.trim() : '';
 
-  // Keep everything else (scorecard/interview/assessment/team notes, any legacy text) intact —
-  // only replace the leading "Referred by:" line.
-  const existingNotes = c.notes || '';
-  const rest = existingNotes.replace(/^Referred by: [^\n]+\n?/,'');
-  c.notes = referredBy ? ('Referred by: ' + referredBy + (rest ? '\n' + rest : '')) : rest;
+  // Build regular notes section
+  let regularNotes = notesText.replace(/Referred by: [^\n]+\n?/g, '').trim();
+  if (referredBy) regularNotes = 'Referred by: ' + referredBy + (regularNotes ? '\n' + regularNotes : '');
 
+  // Preserve existing scorecard section if any
+  const scMatch = (c.notes||'').match(/(\n?---SCORECARD---[\s\S]*)/);
+  const scSection = scMatch ? scMatch[1] : '';
+
+  c.notes = regularNotes + scSection;
   pushToSheet('update', {id:String(c.id), notes:c.notes});
   toast('Saved','ok');
 }
@@ -2206,7 +2113,7 @@ function renderSources() {
         const avg = srcCands.filter(c=>c.score!==null).length ? Math.round(srcCands.filter(c=>c.score!==null).reduce((a,c)=>a+c.score,0)/srcCands.filter(c=>c.score!==null).length) : null;
         const hired = srcCands.filter(c=>c.stage==='Hired').length;
         return `<div class="src-stat">
-          <div class="src-stat-n" style="color:${n>=5?'var(--green)':n>=2?'var(--blue)':'var(--tx)'}">${n}</div>
+          <div class="src-stat-n" style="color:${n>=5?'#4ADE80':n>=2?'#60A5FA':'var(--tx)'}">${n}</div>
           <div class="src-stat-l">${s}</div>
           <div class="src-stat-sub">${avg?'Avg score: '+avg:' No scores yet'} · ${hired} hired</div>
         </div>`;
@@ -2725,15 +2632,51 @@ Return ONLY valid JSON, no markdown:
 {"scores":{"iq":7,"personality":8,"interview_style":7,"tech_savvy":6,"integrity":9,"coachability":8},"trait_notes":{"iq":"Gave structured answer to the scheduling problem, showed logical thinking","personality":"Very warm, laughed naturally, would fit the team well","interview_style":"Came prepared with examples, answered directly","tech_savvy":"Mentioned using ServiceTitan but needed prompting on specifics","integrity":"Owned a past mistake without making excuses","coachability":"Asked what success looks like and how to improve"},"summary":"2-3 sentence overall impression of how this candidate interviewed.","hire_recommendation":"Strong Hire","hire_reason":"One sentence explaining the recommendation.","red_flags":["Any concern observed during interview, or empty array if none"],"follow_up_questions":["Question to clarify something unclear from the notes","Second follow-up if needed"],"follow_up_email":{"subject":"Following up on your interview — [Candidate Name]","body":"Hi [First Name],\n\nThank you for taking the time to interview with us. We enjoyed learning more about your background.\n\nWe did want to follow up on a couple of things from our conversation:\n\n[Address each red flag as a professional clarifying question — e.g. 'You mentioned leaving X after a short time — could you share a bit more about what happened there?']\n\nWe appreciate your transparency and want to make sure we have a full picture before moving forward.\n\nLooking forward to hearing from you.\n\nWarm regards,\nThe Wise House Team"}}
 IMPORTANT: If there are NO red flags, set follow_up_email to null. Only generate the email if there are actual red flags worth clarifying.`;
 
+  // Retry helper
+  async function callClaudeWithRetry(payload, retries=2) {
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      try {
+        const r = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+          body: JSON.stringify(payload)
+        });
+        const d = await r.json();
+        if (d.error) {
+          const isRetryable = d.error.type === 'overloaded_error' || d.error.type === 'rate_limit_error' || r.status === 529 || r.status === 503;
+          if (isRetryable && attempt < retries) {
+            resultDiv.innerHTML = `<div class="thinking"><div class="spin"></div><span class="pulse">API busy, retrying... (attempt ${attempt+2}/${retries+1})</span></div>`;
+            await new Promise(res => setTimeout(res, 2000 * (attempt + 1)));
+            continue;
+          }
+          throw new Error(d.error.message || JSON.stringify(d.error));
+        }
+        return d;
+      } catch(fetchErr) {
+        if (attempt < retries) {
+          await new Promise(res => setTimeout(res, 1500));
+          continue;
+        }
+        throw fetchErr;
+      }
+    }
+  }
+
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1200,messages:[{role:'user',content:prompt}]})
+    const d = await callClaudeWithRetry({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1600,
+      messages: [{role:'user', content:prompt}]
     });
-    const d = await r.json();
-    if (d.error) throw new Error(d.error.message);
-    const analysis = JSON.parse((d.content?.[0]?.text||'').replace(/```json|```/g,'').trim());
+
+    // Robust JSON extraction — handle markdown fences and extra text
+    const rawText = d.content?.[0]?.text || '';
+    let jsonStr = rawText.trim();
+    const fenceMatch = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (fenceMatch) jsonStr = fenceMatch[1].trim();
+    const objMatch = jsonStr.match(/\{[\s\S]*\}/);
+    if (objMatch) jsonStr = objMatch[0];
+    const analysis = JSON.parse(jsonStr);
 
     // Save analysis to candidate
     c.interviewAnalysis = analysis;
@@ -2756,8 +2699,14 @@ IMPORTANT: If there are NO red flags, set follow_up_email to null. Only generate
     }
   } catch(e) {
     console.error('Interview analysis failed:', e);
-    resultDiv.innerHTML = '<div class="warn-b">Analysis failed. Check your API key and try again.</div>';
-    if (btn) { btn.disabled = false; btn.innerHTML = 'Analyze with Claude AI'; }
+    const errMsg = e.message || 'Unknown error';
+    const isQuota = errMsg.includes('quota') || errMsg.includes('rate') || errMsg.includes('overloaded');
+    resultDiv.innerHTML = `<div class="warn-b">
+      <strong>Analysis failed</strong><br>
+      ${isQuota ? 'API is busy — wait 30 seconds and try again.' : 'Error: ' + errMsg}
+      <br><button class="btn btn-sm" style="margin-top:8px" onclick="analyzeInterview()">Retry</button>
+    </div>`;
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" style="margin-right:4px"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Analyze with Claude AI'; }
   }
 }
 
