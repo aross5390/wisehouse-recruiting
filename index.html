@@ -1970,7 +1970,6 @@ function openModal(id) {
   const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
   // Strip referred by from display (shown in overview)
   const notesDisplay = notesClean.replace(/^Referred by: [^\n]+\n?/,'').trim();
-  document.getElementById('m-notes-ta').value = notesDisplay;
   // Pre-load referred by field
   const refM2 = notesClean.match(/^Referred by: ([^\n]+)/);
   const refInput = document.getElementById('m-referred-by');
@@ -2010,7 +2009,8 @@ function updateStage() {
 }
 function saveNotes() {
   const c=C.find(x=>String(x.id)===String(AID)); if(!c) return;
-  const notesText = document.getElementById('m-notes-ta').value;
+  const notesClean = (c.notes||'').replace(/\n?---SCORECARD---[\s\S]*/,'').replace(/\n?---INTERVIEW---[\s\S]*/,'').trim();
+  const notesText = notesClean.replace(/^Referred by: [^\n]+\n?/,'').trim();
   const referredBy = document.getElementById('m-referred-by') ? document.getElementById('m-referred-by').value.trim() : '';
 
   // Build regular notes section
